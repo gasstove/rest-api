@@ -35,5 +35,4 @@ public class ImageResource {
         }
         return returnJSON;
     }
-
 }
