@@ -62,6 +62,11 @@
             <artifactId>jeeunit-concurrent</artifactId>
             <version>1.0.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.7.2</version>
+        </dependency>
     </dependencies>
 
     <build>
