@@ -109,7 +109,7 @@ public class TestData {
             statement.setString(2, "member");
             statement.execute();
 
-            for(int f = 0; f < NUM_ACTORS; f++) {
+            for(int f = 0; f < NUM_ACTORS; f++, actorIndex++) {
                 sql = "INSERT into actor(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
                 statement = connection.prepareStatement(sql);
                 String[] name = rNames[actorIndex].split(" ");
@@ -161,7 +161,8 @@ public class TestData {
                         sql = "INSERT into media(type, file_name) VALUES(?,?)";
                         statement = connection.prepareStatement(sql);
                         statement.setString(1, mediaTypes[(int) (Math.random() * 3)]);
-                        statement.setString(2, (int) (Math.random() * 10000) + "");
+                        statement.setString(2, "media_" + (int) (Math.random() * 10000));
+
                         statement.execute();
 
                         sql = "SELECT Max(id) from media";
