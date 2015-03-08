@@ -15,7 +15,7 @@ import javax.ws.rs.core.MediaType;
 @Path("/images")
 public class ImageResource {
 
-    /**
+    /**media_mapping
      *
      */
     @Path("/")
