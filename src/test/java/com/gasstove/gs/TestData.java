@@ -13,14 +13,19 @@ public class TestData {
 
     public static void main(String[] args){
         TestData t = new TestData();
-        Connection c = t.getCommection();
+        t.getConnection();
 
     }
-    public Connection getCommection(){
+    public Connection getConnection(){
         try
         {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:/Users/smorris/Development/db/gasstove.db");
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("Select * FROM event");
+            while(resultSet.next()){
+                System.out.print(resultSet.getString("name"));
+            }
         }
         catch (Exception e)
         {
@@ -40,14 +45,5 @@ public class TestData {
         return connection;
 
     }
-    public void addEvents(){
-        try {
-            statement = connection.createStatement();
-            resultSet = statement
-                    .executeQuery("INSERT ");
-        }catch(SQLException e){
 
-        }
-
-    }
 }
