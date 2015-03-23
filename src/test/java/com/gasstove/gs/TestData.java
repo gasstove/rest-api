@@ -28,8 +28,7 @@ public class TestData {
     final int NUM_ACTORS = 10;
 
 
-    String dbConnect = "jdbc:sqlite:/Users/seanmorris/Development/db/gasstove.db";
-    //jdbc:sqlite:/Users/smorris/Development/db/gasstove.db
+    String dbConnect = "jdbc:sqlite:src/main/resources/gasstove.db";
 
     Connection connection = null;
     ResultSet resultSet = null;
