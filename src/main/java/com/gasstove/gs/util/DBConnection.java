@@ -15,7 +15,7 @@ public class DBConnection {
     final int NUM_ACTORS = 10;
 
 
-    String dbConnect = "jdbc:sqlite:/Users/seanmorris/Development/db/gasstove.db";
+    String dbConnect = "jdbc:sqlite:src/main/resources/gasstove.db";
 
     Connection connection = null;
     ResultSet resultSet = null;
