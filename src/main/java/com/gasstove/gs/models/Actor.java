@@ -9,8 +9,8 @@ public class Actor {
     private int id;
     private String first;
     private String last;
-    private boolean is_subscriber;
-    private String contact_method;
+    private boolean isSubscriber;
+    private String contactMethod;
     private ArrayList<Event> events = new ArrayList<Event>();
 
     public int getId() {
@@ -37,20 +37,20 @@ public class Actor {
         this.last = last;
     }
 
-    public boolean isIs_subscriber() {
-        return is_subscriber;
+    public void setIsSubscriber(boolean isSubscriber) {
+        this.isSubscriber = isSubscriber;
     }
 
-    public void setIs_subscriber(boolean is_subscriber) {
-        this.is_subscriber = is_subscriber;
+    public boolean isSubscriber() {
+        return isSubscriber;
     }
 
-    public String getContact_method() {
-        return contact_method;
+    public String getContactMethod() {
+        return contactMethod;
     }
 
-    public void setContact_method(String contact_method) {
-        this.contact_method = contact_method;
+    public void setContactMethod(String contactMethod) {
+        this.contactMethod = contactMethod;
     }
 
     public ArrayList<Event> getEvents() {

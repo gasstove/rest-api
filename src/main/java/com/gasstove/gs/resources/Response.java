@@ -24,7 +24,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-package com.gasstove.gs;
+package com.gasstove.gs.resources;
 
 /**
  * Holds static methods to return JSON response object

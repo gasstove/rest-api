@@ -79,5 +79,30 @@ public class EventResourceTest {
 
     }
 
+    /**
+     * This tests the get event method. The method should return am event
+     * We don't bother parsing back the response from JSON in this case.
+     */
+    @Test
+    public void testGetEvent() {
+
+        try {
+            // Hit URL to get all networks and save response text
+            HttpURLConnection conn =
+                    TestConfiguration.sendRequest("/events/537", "GET", "");
+
+            this.responseStatus = conn.getResponseMessage();
+            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+
+            // check to ensure we get ok message for response and that it contains a network name and description
+            assertEquals(expectedResponseStatus, this.responseStatus);
+
+            System.out.println(this.responseJSON);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
+
+    }
 
 }
