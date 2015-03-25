@@ -21,15 +21,17 @@ public class EventReader {
         DBConnection db = new DBConnection();
         Connection conn = db.getConnection();
         ArrayList<Event> events = new ArrayList<Event>();
-        String sql = "Select * FROM event";
+        String sql = "Select * FROM events";
         try {
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
-
             while(rs.next()){
                 Event e = new Event();
                 e.setName(rs.getString("name"));
+                e.setOpenDate(rs.getDate("open_date"));
+                e.setCloseDate(rs.getDate("close_date"));
+
                 events.add(e);
             }
 
