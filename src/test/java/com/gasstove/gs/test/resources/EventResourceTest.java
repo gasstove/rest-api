@@ -1,6 +1,6 @@
 package com.gasstove.gs.test.resources;
 
-import com.gasstove.gs.TestConfiguration;
+import com.gasstove.gs.test.util.TestConfiguration;
 import com.googlecode.jeeunit.concurrent.Concurrent;
 import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
 import org.apache.commons.io.IOUtils;
@@ -91,7 +91,7 @@ public class EventResourceTest {
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    com.gasstove.gs.TestConfiguration.sendRequest("/events/537", "GET", "");
+                    TestConfiguration.sendRequest("/events/537", "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");

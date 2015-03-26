@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class EventReader {
 
     Statement stmt = null;
-    ResultSet resultSet = null;
 
     /**
      * This returns a list of all the events in the db. Eventually it will need to be filtered
@@ -49,7 +48,7 @@ public class EventReader {
     }
 
     /**
-     * Get an event by id and return a fullly populated event object that includes
+     * Get an event by id and return a fully populated event object that includes
      * the list of actors in the event.
      *
      * @param eId the event id to query for
