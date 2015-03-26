@@ -1,5 +1,6 @@
-package com.gasstove.gs;
+package com.gasstove.gs.test.resources;
 
+import com.gasstove.gs.TestConfiguration;
 import com.googlecode.jeeunit.concurrent.Concurrent;
 import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
 import org.apache.commons.io.IOUtils;
@@ -14,6 +15,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -71,7 +73,7 @@ public class EventResourceTest {
             // check to ensure we get ok message for response and that it contains a network name and description
             assertEquals(expectedResponseStatus, this.responseStatus);
 
-            System.out.println(this.responseJSON);
+            assertTrue(this.responseJSON.length() > 0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
@@ -89,7 +91,7 @@ public class EventResourceTest {
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/events/537", "GET", "");
+                    com.gasstove.gs.TestConfiguration.sendRequest("/events/537", "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
@@ -97,7 +99,7 @@ public class EventResourceTest {
             // check to ensure we get ok message for response and that it contains a network name and description
             assertEquals(expectedResponseStatus, this.responseStatus);
 
-            System.out.println(this.responseJSON);
+            assertTrue(this.responseJSON.length() > 0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();

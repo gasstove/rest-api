@@ -1,5 +1,6 @@
-package com.gasstove.gs;
+package com.gasstove.gs.test.resources;
 
+import com.gasstove.gs.test.util.TestConfiguration;
 import com.googlecode.jeeunit.concurrent.Concurrent;
 import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
 import org.apache.commons.io.IOUtils;

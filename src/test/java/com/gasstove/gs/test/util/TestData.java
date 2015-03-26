@@ -1,4 +1,6 @@
-package com.gasstove.gs;
+package com.gasstove.gs.test.util;
+
+import com.gasstove.gs.util.DBConnection;
 
 import java.sql.*;
 import java.util.GregorianCalendar;
@@ -21,19 +23,16 @@ public class TestData {
     }
 
     //set these values to manipulate test records
-    final int NUM_EVENTS_USER = 5;
-    final int NUM_MEDIA_PER_EVENT_PER_USER = 5;
-    final int RANDOM_YEAR_START = 2014;
-    final int RANDOM_YEAR_END = 2016;
-    final int NUM_ACTORS = 10;
+    private final int NUM_EVENTS_USER = 5;
+    private final int NUM_MEDIA_PER_EVENT_PER_USER = 5;
+    private final int RANDOM_YEAR_START = 2014;
+    private final int RANDOM_YEAR_END = 2016;
+    private final int NUM_ACTORS = 10;
 
 
-    String dbConnect = "jdbc:sqlite:src/main/resources/gasstove.db";
-
-    Connection connection = null;
-    ResultSet resultSet = null;
-    PreparedStatement  statement = null;
-    Statement stmt = null;
+    private Connection connection = null;
+    private PreparedStatement  statement = null;
+    private Statement stmt = null;
 
 
     /**
@@ -44,8 +43,7 @@ public class TestData {
     public Connection getConnection(){
         try
         {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(dbConnect);
+            connection = new DBConnection().getConnection();
         }
         catch (Exception e)
         {

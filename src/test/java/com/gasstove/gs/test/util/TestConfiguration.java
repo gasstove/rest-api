@@ -1,4 +1,4 @@
-package com.gasstove.gs;
+package com.gasstove.gs.test.util;
 
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
