@@ -8,6 +8,8 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
+ * This are all the methods needed to get data for Event objects.
+ *
  * Created by seanmorris on 3/22/15.
  */
 public class EventReader {
@@ -15,6 +17,11 @@ public class EventReader {
     Statement stmt = null;
     ResultSet resultSet = null;
 
+    /**
+     * This returns a list of all the events in the db. Eventually it will need to be filtered
+     *
+     * @return ArrayList<Event> a list of event objects
+     */
     public ArrayList<Event> getEvents(){
         DBConnection db = new DBConnection();
         Connection conn = db.getConnection();
@@ -41,6 +48,13 @@ public class EventReader {
         return events;
     }
 
+    /**
+     * Get an event by id and return a fullly populated event object that includes
+     * the list of actors in the event.
+     *
+     * @param eId the event id to query for
+     * @return Event a fully populated event object
+     */
     public Event getEvent(int eId){
         DBConnection db = new DBConnection();
         Connection conn = db.getConnection();
