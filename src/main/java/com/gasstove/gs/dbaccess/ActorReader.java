@@ -97,4 +97,58 @@ public class ActorReader {
         return a;
     }
 
+    /**
+     * Get an actor by id and event id. The Actor will be populated with event and
+     * the events media for the actor
+     *
+     * @param aId the actor id to query for
+     * @return Actor a fully populated actor object
+     */
+    public Actor getActorEventMedia(int aId, int eId){
+        DBConnection db = new DBConnection();
+        Connection conn = db.getConnection();
+        String sqlA = "Select * FROM actor where id = ?";
+        String sqlAE = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = ?";
+        String sqlEM = "Select media.id as mid, * FROM media, " +
+                                "media_mapping mmm," +
+                                "actor_event_mapping aem " +
+                                "WHERE aem.id=mm.actor.event_mapping_id and mm.media_id = media.id";
+        Actor a = new Actor();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(sqlA);
+            stmt.setInt(1,aId);
+
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                a.setId(rs.getInt("id"));
+                a.setFirst(rs.getString("first"));
+                a.setLast(rs.getString("last"));
+                a.setContactMethod(rs.getString("contact_method"));
+                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
+
+            }
+
+            stmt = conn.prepareStatement(sqlA);
+            stmt.setInt(1,aId);
+            rs = stmt.executeQuery();
+            ArrayList<Event> events = new ArrayList<Event>();
+            while(rs.next()) {
+                Event e = new Event();
+                e.setId(rs.getInt("eid"));
+                e.setName(rs.getString("name"));
+                e.setOpenDate(rs.getDate("open_date"));
+                e.setCloseDate(rs.getDate("close_date"));
+                e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
+                e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
+                e.setJoinInvitation(rs.getBoolean("join_invitation"));
+                events.add(e);
+            }
+            a.setEvents(events);
+
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+        return a;
+    }
+
 }

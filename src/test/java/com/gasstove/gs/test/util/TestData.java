@@ -3,6 +3,7 @@ package com.gasstove.gs.test.util;
 import com.gasstove.gs.util.DBConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 /**
@@ -28,6 +29,8 @@ public class TestData {
     private final int RANDOM_YEAR_START = 2014;
     private final int RANDOM_YEAR_END = 2016;
     private final int NUM_ACTORS = 10;
+    private final int NUM_EVENTS = 90;
+
 
 
     private Connection connection = null;
@@ -105,8 +108,10 @@ public class TestData {
             int actorIndex = 0;
             int currentActorIndex = -1;
             int currentEventIndex = -1;
+            int actorIdIndex = 0;
             int currentActorEventMappingIndex = -1;
             int currentMediaIndex = -1;
+            ArrayList<Integer> actorIds = new ArrayList<Integer>();
 
             //add the roles you want defined
             String sql = "INSERT into roles(id,type) VALUES(?,?)";
@@ -120,7 +125,7 @@ public class TestData {
             statement.setInt(1, 2);
             statement.setString(2, "member");
             statement.execute();
-
+            ResultSet r = null;
             //this will loop for the number of actors defined
             for(int f = 0; f < NUM_ACTORS; f++, actorIndex++) {
 
@@ -136,13 +141,14 @@ public class TestData {
                 //get actor id
                 sql = "SELECT Max(id) from actor";
                 stmt = connection.createStatement();
-                ResultSet r = stmt.executeQuery(sql);
+                r = stmt.executeQuery(sql);
                 if (r.next()) {
-                    currentActorIndex = r.getInt(1);
+                    actorIds.add(r.getInt(1));
                 }
+            }
 
                 //insert events for actor
-                for (int x = 0; x < NUM_EVENTS_USER; x++, eventIndex++) {
+                for (int x = 0; x < NUM_EVENTS; x++, eventIndex++) {
                     sql = "INSERT into event(name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,1,1,1)";
                     statement = connection.prepareStatement(sql);
                     statement.setString(1, events[eventIndex]);
@@ -158,51 +164,54 @@ public class TestData {
                         currentEventIndex = r.getInt(1);
                     }
 
-                    //add mapping for actor and event
-                    sql = "INSERT into actor_event_mapping(event_id, actor_id,role_id,join_date) VALUES(?,?,?,?)";
-                    statement = connection.prepareStatement(sql);
-                    statement.setInt(1, currentEventIndex);
-                    statement.setInt(2, currentActorIndex);
-                    statement.setInt(3, (int) (Math.random() * 2));
-                    statement.setDate(4, new java.sql.Date(randomDate().getTime()));
-                    statement.execute();
-
-                    //get actor_event mapping id for media_mapping table
-                    sql = "SELECT Max(id) from actor_event_mapping";
-                    stmt = connection.createStatement();
-                    r = stmt.executeQuery(sql);
-                    if (r.next()) {
-                        currentActorEventMappingIndex = r.getInt(1);
-                    }
-
-                    //add media for this event and actor
-                    for (int k = 0; k < NUM_MEDIA_PER_EVENT_PER_USER; k++) {
-                        //insert the media
-                        sql = "INSERT into media(type, file_name) VALUES(?,?)";
+                    for(int d = 0; d < NUM_EVENTS_USER; d++) {
+                        //add mapping for actor and event
+                        sql = "INSERT into actor_event_mapping(event_id, actor_id,role_id,join_date) VALUES(?,?,?,?)";
                         statement = connection.prepareStatement(sql);
-                        statement.setString(1, mediaTypes[(int) (Math.random() * 3)]);
-                        statement.setString(2, "media_" + (int) (Math.random() * 10000));
+                        statement.setInt(1, currentEventIndex);
+                        statement.setInt(2, actorIds.get(actorIdIndex++ % actorIds.size()));
+
+                        statement.setInt(3, (int) (Math.random() * 2));
+                        statement.setDate(4, new java.sql.Date(randomDate().getTime()));
                         statement.execute();
 
-                        //get media id
-                        sql = "SELECT Max(id) from media";
+                        //get actor_event mapping id for media_mapping table
+                        sql = "SELECT Max(id) from actor_event_mapping";
                         stmt = connection.createStatement();
                         r = stmt.executeQuery(sql);
                         if (r.next()) {
-                            currentMediaIndex = r.getInt(1);
+                            currentActorEventMappingIndex = r.getInt(1);
                         }
 
-                        //add the media mapping using media id and actor_event_mapping id
-                        sql = "INSERT into media_mapping(media_id, actor_event_mapping_id,num_downloads,shared) VALUES(?,?,?,?)";
-                        statement = connection.prepareStatement(sql);
-                        statement.setInt(1, currentMediaIndex);
-                        statement.setInt(2, currentActorEventMappingIndex);
-                        statement.setInt(3, randBetween(10, 10000));
-                        statement.setInt(4, randBetween(0, 2));
-                        statement.execute();
+                        //add media for this event and actor
+                        for (int k = 0; k < NUM_MEDIA_PER_EVENT_PER_USER; k++) {
+                            //insert the media
+                            sql = "INSERT into media(type, file_name) VALUES(?,?)";
+                            statement = connection.prepareStatement(sql);
+                            statement.setString(1, mediaTypes[(int) (Math.random() * 3)]);
+                            statement.setString(2, "media_" + (int) (Math.random() * 10000));
+                            statement.execute();
+
+                            //get media id
+                            sql = "SELECT Max(id) from media";
+                            stmt = connection.createStatement();
+                            r = stmt.executeQuery(sql);
+                            if (r.next()) {
+                                currentMediaIndex = r.getInt(1);
+                            }
+
+                            //add the media mapping using media id and actor_event_mapping id
+                            sql = "INSERT into media_mapping(media_id, actor_event_mapping_id,num_downloads,shared) VALUES(?,?,?,?)";
+                            statement = connection.prepareStatement(sql);
+                            statement.setInt(1, currentMediaIndex);
+                            statement.setInt(2, currentActorEventMappingIndex);
+                            statement.setInt(3, randBetween(10, 10000));
+                            statement.setInt(4, randBetween(0, 2));
+                            statement.execute();
+                        }
                     }
                 }
-            }
+
 
         }
         catch(SQLException s){

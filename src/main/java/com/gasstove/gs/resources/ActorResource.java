@@ -51,18 +51,49 @@ public class ActorResource {
      * Restful method to return actor object by id
      *
      * @param actorId   The id of the actor to be loaded
-     * @return JSON representation of Event object
+     * @return JSON representation of Actor object
      */
     @Path("/{actorId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEvent(@PathParam("actorId") String actorId) {
+    public String getActor(@PathParam("actorId") String actorId) {
 
         String returnJSON = "";
 
         try {
             ActorReader ar = new ActorReader();
             Actor actor = ar.getActor(Integer.parseInt(actorId));
+
+            Gson gson = new Gson();
+            returnJSON = gson.toJson(actor);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+        } finally {
+        }
+        return returnJSON;
+    }
+
+    /**
+     * Restful method to return actor object populated by an event and media
+     * in the event
+     *
+     * @param actorId   The id of the actor to be loaded
+       @param eventId   The id of the event to be loaded
+     * @return JSON representation of Actor object
+     */
+    @Path("/actor/{Id: [0-9]+}/event/{eventId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEvent(@PathParam("actorId") String actorId,
+                           @PathParam("eventId") String eventId) {
+
+        String returnJSON = "";
+
+        try {
+            ActorReader ar = new ActorReader();
+            Actor actor = ar.getActorEventMedia(Integer.parseInt(actorId),
+                                                Integer.parseInt(eventId));
 
             Gson gson = new Gson();
             returnJSON = gson.toJson(actor);
