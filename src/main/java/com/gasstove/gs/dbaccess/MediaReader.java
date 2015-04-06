@@ -38,6 +38,8 @@ public class MediaReader {
         return medias;
     }
 
+
+    // TODO: add "owner" to media table and get it directly
     public static Media getMedia(int mId){
 
         Media media = new Media();

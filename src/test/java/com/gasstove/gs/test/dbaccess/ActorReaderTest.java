@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  *
  */
 public class ActorReaderTest {
-    private ActorReader ar = new ActorReader();
+
     /**
      * The constructor sets up database for so we can set up a Model DataBase Access
      * reader and writer;
@@ -34,7 +34,7 @@ public class ActorReaderTest {
     public void testGetActors() {
         try {
 
-            ArrayList<Actor> list = ar.getActors();
+            ArrayList<Actor> list = ActorReader.getActors();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
 
@@ -53,7 +53,7 @@ public class ActorReaderTest {
 
         try {
 
-            Actor a = ar.getActor(122);
+            Actor a = ActorReader.getActor(122);
             assertTrue(a.getFirst().length() > 0);
             assertTrue(a.getId() == 122);
             assertNotNull(a.getEvents());

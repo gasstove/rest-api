@@ -16,6 +16,10 @@ public class Media {
         this.cards.add(mc);
     }
 
+    public ArrayList<MediaCard> getCards(){
+        return cards;
+    }
+
     public Actor getOwner() {
         return owner;
     }

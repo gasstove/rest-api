@@ -15,7 +15,7 @@ import static org.junit.Assert.*;
  *
  */
 public class EventReaderTest {
-    private EventReader er = new EventReader();
+
     /**
      * The constructor sets up database for so we can set up a Model DataBase Access
      * reader and writer;
@@ -33,17 +33,13 @@ public class EventReaderTest {
     @Test
     public void testGetEvents() {
         try {
-            EventReader er = new EventReader();
-            ArrayList<Event> list = er.getEvents();
-
+            ArrayList<Event> list = EventReader.getEvents();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getName() != null);
-
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
         }
-
     }
 
     /**
@@ -53,15 +49,12 @@ public class EventReaderTest {
     public void testGetEvent() {
 
         try {
-
-            Event e = er.getEvent(537);
+            Event e = EventReader.getEvent(537);
             assertTrue(e.getName().length() > 0);
             assertTrue(e.getId() == 537);
             assertNotNull(e.getUsers());
             assertNotNull(e.getCloseDate());
             assertNotNull(e.getOpenDate());
-
-
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
