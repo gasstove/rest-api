@@ -23,10 +23,10 @@ public class EventReader {
      */
     public ArrayList<Event> getEvents(){
         DBConnection db = new DBConnection();
-        Connection conn = db.getConnection();
         ArrayList<Event> events = new ArrayList<Event>();
         String sql = "Select * FROM event";
         try {
+            Connection conn = db.getConnection();
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -56,11 +56,11 @@ public class EventReader {
      */
     public Event getEvent(int eId){
         DBConnection db = new DBConnection();
-        Connection conn = db.getConnection();
         String sqlE = "Select * FROM event where id = ?";
         String sqlA = "Select actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem where aem.event_id=? and aem.actor_id = actor.id";
         Event e = new Event();
         try {
+            Connection conn = db.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlE);
             stmt.setInt(1,eId);
 

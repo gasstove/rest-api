@@ -16,17 +16,16 @@ public class DBConnection {
      *
      * @return Connection database connection
      */
-    public Connection getConnection(){
+    public Connection getConnection() throws SQLException {
         try
         {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(dbConnect);
         }
-        catch (Exception e)
+        catch (ClassNotFoundException e)
         {
             e.printStackTrace();
         }
         return connection;
-
     }
 }

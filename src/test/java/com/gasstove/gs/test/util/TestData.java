@@ -21,9 +21,15 @@ public class TestData {
     public static void main(String[] args){
         TestData t = new TestData();
         DataContainer data = t.generate_data();
-        t.getConnection();
-        t.removeAllRecords();
-        t.insert_db(data);
+
+        try {
+            t.getConnection();
+            t.removeAllRecords();
+            t.insert_db(data);
+        }
+        catch(Exception s){
+            s.printStackTrace();
+        }
     }
 
     //set these values to manipulate test records
@@ -33,9 +39,10 @@ public class TestData {
     private final int MIN_MEDIA_PER_EVENTUSER = 0;
     private final int MAX_MEDIA_PER_EVENTUSER = 10;
 
-    // set this >1 for many-to-many event_user <-> media relationship
-    // Set this =1 to impose each media belongs to only 1 event_user
+    // true if a media item can belong to more than one event, false otherwise
     private final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = false;
+
+    // if above is true, average number of events a media item belongs to (can be 1.5)
     private final float AVG_EVENT_PER_MEDIA = 2f;
 
     private final int MIN_EVENT_YEAR = 2014;
@@ -50,57 +57,43 @@ public class TestData {
     private PreparedStatement  statement = null;
     private Statement stmt = null;
 
-
     /**
      * Establish connection to db
      *
      * @return Connection database connection
      */
-    public Connection getConnection(){
-        try
-        {
-            connection = new DBConnection().getConnection();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-        return connection;
+    public void getConnection() throws SQLException {
+        connection = new DBConnection().getConnection();
     }
 
     /**
      * Removes all the records from each table so they can be populated
      */
-    public void removeAllRecords(){
-        try {
-            
-            String sql = "DELETE FROM roles";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+    public void removeAllRecords() throws SQLException {
 
-            sql = "DELETE FROM actor";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+        String sql = "DELETE FROM roles";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
-            sql = "DELETE FROM event";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+        sql = "DELETE FROM actor";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
-            sql = "DELETE FROM media";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+        sql = "DELETE FROM event";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
-            sql = "DELETE FROM actor_event_mapping";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+        sql = "DELETE FROM media";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
-            sql = "DELETE FROM media_mapping";
-            stmt = connection.createStatement();
-            stmt.execute(sql);
+        sql = "DELETE FROM actor_event_mapping";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
-        } catch(SQLException e){
-               e.printStackTrace();
-        }
+        sql = "DELETE FROM media_mapping";
+        stmt = connection.createStatement();
+        stmt.execute(sql);
 
     }
 
@@ -142,7 +135,7 @@ public class TestData {
     /**
      * Insert data into db
      */
-    public void insert_db(DataContainer data){
+    public void insert_db(DataContainer data) throws SQLException {
 
 //        //add the roles you want defined
 //        String sql = "INSERT into roles(id,type) VALUES(?,?)";
@@ -158,24 +151,31 @@ public class TestData {
 //        statement.execute();
 
         // insert users into db
+        System.out.println("Inserting "+data.all_users.size()+" users.");
         for(User user : data.all_users)
             user.insert_db();
 
         // insert events into db
+        System.out.println("Inserting "+data.all_events.size()+" events.");
         for(Event event : data.all_events)
             event.insert_db();
 
         // insert media into db
+        System.out.println("Inserting "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
             media.insert_db();
 
         // insert guest lists into actor_event_mapping
-        for(Event event : data.all_events)
+        for(Event event : data.all_events) {
+            System.out.println("Inserting "+event.users.size()+" guests for event " + event.name +".");
             event.insert_guests_db();
+        }
 
         // insert media info into media_mapping
+        System.out.println("Inserting media mapping for "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
             media.insert_userevent_mapping_db();
+
     }
 
     /**
@@ -215,49 +215,35 @@ public class TestData {
             event.add_media(this);
         }
 
-        public void insert_db(){
+        public void insert_db() throws SQLException {
+            if(id!=null)
+                throw new SQLException("Repeat insertion of media " + id);
 
-            try{
+            // insert the media
+            String sql = "INSERT into media(type, file_name) VALUES(?,?)";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1,mediaType);
+            statement.setString(2, "media_" + filename_ext);
+            statement.execute();
 
-                if(id!=null)
-                    throw new Exception("Repeat insertion of media " + id);
-
-                // insert the media
-                String sql = "INSERT into media(type, file_name) VALUES(?,?)";
-                statement = connection.prepareStatement(sql);
-                statement.setString(1,mediaType);
-                statement.setString(2, "media_" + filename_ext);
-                statement.execute();
-
-                // get media id
-                sql = "SELECT Max(id) from media";
-                stmt = connection.createStatement();
-                ResultSet r = stmt.executeQuery(sql);
-                if (r.next())
-                    this.id = r.getInt(1);
-
-            }
-            catch(Exception s){
-                s.printStackTrace();
-            }
-
+            // get media id
+            sql = "SELECT Max(id) from media";
+            stmt = connection.createStatement();
+            ResultSet r = stmt.executeQuery(sql);
+            if (r.next())
+                this.id = r.getInt(1);
         }
 
-        public void insert_userevent_mapping_db(){
-            try {
-                for(Event event : events) {
+        public void insert_userevent_mapping_db() throws SQLException {
+            for(Event event : events) {
 
-                    String sql = "INSERT into media_mapping(media_id, actor_event_mapping_id,num_downloads,shared) VALUES(?,?,?,?)";
-                    statement = connection.prepareStatement(sql);
-                    statement.setInt(1, this.id);
-                    statement.setInt(2, event.get_usereventid_for_user(this.owner) );
-                    statement.setInt(3, randBetween(10, 10000));
-                    statement.setInt(4, randBetween(0, 2));
-                    statement.execute();
-                }
-            }
-            catch(Exception s){
-                s.printStackTrace();
+                String sql = "INSERT into media_mapping(media_id, actor_event_mapping_id,num_downloads,shared) VALUES(?,?,?,?)";
+                statement = connection.prepareStatement(sql);
+                statement.setInt(1, this.id);
+                statement.setInt(2, event.get_usereventid_for_user(this.owner) );
+                statement.setInt(3, randBetween(10, 10000));
+                statement.setInt(4, randBetween(0, 2));
+                statement.execute();
             }
         }
 
@@ -295,53 +281,42 @@ public class TestData {
             this.medias.add(media);
         }
 
-        public void insert_db(){
+        public void insert_db() throws SQLException{
+            if(id!=null)
+                throw new SQLException("Repeat insertion of event " + id);
+            String sql = "INSERT into event(name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,1,1,1)";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, this.name);
+            statement.setDate(2, new java.sql.Date(this.open_date));
+            statement.setDate(3, new java.sql.Date(this.close_date));
+            statement.execute();
 
-            try{
-                if(id!=null)
-                    throw new Exception("Repeat insertion of event " + id);
-                String sql = "INSERT into event(name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,1,1,1)";
+            // get event ids
+            sql = "SELECT Max(id) from event";
+            stmt = connection.createStatement();
+            ResultSet r = stmt.executeQuery(sql);
+            if (r.next())
+                this.id = r.getInt(1);
+        }
+
+        public void insert_guests_db() throws SQLException {
+
+            // add guests to this event
+            for(User user : this.users) {
+                String sql = "INSERT into actor_event_mapping(event_id, actor_id,role_id,join_date) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
-                statement.setString(1, this.name);
-                statement.setDate(2, new java.sql.Date(this.open_date));
-                statement.setDate(3, new java.sql.Date(this.close_date));
+                statement.setInt(1, this.id);
+                statement.setInt(2, user.id);
+                statement.setInt(3, (int) (Math.random() * 2));
+                statement.setDate(4, new java.sql.Date(this.open_date));
                 statement.execute();
 
-                // get event ids
-                sql = "SELECT Max(id) from event";
+                // extract actor_event ids
+                sql = "SELECT Max(id) from actor_event_mapping";
                 stmt = connection.createStatement();
                 ResultSet r = stmt.executeQuery(sql);
                 if (r.next())
-                    this.id = r.getInt(1);
-            }
-            catch(Exception s){
-                s.printStackTrace();
-            }
-        }
-
-        public void insert_guests_db(){
-
-            try{
-                // add guests to this event
-                for(User user : this.users) {
-                    String sql = "INSERT into actor_event_mapping(event_id, actor_id,role_id,join_date) VALUES(?,?,?,?)";
-                    statement = connection.prepareStatement(sql);
-                    statement.setInt(1, this.id);
-                    statement.setInt(2, user.id);
-                    statement.setInt(3, (int) (Math.random() * 2));
-                    statement.setDate(4, new java.sql.Date(this.open_date));
-                    statement.execute();
-
-                    // extract actor_event ids
-                    sql = "SELECT Max(id) from actor_event_mapping";
-                    stmt = connection.createStatement();
-                    ResultSet r = stmt.executeQuery(sql);
-                    if (r.next())
-                        userEventId_for_user.put(user, r.getInt(1));
-                }
-            }
-            catch(Exception s){
-                s.printStackTrace();
+                    userEventId_for_user.put(user, r.getInt(1));
             }
         }
 
@@ -365,29 +340,23 @@ public class TestData {
             events.add(event);
         }
 
-        public void insert_db(){
+        public void insert_db() throws SQLException {
 
-            try{
+            if(id!=null)
+                throw new SQLException("Repeat insertion of user " + id);
+            String sql = "INSERT into actor(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
+            statement = connection.prepareStatement(sql);
+            statement.setString(1, this.first);
+            statement.setString(2, this.last);
+            statement.setInt(3, this.is_subscriber ? 1 : 0 );
+            statement.execute();
 
-                if(id!=null)
-                    throw new Exception("Repeat insertion of user " + id);
-                String sql = "INSERT into actor(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
-                statement = connection.prepareStatement(sql);
-                statement.setString(1, this.first);
-                statement.setString(2, this.last);
-                statement.setInt(3, this.is_subscriber ? 1 : 0 );
-                statement.execute();
-
-                // extract actor id
-                sql = "SELECT Max(id) from actor";
-                stmt = connection.createStatement();
-                ResultSet r = stmt.executeQuery(sql);
-                if (r.next())
-                    this.id = r.getInt(1);
-            }
-            catch(Exception s){
-                s.printStackTrace();
-            }
+            // extract actor id
+            sql = "SELECT Max(id) from actor";
+            stmt = connection.createStatement();
+            ResultSet r = stmt.executeQuery(sql);
+            if (r.next())
+                this.id = r.getInt(1);
 
         }
 

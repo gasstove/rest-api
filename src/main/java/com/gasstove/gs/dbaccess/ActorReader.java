@@ -23,10 +23,10 @@ public class ActorReader {
      */
     public ArrayList<Actor> getActors(){
         DBConnection db = new DBConnection();
-        Connection conn = db.getConnection();
         ArrayList<Actor> actors = new ArrayList<Actor>();
         String sql = "Select * FROM actor";
         try {
+            Connection conn = db.getConnection();
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
 
@@ -56,11 +56,11 @@ public class ActorReader {
      */
     public Actor getActor(int aId){
         DBConnection db = new DBConnection();
-        Connection conn = db.getConnection();
         String sqlE = "Select * FROM actor where id = ?";
         String sqlA = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = event.id";
         Actor a = new Actor();
         try {
+            Connection conn = db.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlE);
             stmt.setInt(1,aId);
 
@@ -106,7 +106,6 @@ public class ActorReader {
      */
     public Actor getActorEventMedia(int aId, int eId){
         DBConnection db = new DBConnection();
-        Connection conn = db.getConnection();
         String sqlA = "Select * FROM actor where id = ?";
         String sqlAE = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = ?";
         String sqlEM = "Select media.id as mid, * FROM media, " +
@@ -115,6 +114,7 @@ public class ActorReader {
                                 "WHERE aem.id=mm.actor.event_mapping_id and mm.media_id = media.id";
         Actor a = new Actor();
         try {
+            Connection conn = db.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sqlA);
             stmt.setInt(1,aId);
 
