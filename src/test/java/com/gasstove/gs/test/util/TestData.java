@@ -40,7 +40,7 @@ public class TestData {
     private final int MAX_MEDIA_PER_EVENTUSER = 10;
 
     // true if a media item can belong to more than one event, false otherwise
-    private final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = false;
+    private final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = true;
 
     // if above is true, average number of events a media item belongs to (can be 1.5)
     private final float AVG_EVENT_PER_MEDIA = 2f;

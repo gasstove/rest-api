@@ -32,8 +32,7 @@ public class EventResource {
         String returnJSON = "";
 
         try {
-            EventReader er = new EventReader();
-            ArrayList<Event> events = er.getEvents();
+            ArrayList<Event> events = EventReader.getEvents();
 
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
@@ -59,8 +58,7 @@ public class EventResource {
         String returnJSON = "";
 
         try {
-            EventReader er = new EventReader();
-            Event event = er.getEvent(Integer.parseInt(eventId));
+            Event event = EventReader.getEvent(Integer.parseInt(eventId));
 
             Gson gson = new Gson();
             returnJSON = gson.toJson(event);

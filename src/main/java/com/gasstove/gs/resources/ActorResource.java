@@ -91,8 +91,7 @@ public class ActorResource {
         String returnJSON = "";
 
         try {
-            ActorReader ar = new ActorReader();
-            Actor actor = ar.getActorEventMedia(Integer.parseInt(actorId),
+            Actor actor = ActorReader.getActorEventMedia(Integer.parseInt(actorId),
                                                 Integer.parseInt(eventId));
 
             Gson gson = new Gson();

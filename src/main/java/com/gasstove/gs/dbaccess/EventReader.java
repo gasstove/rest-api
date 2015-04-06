@@ -14,14 +14,13 @@ import java.util.ArrayList;
  */
 public class EventReader {
 
-    Statement stmt = null;
-
     /**
      * This returns a list of all the events in the db. Eventually it will need to be filtered
      *
      * @return ArrayList<Event> a list of event objects
      */
-    public ArrayList<Event> getEvents(){
+    public static ArrayList<Event> getEvents(){
+        Statement stmt;
         DBConnection db = new DBConnection();
         ArrayList<Event> events = new ArrayList<Event>();
         String sql = "Select * FROM event";
@@ -54,7 +53,7 @@ public class EventReader {
      * @param eId the event id to query for
      * @return Event a fully populated event object
      */
-    public Event getEvent(int eId){
+    public static Event getEvent(int eId){
         DBConnection db = new DBConnection();
         String sqlE = "Select * FROM event where id = ?";
         String sqlA = "Select actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem where aem.event_id=? and aem.actor_id = actor.id";
