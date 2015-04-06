@@ -13,7 +13,7 @@ import javax.ws.rs.core.MediaType;
  */
 
 @Path("/images")
-public class ImageResource {
+public class MediaResouce {
 
     /**media_mapping
      *
@@ -21,7 +21,7 @@ public class ImageResource {
     @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getImages() {
+    public String getMedias() {
 
         String returnJSON = "";
 
