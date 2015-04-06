@@ -14,14 +14,14 @@ import java.util.ArrayList;
  */
 public class ActorReader {
 
-    Statement stmt = null;
 
     /**
      * This returns a list of all the actors in the db. Eventually it will need to be filtered
      *
      * @return ArrayList<Actors> a list of actor objects
      */
-    public ArrayList<Actor> getActors(){
+    public static ArrayList<Actor> getActors(){
+        Statement stmt;
         DBConnection db = new DBConnection();
         ArrayList<Actor> actors = new ArrayList<Actor>();
         String sql = "Select * FROM actor";
@@ -54,7 +54,7 @@ public class ActorReader {
      * @param aId the actor id to query for
      * @return Actor a fully populated actor object
      */
-    public Actor getActor(int aId){
+    public static Actor getActor(int aId){
         DBConnection db = new DBConnection();
         String sqlE = "Select * FROM actor where id = ?";
         String sqlA = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = event.id";
@@ -104,7 +104,7 @@ public class ActorReader {
      * @param aId the actor id to query for
      * @return Actor a fully populated actor object
      */
-    public Actor getActorEventMedia(int aId, int eId){
+    public static Actor getActorEventMedia(int aId, int eId){
         DBConnection db = new DBConnection();
         String sqlA = "Select * FROM actor where id = ?";
         String sqlAE = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = ?";
