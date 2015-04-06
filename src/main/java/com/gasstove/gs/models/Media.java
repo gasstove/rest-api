@@ -1,5 +1,7 @@
 package com.gasstove.gs.models;
 
+import java.util.ArrayList;
+
 /**
  * Created by smorris on 3/24/15.
  */
@@ -7,6 +9,20 @@ public class Media {
     private int id;
     private String type;
     private String fileName;
+    private Actor owner;
+    private ArrayList<MediaCard> cards = new ArrayList<MediaCard>();
+
+    public void addCard(MediaCard mc){
+        this.cards.add(mc);
+    }
+
+    public Actor getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Actor owner) {
+        this.owner = owner;
+    }
 
     public int getId() {
         return id;
