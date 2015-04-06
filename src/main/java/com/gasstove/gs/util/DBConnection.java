@@ -7,21 +7,9 @@ import java.sql.*;
  */
 public class DBConnection {
 
-    //set these values to manipulate test records
-    final int NUM_EVENTS_USER = 5;
-    final int NUM_MEDIA_PER_EVENT_PER_USER = 5;
-    final int RANDOM_YEAR_START = 2014;
-    final int RANDOM_YEAR_END = 2016;
-    final int NUM_ACTORS = 10;
-
-
     String dbConnect = "jdbc:sqlite:src/main/resources/gasstove.db";
 
     Connection connection = null;
-    ResultSet resultSet = null;
-    PreparedStatement statement = null;
-    Statement stmt = null;
-
 
     /**
      * Establish connection to db
