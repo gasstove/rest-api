@@ -30,13 +30,9 @@ public class ActorResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getActors() {
-
         String returnJSON = "";
-
         try {
-            ActorReader er = new ActorReader();
-            ArrayList<Actor> actors = er.getActors();
-
+            ArrayList<Actor> actors = ActorReader.getActors();
             Gson gson = new Gson();
             returnJSON = gson.toJson(actors);
         } catch (Exception exp) {
@@ -61,8 +57,7 @@ public class ActorResource {
         String returnJSON = "";
 
         try {
-            ActorReader ar = new ActorReader();
-            Actor actor = ar.getActor(Integer.parseInt(actorId));
+            Actor actor = ActorReader.getActor(Integer.parseInt(actorId));
 
             Gson gson = new Gson();
             returnJSON = gson.toJson(actor);

@@ -9,7 +9,9 @@ public class Media {
     private int id;
     private String type;
     private String fileName;
-    private Actor owner;
+    private String owner_name;
+    private int owner_id;
+
     private ArrayList<MediaCard> cards = new ArrayList<MediaCard>();
 
     public void addCard(MediaCard mc){
@@ -20,12 +22,12 @@ public class Media {
         return cards;
     }
 
-    public Actor getOwner() {
-        return owner;
+    public String getOwnerName() {
+        return owner_name;
     }
 
-    public void setOwner(Actor owner) {
-        this.owner = owner;
+    public void setOwnerName(String owner_name) {
+        this.owner_name = owner_name;
     }
 
     public int getId() {
@@ -34,6 +36,14 @@ public class Media {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getOwnerId() {
+        return owner_id;
+    }
+
+    public void setOwnerId(int owner_id) {
+        this.owner_id = owner_id;
     }
 
     public String getType() {

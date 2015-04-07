@@ -1,5 +1,6 @@
 package com.gasstove.gs.test.resources;
 
+import com.gasstove.gs.resources.MediaResource;
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.googlecode.jeeunit.concurrent.Concurrent;
 import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
@@ -15,6 +16,7 @@ import java.util.Collection;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 /**
@@ -43,10 +45,6 @@ public class MediaResourceTest {
     public MediaResourceTest() throws Exception {
     }
 
-
-    /**
-     * A fake network is set up before each test.
-     */
     @Before
     public void setup() {
         // Setup server request
@@ -54,17 +52,13 @@ public class MediaResourceTest {
     }
 
 
-    /**
-     * This tests the get networks method. The method should return a list of networks.
-     * We don't bother parsing back the response from JSON in this case.
-     */
     @Test
-    public void testGetImages() {
+    public void testGetMedias() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/images/", "GET", "");
+                    TestConfiguration.sendRequest("/medias/", "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
@@ -80,5 +74,26 @@ public class MediaResourceTest {
 
     }
 
+    @Test
+    public void testGetMedia() {
+
+        try {
+            // Hit URL to get all networks and save response text
+            HttpURLConnection conn =
+                    TestConfiguration.sendRequest("/medias/7295", "GET", "");
+
+            this.responseStatus = conn.getResponseMessage();
+            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+
+            // check to ensure we get ok message for response and that it contains a network name and description
+            assertEquals(expectedResponseStatus, this.responseStatus);
+
+            assertTrue(this.responseJSON.length() > 0);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
+
+    }
 
 }

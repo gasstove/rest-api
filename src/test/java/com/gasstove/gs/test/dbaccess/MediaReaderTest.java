@@ -34,8 +34,20 @@ public class MediaReaderTest {
             assertTrue(m.getId() == 7295);
             assertTrue(m.getFileName().length()>0);
             assertTrue(m.getType().length()>0);
-            assertNotNull(m.getOwner());
+            assertNotNull(m.getOwnerName());
             assertNotNull(m.getCards());
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void testGetMediaForEvent() {
+        try {
+            ArrayList<Media> m = MediaReader.getMediaForEvent(745);
+            assertNotNull(m);
+            assertTrue(m.size()>0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
