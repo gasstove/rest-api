@@ -25,7 +25,7 @@ import static org.junit.Assert.fail;
  *
  * @author mnjuhn
  */
-public class ImageResourceTest {
+public class MediaResourceTest {
     // standard response values per test
     String responseStatus;
     String responseJSON;
@@ -40,7 +40,7 @@ public class ImageResourceTest {
      *
      * @throws Exception This happens if the database set up has trouble
      */
-    public ImageResourceTest() throws Exception {
+    public MediaResourceTest() throws Exception {
     }
 
 

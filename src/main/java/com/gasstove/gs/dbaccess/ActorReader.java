@@ -97,6 +97,22 @@ public class ActorReader {
         return a;
     }
 
+    public static String getActorNameWithId(int aId){
+        String name = "";
+        try {
+            DBConnection db = new DBConnection();
+            Connection conn = db.getConnection();
+            PreparedStatement stmt = conn.prepareStatement("Select first,last FROM actor where id = ?");
+            stmt.setInt(1,aId);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next())
+                name = rs.getString("first") + " " + rs.getString("last");
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+        return name;
+    }
+
     /**
      * Get an actor by id and event id. The Actor will be populated with event and
      * the events media for the actor
