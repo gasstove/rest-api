@@ -2,6 +2,7 @@ package com.gasstove.gs.test.util;
 
 import com.gasstove.gs.util.DBConnection;
 
+import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -23,8 +24,9 @@ public class TestData {
         DataContainer data = t.generate_data();
 
         try {
+            t.dropTables();
             t.getConnection();
-            t.removeAllRecords();
+            t.createDB();
             t.insert_db(data);
         }
         catch(Exception s){
@@ -66,6 +68,77 @@ public class TestData {
         connection = new DBConnection().getConnection();
     }
 
+    public void dropTables(){
+        try {
+            System.out.println("Dropping tables...");
+            File f = new File("src/main/resources/gasstove.db");
+            f.delete();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        System.out.println("All tables dropped");
+    }
+    public void createDB() throws SQLException{
+        System.out.println("Creating database and tables");
+
+        stmt = connection.createStatement();
+        String sql = "";
+        sql =   "CREATE TABLE roles (" +
+                "id int PRIMARY KEY NOT NULL, " +
+                "type varchar NOT NULL)";
+        stmt.execute(sql);
+
+        sql = "CREATE TABLE \"media_mapping\" (" +
+                "\'id\'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "\'media_id\' int NOT NULL, " +
+                "\'event_id'	int NOT NULL, " +
+                "\'num_downloads'	int NOT NULL, " +
+                "\'shared'	boolean NOT NULL, " +
+                "\'comment'	varchar, " +
+                "\'num_likes'	int, " +
+                "\'num_dislikes'	int " +
+                ")";
+        stmt.execute(sql);
+
+        sql =   "CREATE TABLE \"media\" ( " +
+                "'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "'type'	varchar NOT NULL, " +
+                "'file_name'	varchar NOT NULL, " +
+                "'actor_id'	INTEGER " +
+                ")";
+        stmt.execute(sql);
+
+        sql =   "CREATE TABLE \"event\" (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "name varchar NOT NULL, " +
+                "open_date datetime NOT NULL, " +
+                "close_date datetime NOT NULL, " +
+                "join_invitation boolean NOT NULL, " +
+                "join_allow_by_accept boolean NOT NULL, " +
+                "join_allow_auto boolean NOT NULL " +
+                ")";
+        stmt.execute(sql);
+
+         sql =  "CREATE TABLE actor_event_mapping (" +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "event_id int NOT NULL, " +
+                "actor_id int NOT NULL, " +
+                "role_id int NOT NULL, " +
+                "join_date datetime NOT NULL " +
+                ")";
+         stmt.execute(sql);
+
+         sql =  "CREATE TABLE actor( " +
+                "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+                "first varchar NOT NULL, " +
+                "last varchar NOT NULL, " +
+                "is_subscriber boolean NOT NULL, " +
+                "contact_method boolean NOT NULL " +
+                ")";
+         stmt.execute(sql);
+         System.out.println("Database created");
+
+    }
     /**
      * Removes all the records from each table so they can be populated
      */
@@ -137,18 +210,18 @@ public class TestData {
      */
     public void insert_db(DataContainer data) throws SQLException {
 
-//        //add the roles you want defined
-//        String sql = "INSERT into roles(id,type) VALUES(?,?)";
-//        statement = connection.prepareStatement(sql);
-//        statement.setInt(1, 1);
-//        statement.setString(2, "owner");
-//        statement.execute();
+          //add the roles you want defined
+          String sql = "INSERT into roles(id,type) VALUES(?,?)";
+          statement = connection.prepareStatement(sql);
+          statement.setInt(1, 1);
+          statement.setString(2, "owner");
+          statement.execute();
 //
-//        sql = "INSERT into roles(id,type) VALUES(?,?)";
-//        statement = connection.prepareStatement(sql);
-//        statement.setInt(1, 2);
-//        statement.setString(2, "member");
-//        statement.execute();
+          sql = "INSERT into roles(id,type) VALUES(?,?)";
+          statement = connection.prepareStatement(sql);
+          statement.setInt(1, 2);
+          statement.setString(2, "member");
+          statement.execute();
 
         // insert users into db
         System.out.println("Inserting "+data.all_users.size()+" users.");
@@ -174,7 +247,7 @@ public class TestData {
         // insert media info into media_mapping
         System.out.println("Inserting media mapping for "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
-            media.insert_userevent_mapping_db();
+            media.insert_event_mapping_db();
 
     }
 
@@ -234,13 +307,13 @@ public class TestData {
                 this.id = r.getInt(1);
         }
 
-        public void insert_userevent_mapping_db() throws SQLException {
+        public void insert_event_mapping_db() throws SQLException {
             for(Event event : events) {
 
-                String sql = "INSERT into media_mapping(media_id, actor_event_mapping_id,num_downloads,shared) VALUES(?,?,?,?)";
+                String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, this.id);
-                statement.setInt(2, event.get_usereventid_for_user(this.owner) );
+                statement.setInt(2, event.id );
                 statement.setInt(3, randBetween(10, 10000));
                 statement.setInt(4, randBetween(0, 2));
                 statement.execute();
