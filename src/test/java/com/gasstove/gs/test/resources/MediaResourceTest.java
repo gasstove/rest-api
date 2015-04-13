@@ -51,7 +51,6 @@ public class MediaResourceTest {
         System.out.println("Testing Image Resource");
     }
 
-
     @Test
     public void testGetMedias() {
 

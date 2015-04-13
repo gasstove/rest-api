@@ -78,6 +78,7 @@ public class TestData {
         }
         System.out.println("All tables dropped");
     }
+
     public void createDB() throws SQLException{
         System.out.println("Creating database and tables");
 
@@ -139,6 +140,7 @@ public class TestData {
          System.out.println("Database created");
 
     }
+
     /**
      * Removes all the records from each table so they can be populated
      */
@@ -216,7 +218,7 @@ public class TestData {
           statement.setInt(1, 1);
           statement.setString(2, "owner");
           statement.execute();
-//
+
           sql = "INSERT into roles(id,type) VALUES(?,?)";
           statement = connection.prepareStatement(sql);
           statement.setInt(1, 2);
@@ -251,6 +253,7 @@ public class TestData {
 
     }
 
+    /* .. DATA HOLDING CLASSES ................................................... */
     /**
      * Container class for all data
      */
@@ -462,6 +465,8 @@ public class TestData {
             return medias;
         }
     }
+
+    /* .. PRIVATE STATICS ....................................................... */
 
     /**
      * Generate a random date base on min_year and max_year

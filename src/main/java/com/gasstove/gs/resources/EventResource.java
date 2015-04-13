@@ -21,19 +21,16 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventResource {
 
-    /**media_mapping
+    /** Returns ids and names of all events.
      *
      */
     @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEvents() {
-
         String returnJSON = "";
-
         try {
-            ArrayList<Event> events = EventReader.getEvents();
-
+            ArrayList<Event> events = EventReader.getEventsIdAndName();
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {

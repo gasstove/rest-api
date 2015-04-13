@@ -6,19 +6,20 @@ import java.util.ArrayList;
  * Created by smorris on 3/24/15.
  */
 public class Media {
+
+    // medias table
     private int id;
     private String type;
     private String fileName;
-    private String owner_name;
-    private int owner_id;
+    private Actor owner;
 
-    private ArrayList<MediaCard> cards = new ArrayList<MediaCard>();
+    private ArrayList<MediaEvent> cards = new ArrayList<MediaEvent>();
 
-    public void addCard(MediaCard mc){
+    public void addCard(MediaEvent mc){
         this.cards.add(mc);
     }
 
-    public ArrayList<MediaCard> getCards(){
+    public ArrayList<MediaEvent> getCards(){
         return cards;
     }
 

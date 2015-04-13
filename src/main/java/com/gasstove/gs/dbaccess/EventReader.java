@@ -15,11 +15,11 @@ import java.util.ArrayList;
 public class EventReader {
 
     /**
-     * This returns a list of all the events in the db. Eventually it will need to be filtered
-     *
+     * Returns a list of all the actors in the db.
+     * Provides for each event: id, name
      * @return ArrayList<Event> a list of event objects
      */
-    public static ArrayList<Event> getEvents(){
+    public static ArrayList<Event> getEventsIdAndName(){
         Statement stmt;
         DBConnection db = new DBConnection();
         ArrayList<Event> events = new ArrayList<Event>();
@@ -28,18 +28,14 @@ public class EventReader {
             Connection conn = db.getConnection();
             stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-
             while(rs.next()){
                 Event e = new Event();
                 e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
                 e.setOpenDate(rs.getDate("open_date"));
                 e.setCloseDate(rs.getDate("close_date"));
-
                 events.add(e);
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

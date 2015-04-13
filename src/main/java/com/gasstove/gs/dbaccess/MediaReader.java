@@ -1,7 +1,7 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.Media;
-import com.gasstove.gs.models.MediaCard;
+import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.DBConnection;
 
 import java.sql.*;
@@ -64,7 +64,7 @@ public class MediaReader {
             stmt.setInt(1,mId);
             rs = stmt.executeQuery();
             while(rs.next()) {
-                MediaCard mc = new MediaCard();
+                MediaEvent mc = new MediaEvent();
 
                 mc.numDownloads = rs.getInt("num_downloads");
                 mc.shared = rs.getBoolean("shared");
@@ -77,7 +77,7 @@ public class MediaReader {
                 ResultSet rs2 = stmt.executeQuery();
                 if(rs2.next()){
                     // This is silly, media has a single owner, and should know it directly
-                    media.setOwnerName( ActorReader.getActorNameWithId(rs2.getInt("actor_id")) );
+                    media.setOwnerName(ActorReader.getActorNameWithId(rs2.getInt("actor_id")));
                     mc.event_id = rs2.getInt("event_id");
                 }
 

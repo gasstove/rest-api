@@ -6,11 +6,15 @@ import java.util.ArrayList;
  * Created by smorris on 3/24/15.
  */
 public class Actor {
+
+    // actor table
     private int id;
     private String first;
     private String last;
     private boolean isSubscriber;
     private String contactMethod;
+
+    // refs
     private ArrayList<Event> events = new ArrayList<Event>();
 
     public int getId() {

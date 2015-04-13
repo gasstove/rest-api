@@ -16,11 +16,11 @@ public class ActorReader {
 
 
     /**
-     * This returns a list of all the actors in the db. Eventually it will need to be filtered
-     *
+     * Returns a list of all the actors in the db.
+     * Provides for each actor: id, first, last
      * @return ArrayList<Actors> a list of actor objects
      */
-    public static ArrayList<Actor> getActors(){
+    public static ArrayList<Actor> getActorsIdAndName(){
         Statement stmt;
         DBConnection db = new DBConnection();
         ArrayList<Actor> actors = new ArrayList<Actor>();
@@ -35,12 +35,8 @@ public class ActorReader {
                 a.setId(rs.getInt("id"));
                 a.setFirst(rs.getString("first"));
                 a.setLast(rs.getString("last"));
-                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
-                a.setContactMethod(rs.getString("contact_method"));
                 actors.add(a);
             }
-
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -54,7 +50,7 @@ public class ActorReader {
      * @param aId the actor id to query for
      * @return Actor a fully populated actor object
      */
-    public static Actor getActor(int aId){
+    public static Actor getActorFull(int aId){
         DBConnection db = new DBConnection();
         String sqlE = "Select * FROM actor where id = ?";
         String sqlA = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = event.id";
@@ -71,7 +67,6 @@ public class ActorReader {
                 a.setLast(rs.getString("last"));
                 a.setContactMethod(rs.getString("contact_method"));
                 a.setIsSubscriber(rs.getBoolean("is_subscriber"));
-
             }
 
             stmt = conn.prepareStatement(sqlA);

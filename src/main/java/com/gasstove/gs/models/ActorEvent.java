@@ -5,11 +5,16 @@ import java.util.ArrayList;
 /**
  * Created by smorris on 3/24/15.
  */
-public class Card {
+public class ActorEvent {
+
+    // actor_event table
     private Actor actor;
     private Role role;
     private Event event;
-    private ArrayList<MediaCard> mediaCards = new ArrayList<MediaCard>();
+    private Date joinDate;
+
+    // refs
+    private ArrayList<MediaEvent> mediaEvents = new ArrayList<MediaEvent>();
 
     public Actor getActor() {
         return actor;
@@ -35,11 +40,11 @@ public class Card {
         this.event = event;
     }
 
-    public ArrayList<MediaCard> getMediaCards() {
-        return mediaCards;
+    public ArrayList<MediaEvent> getMediaEvents() {
+        return mediaEvents;
     }
 
-    public void setMediaCards(ArrayList<MediaCard> mediaCards) {
-        this.mediaCards = mediaCards;
+    public void setMediaEvents(ArrayList<MediaEvent> mediaEvents) {
+        this.mediaEvents = mediaEvents;
     }
 }

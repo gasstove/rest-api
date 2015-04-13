@@ -7,6 +7,8 @@ import java.util.Date;
  * Created by seanmorris on 3/22/15.
  */
 public class Event {
+
+    // events table
     private int id;
     private String name;
     private Date openDate;
@@ -14,6 +16,8 @@ public class Event {
     private boolean joinInvitation;
     private boolean joinAllowByAccept;
     private boolean joinAllowAuto;
+
+    // refs
     private ArrayList<Actor> users = new ArrayList<Actor>();
 
     public Date getCloseDate() {
@@ -31,7 +35,6 @@ public class Event {
     public void setOpenDate(Date date) {
         this.openDate = date;
     }
-
 
     public String getName() {
         return name;
@@ -80,4 +83,5 @@ public class Event {
     public void setUsers(ArrayList<Actor> users) {
         this.users = users;
     }
+
 }

@@ -24,7 +24,7 @@ import java.util.ArrayList;
 public class ActorResource {
 
     /**
-     *  This is the root resource for actors. It returns all actors
+     *  Returns ids and names of all actors.
      */
     @Path("/")
     @GET
@@ -32,7 +32,7 @@ public class ActorResource {
     public String getActors() {
         String returnJSON = "";
         try {
-            ArrayList<Actor> actors = ActorReader.getActors();
+            ArrayList<Actor> actors = ActorReader.getActorsIdAndName();
             Gson gson = new Gson();
             returnJSON = gson.toJson(actors);
         } catch (Exception exp) {
@@ -53,12 +53,9 @@ public class ActorResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getActor(@PathParam("actorId") String actorId) {
-
         String returnJSON = "";
-
         try {
-            Actor actor = ActorReader.getActor(Integer.parseInt(actorId));
-
+            Actor actor = ActorReader.getActorFull(Integer.parseInt(actorId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(actor);
         } catch (Exception exp) {
@@ -69,33 +66,33 @@ public class ActorResource {
         return returnJSON;
     }
 
-    /**
-     * Restful method to return actor object populated by an event and media
-     * in the event
-     *
-     * @param actorId   The id of the actor to be loaded
-       @param eventId   The id of the event to be loaded
-     * @return JSON representation of Actor object
-     */
-    @Path("/actor/{Id: [0-9]+}/event/{eventId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getEvent(@PathParam("actorId") String actorId,
-                           @PathParam("eventId") String eventId) {
-
-        String returnJSON = "";
-
-        try {
-            Actor actor = ActorReader.getActorEventMedia(Integer.parseInt(actorId),
-                                                Integer.parseInt(eventId));
-
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(actor);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
-        } finally {
-        }
-        return returnJSON;
-    }
+//    /**
+//     * Restful method to return actor object an event and media
+//     * in the event
+//     *
+//     * @param actorId   The id of the actor to be loaded
+//       @param eventId   The id of the event to be loaded
+//     * @return JSON representation of Actor object
+//     */
+//    @Path("/actor/{Id: [0-9]+}/event/{eventId: [0-9]+}")
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getEvent(@PathParam("actorId") String actorId,
+//                           @PathParam("eventId") String eventId) {
+//
+//        String returnJSON = "";
+//
+//        try {
+//            Actor actor = ActorReader.getActorEventMedia(Integer.parseInt(actorId),
+//                                                Integer.parseInt(eventId));
+//
+//            Gson gson = new Gson();
+//            returnJSON = gson.toJson(actor);
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+//        } finally {
+//        }
+//        return returnJSON;
+//    }
 }
