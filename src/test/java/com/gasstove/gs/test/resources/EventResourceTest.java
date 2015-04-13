@@ -1,6 +1,7 @@
 package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.test.util.TestConfiguration;
+import com.gasstove.gs.test.util.TestDefaults;
 import com.googlecode.jeeunit.concurrent.Concurrent;
 import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
 import org.apache.commons.io.IOUtils;
@@ -27,6 +28,7 @@ import static org.junit.Assert.fail;
  * @author mnjuhn
  */
 public class EventResourceTest {
+
     // standard response values per test
     String responseStatus;
     String responseJSON;
@@ -45,14 +47,14 @@ public class EventResourceTest {
     }
 
 
-    /**
-     * A fake network is set up before each test.
-     */
-    @Before
-    public void setup() {
-        // Setup server request
-        System.out.println("Testing Event Resource");
-    }
+//    /**
+//     * A fake network is set up before each test.
+//     */
+//    @Before
+//    public void setup() {
+//        // Setup server request
+//        System.out.println("Testing Event Resource");
+//    }
 
 
     /**
@@ -91,7 +93,7 @@ public class EventResourceTest {
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/events/537", "GET", "");
+                    TestConfiguration.sendRequest("/events/"+ TestDefaults.event_id, "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");

@@ -15,11 +15,11 @@ import java.util.ArrayList;
 public class EventReader {
 
     /**
-     * Returns a list of all the actors in the db.
+     * Returns a list of all the events in the db.
      * Provides for each event: id, name
      * @return ArrayList<Event> a list of event objects
      */
-    public static ArrayList<Event> getEventsIdAndName(){
+    public static ArrayList<Event> getEventsBasicInfo(){
         Statement stmt;
         DBConnection db = new DBConnection();
         ArrayList<Event> events = new ArrayList<Event>();
@@ -49,7 +49,7 @@ public class EventReader {
      * @param eId the event id to query for
      * @return Event a fully populated event object
      */
-    public static Event getEvent(int eId){
+    public static Event getEventFull(int eId){
         DBConnection db = new DBConnection();
         String sqlE = "Select * FROM event where id = ?";
         String sqlA = "Select actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem where aem.event_id=? and aem.actor_id = actor.id";

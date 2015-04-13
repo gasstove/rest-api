@@ -13,15 +13,15 @@ public class Media {
     private String fileName;
     private Actor owner;
 
-    private ArrayList<MediaEvent> cards = new ArrayList<MediaEvent>();
+//    private ArrayList<MediaEvent> cards;
 
-    public void addCard(MediaEvent mc){
-        this.cards.add(mc);
-    }
+//    public void addCard(MediaEvent mc){
+//        this.cards.add(mc);
+//    }
 
-    public ArrayList<MediaEvent> getCards(){
-        return cards;
-    }
+//    public ArrayList<MediaEvent> getCards(){
+//        return cards;
+//    }
 
     public int getId() {
         return id;

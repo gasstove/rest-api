@@ -1,9 +1,7 @@
 package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.ActorReader;
-import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.models.Actor;
-import com.gasstove.gs.models.Event;
 import com.google.gson.Gson;
 
 import javax.ws.rs.GET;
@@ -32,7 +30,7 @@ public class ActorResource {
     public String getActors() {
         String returnJSON = "";
         try {
-            ArrayList<Actor> actors = ActorReader.getActorsIdAndName();
+            ArrayList<Actor> actors = ActorReader.getActorsBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(actors);
         } catch (Exception exp) {

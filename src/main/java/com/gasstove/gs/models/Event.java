@@ -13,12 +13,12 @@ public class Event {
     private String name;
     private Date openDate;
     private Date closeDate;
-    private boolean joinInvitation;
-    private boolean joinAllowByAccept;
-    private boolean joinAllowAuto;
+    private Boolean joinInvitation;
+    private Boolean joinAllowByAccept;
+    private Boolean joinAllowAuto;
 
     // refs
-    private ArrayList<Actor> users = new ArrayList<Actor>();
+    private ArrayList<Actor> users;
 
     public Date getCloseDate() {
         return closeDate;

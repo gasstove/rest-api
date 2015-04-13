@@ -1,6 +1,7 @@
 package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.test.util.TestConfiguration;
+import com.gasstove.gs.test.util.TestDefaults;
 import org.apache.commons.io.IOUtils;
 import org.junit.Before;
 import org.junit.Test;
@@ -18,12 +19,12 @@ import static org.junit.Assert.*;
  * @author mnjuhn
  */
 public class ActorResourceTest {
+
     // standard response values per test
     String responseStatus;
     String responseJSON;
     private final String expectedResponseStatus = "OK";
     private final int expectedResponseCode = 200;
-
 
     /**
      * The constructor sets up database for so we can set up a Model DataBase Access
@@ -34,8 +35,6 @@ public class ActorResourceTest {
      */
     public ActorResourceTest() throws Exception {
     }
-
-
 
     /**
      * This tests the getActors resource. The method should return a list of actors.
@@ -72,7 +71,7 @@ public class ActorResourceTest {
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/actors/122", "GET", "");
+                    TestConfiguration.sendRequest("/actors/"+ TestDefaults.actor_id, "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");

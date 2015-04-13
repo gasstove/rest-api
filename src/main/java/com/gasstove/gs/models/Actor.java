@@ -11,11 +11,11 @@ public class Actor {
     private int id;
     private String first;
     private String last;
-    private boolean isSubscriber;
+    private Boolean isSubscriber;
     private String contactMethod;
 
     // refs
-    private ArrayList<Event> events = new ArrayList<Event>();
+    private ArrayList<Event> events;
 
     public int getId() {
         return id;

@@ -3,7 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.models.Event;
 
-import org.junit.Before;
+import com.gasstove.gs.test.util.TestDefaults;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ public class EventReaderTest {
     @Test
     public void testGetEvents() {
         try {
-            ArrayList<Event> list = EventReader.getEvents();
+            ArrayList<Event> list = EventReader.getEventsBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getName() != null);
         } catch (Exception exp) {
@@ -49,9 +49,9 @@ public class EventReaderTest {
     public void testGetEvent() {
 
         try {
-            Event e = EventReader.getEvent(537);
+            Event e = EventReader.getEventFull(TestDefaults.event_id);
             assertTrue(e.getName().length() > 0);
-            assertTrue(e.getId() == 537);
+            assertTrue(e.getId() == TestDefaults.event_id);
             assertNotNull(e.getUsers());
             assertNotNull(e.getCloseDate());
             assertNotNull(e.getOpenDate());

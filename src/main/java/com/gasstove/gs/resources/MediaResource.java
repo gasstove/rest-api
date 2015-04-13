@@ -27,7 +27,7 @@ public class MediaResource {
     public String getMedias() {
         String returnJSON = "";
         try {
-            ArrayList<Media> medias = MediaReader.getMedias();
+            ArrayList<Media> medias = MediaReader.getMediasBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(medias);
         } catch (Exception exp) {

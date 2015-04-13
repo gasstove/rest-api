@@ -28,9 +28,9 @@ public class EventResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEvents() {
-        String returnJSON = "";
+        String returnJSON;
         try {
-            ArrayList<Event> events = EventReader.getEventsIdAndName();
+            ArrayList<Event> events = EventReader.getEventsBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {
@@ -51,12 +51,9 @@ public class EventResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEvent(@PathParam("eventId") String eventId) {
-
-        String returnJSON = "";
-
+        String returnJSON;
         try {
-            Event event = EventReader.getEvent(Integer.parseInt(eventId));
-
+            Event event = EventReader.getEventFull(Integer.parseInt(eventId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(event);
         } catch (Exception exp) {
@@ -66,4 +63,5 @@ public class EventResource {
         }
         return returnJSON;
     }
+
 }

@@ -14,22 +14,35 @@ import java.util.ArrayList;
  */
 public class ActorReader {
 
+    private Connection conn;
+
+    public ActorReader(){
+        try {
+            conn = (new DBConnection()).getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public ActorReader(Connection conn){
+        try {
+            if(conn.isValid(1000))
+                this.conn = conn;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Returns a list of all the actors in the db.
      * Provides for each actor: id, first, last
      * @return ArrayList<Actors> a list of actor objects
      */
-    public static ArrayList<Actor> getActorsIdAndName(){
-        Statement stmt;
-        DBConnection db = new DBConnection();
+    public ArrayList<Actor> getActorsBasicInfo(){
         ArrayList<Actor> actors = new ArrayList<Actor>();
-        String sql = "Select * FROM actor";
         try {
-            Connection conn = db.getConnection();
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM actor");
             while(rs.next()){
                 Actor a = new Actor();
                 a.setId(rs.getInt("id"));
@@ -50,14 +63,10 @@ public class ActorReader {
      * @param aId the actor id to query for
      * @return Actor a fully populated actor object
      */
-    public static Actor getActorFull(int aId){
-        DBConnection db = new DBConnection();
-        String sqlE = "Select * FROM actor where id = ?";
-        String sqlA = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = event.id";
+    public Actor getActorFull(int aId){
         Actor a = new Actor();
         try {
-            Connection conn = db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlE);
+            PreparedStatement stmt = conn.prepareStatement( "SELECT * FROM actor where id = ?" );
             stmt.setInt(1,aId);
 
             ResultSet rs = stmt.executeQuery();
@@ -69,7 +78,9 @@ public class ActorReader {
                 a.setIsSubscriber(rs.getBoolean("is_subscriber"));
             }
 
-            stmt = conn.prepareStatement(sqlA);
+
+
+            stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? AND aem.event_id = event.id" );
             stmt.setInt(1,aId);
             rs = stmt.executeQuery();
             ArrayList<Event> events = new ArrayList<Event>();
@@ -85,19 +96,17 @@ public class ActorReader {
                 events.add(e);
             }
             a.setEvents(events);
-
+            
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
         return a;
     }
 
-    public static String getActorNameWithId(int aId){
+    public String getActorNameWithId(int aId){
         String name = "";
         try {
-            DBConnection db = new DBConnection();
-            Connection conn = db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement("Select first,last FROM actor where id = ?");
+            PreparedStatement stmt = conn.prepareStatement("SELECT first,last FROM actor WHERE id = ?");
             stmt.setInt(1,aId);
             ResultSet rs = stmt.executeQuery();
             if(rs.next())
@@ -115,51 +124,50 @@ public class ActorReader {
      * @param aId the actor id to query for
      * @return Actor a fully populated actor object
      */
-    public static Actor getActorEventMedia(int aId, int eId){
-        DBConnection db = new DBConnection();
-        String sqlA = "Select * FROM actor where id = ?";
-        String sqlAE = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = ?";
-        String sqlEM = "Select media.id as mid, * FROM media, " +
-                                "media_mapping mmm," +
-                                "actor_event_mapping aem " +
-                                "WHERE aem.id=mm.actor.event_mapping_id and mm.media_id = media.id";
-        Actor a = new Actor();
-        try {
-            Connection conn = db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlA);
-            stmt.setInt(1,aId);
-
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                a.setId(rs.getInt("id"));
-                a.setFirst(rs.getString("first"));
-                a.setLast(rs.getString("last"));
-                a.setContactMethod(rs.getString("contact_method"));
-                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
-
-            }
-
-            stmt = conn.prepareStatement(sqlA);
-            stmt.setInt(1,aId);
-            rs = stmt.executeQuery();
-            ArrayList<Event> events = new ArrayList<Event>();
-            while(rs.next()) {
-                Event e = new Event();
-                e.setId(rs.getInt("eid"));
-                e.setName(rs.getString("name"));
-                e.setOpenDate(rs.getDate("open_date"));
-                e.setCloseDate(rs.getDate("close_date"));
-                e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
-                e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
-                e.setJoinInvitation(rs.getBoolean("join_invitation"));
-                events.add(e);
-            }
-            a.setEvents(events);
-
-        } catch (SQLException sq) {
-            sq.printStackTrace();
-        }
-        return a;
-    }
+//    public Actor getActorEventMedia(int aId, int eId){
+//        String sqlA = "Select * FROM actor where id = ?";
+//        String sqlAE = "Select event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? and aem.event_id = ?";
+//        String sqlEM = "Select media.id as mid, * FROM media, " +
+//                                "media_mapping mmm," +
+//                                "actor_event_mapping aem " +
+//                                "WHERE aem.id=mm.actor.event_mapping_id and mm.media_id = media.id";
+//        Actor a = new Actor();
+//        try {
+//            Connection conn = db.getConnection();
+//            PreparedStatement stmt = conn.prepareStatement(sqlA);
+//            stmt.setInt(1,aId);
+//
+//            ResultSet rs = stmt.executeQuery();
+//            if(rs.next()){
+//                a.setId(rs.getInt("id"));
+//                a.setFirst(rs.getString("first"));
+//                a.setLast(rs.getString("last"));
+//                a.setContactMethod(rs.getString("contact_method"));
+//                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
+//
+//            }
+//
+//            stmt = conn.prepareStatement(sqlA);
+//            stmt.setInt(1,aId);
+//            rs = stmt.executeQuery();
+//            ArrayList<Event> events = new ArrayList<Event>();
+//            while(rs.next()) {
+//                Event e = new Event();
+//                e.setId(rs.getInt("eid"));
+//                e.setName(rs.getString("name"));
+//                e.setOpenDate(rs.getDate("open_date"));
+//                e.setCloseDate(rs.getDate("close_date"));
+//                e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
+//                e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
+//                e.setJoinInvitation(rs.getBoolean("join_invitation"));
+//                events.add(e);
+//            }
+//            a.setEvents(events);
+//
+//        } catch (SQLException sq) {
+//            sq.printStackTrace();
+//        }
+//        return a;
+//    }
 
 }

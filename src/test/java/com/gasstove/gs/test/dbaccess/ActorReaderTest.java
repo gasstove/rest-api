@@ -1,9 +1,8 @@
 package com.gasstove.gs.test.dbaccess;
 
 import com.gasstove.gs.dbaccess.ActorReader;
-import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.models.Actor;
-import com.gasstove.gs.models.Event;
+import com.gasstove.gs.test.util.TestDefaults;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -34,7 +33,7 @@ public class ActorReaderTest {
     public void testGetActors() {
         try {
 
-            ArrayList<Actor> list = ActorReader.getActors();
+            ArrayList<Actor> list = ActorReader.getActorsBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
 
@@ -53,9 +52,9 @@ public class ActorReaderTest {
 
         try {
 
-            Actor a = ActorReader.getActor(122);
+            Actor a = ActorReader.getActorFull(TestDefaults.actor_id);
             assertTrue(a.getFirst().length() > 0);
-            assertTrue(a.getId() == 122);
+            assertTrue(a.getId() == TestDefaults.actor_id);
             assertNotNull(a.getEvents());
             assertNotNull(a.getLast());
             assertNotNull(a.getContactMethod());
