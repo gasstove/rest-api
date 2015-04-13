@@ -23,6 +23,10 @@ public class ActorReader {
         }
     }
 
+    /**
+     * Used if someone with a valid connection wants to use the ActorReader
+     * @param conn
+     */
     public ActorReader(Connection conn) {
         this.conn = conn;
     }
@@ -83,6 +87,37 @@ public class ActorReader {
         }
         return a;
     }
+
+    public ArrayList<Actor> getActorsForEvent(int eId){
+        ArrayList<Actor> actors = new ArrayList<Actor>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT actor.id, first, last FROM actor, actor_event_mapping aem WHERE aem.event_id=? AND aem.actor_id = actor.id");
+            stmt.setInt(1, eId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Actor a = new Actor();
+                a.setId(rs.getInt("id"));
+                a.setFirst(rs.getString("first"));
+                a.setLast(rs.getString("last"));
+                actors.add(a);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return actors;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
 
     public String getActorNameWithId(int aId) {
         String name = "";

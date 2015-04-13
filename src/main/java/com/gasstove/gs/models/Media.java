@@ -11,17 +11,10 @@ public class Media {
     private int id;
     private String type;
     private String fileName;
-    private Actor owner;
+    private int actor_id;
 
-//    private ArrayList<MediaEvent> cards;
-
-//    public void addCard(MediaEvent mc){
-//        this.cards.add(mc);
-//    }
-
-//    public ArrayList<MediaEvent> getCards(){
-//        return cards;
-//    }
+    // refs
+    private ArrayList<MediaEvent> media_events;
 
     public int getId() {
         return id;
@@ -46,4 +39,20 @@ public class Media {
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }
+
+    public int getActor_id() {
+        return actor_id;
+    }
+
+    public void setActor_id(int actor_id) {
+        this.actor_id = actor_id;
+    }
+
+    public void add_media_event(MediaEvent me){
+        if(media_events==null)
+            media_events = new ArrayList<MediaEvent>();
+        media_events.add(me);
+    }
+
+
 }

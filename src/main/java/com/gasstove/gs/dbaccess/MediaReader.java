@@ -51,53 +51,42 @@ public class MediaReader {
     }
 
 
-//    public Media getMedia(int mId){
-//
-//        Media media = new Media();
-//        try {
-//
-//            // query media table
-//            String sqlM = "Select * FROM media where id = ?";
-//            PreparedStatement stmt = conn.prepareStatement(sqlM);
-//            stmt.setInt(1,mId);
-//            ResultSet rs = stmt.executeQuery();
-//            if(rs.next()){
-//                media.setId(rs.getInt("id"));
-//                media.setType(rs.getString("type"));
-//                media.setFileName(rs.getString("file_name"));
-//            }
-//
-//            // query media_mapping table
-//            String strMM = "Select * FROM media_mapping where media_id = ?";
-//            stmt = conn.prepareStatement(strMM);
-//            stmt.setInt(1,mId);
-//            rs = stmt.executeQuery();
-//            while(rs.next()) {
-//                MediaEvent mc = new MediaEvent();
-//
-//                mc.numDownloads = rs.getInt("num_downloads");
-//                mc.shared = rs.getBoolean("shared");
-//
-//                // query actor_event_mapping table
-//                int actor_event_id = rs.getInt("actor_event_mapping_id");
-//                String sqlAE = "Select * FROM actor_event_mapping where id = ?";
-//                stmt = conn.prepareStatement(sqlAE);
-//                stmt.setInt(1,actor_event_id);
-//                ResultSet rs2 = stmt.executeQuery();
-//                if(rs2.next()){
-//                    // This is silly, media has a single owner, and should know it directly
-//                    media.setOwnerName(ActorReader.getActorNameWithId(rs2.getInt("actor_id")));
-//                    mc.event_id = rs2.getInt("event_id");
-//                }
-//
-//                media.addCard(mc);
-//            }
-//
-//        } catch (SQLException sq) {
-//            sq.printStackTrace();
-//        }
-//        return media;
-//    }
+    public Media getMedia(int mId){
+
+        Media media = new Media();
+        try {
+
+            // query media table
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM media WHERE id = ?");
+            stmt.setInt(1,mId);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                media.setId(rs.getInt("id"));
+                media.setType(rs.getString("type"));
+                media.setFileName(rs.getString("file_name"));
+                media.setActor_id(rs.getInt("actor_id"));
+            }
+
+            // query media_mapping table
+            stmt = conn.prepareStatement("SELECT * FROM media_mapping WHERE media_id = ?");
+            stmt.setInt(1,mId);
+            rs = stmt.executeQuery();
+            while(rs.next()) {
+                MediaEvent me = new MediaEvent();
+                me.setComment(rs.getString("comment"));
+                me.setShared(rs.getBoolean("shared"));
+                me.setNumDownloads(rs.getInt("num_downloads"));
+                me.setEvent_id(rs.getInt("event_id"));
+                me.setNumDislikes(rs.getInt("num_dislikes"));
+                me.setNumLikes(rs.getInt("num_likes"));
+                media.add_media_event(me);
+            }
+
+        } catch (SQLException sq) {
+            sq.printStackTrace();
+        }
+        return media;
+    }
 
 //    public ArrayList<Media> getMediaForEvent(int eId){
 //        ArrayList<Media> medias = new ArrayList<Media>();

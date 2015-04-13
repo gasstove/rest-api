@@ -39,32 +39,31 @@ public class MediaResource {
         return returnJSON;
     }
 
-//    /**
-//     * Restful method to return media object by id
-//     *
-//     * @param mediaId The id of the media to be loaded
-//     * @return JSON representation of Media object
-//     */
-//    @Path("/{mediaId: [0-9]+}")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String getMedia(@PathParam("mediaId") String mediaId) {
-//
-//        String returnJSON = "";
-//
-//        try {
-//            Media media = MediaReader.getMedia(Integer.parseInt(mediaId));
-//            Gson gson = new Gson();
-//            returnJSON = gson.toJson(media);
-//        } catch (Exception exp) {
-//            exp.printStackTrace();
-//            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
-//        } finally {
-//        }
-//        return returnJSON;
-//    }
-//
-//
+    /**
+     * Restful method to return media object by id
+     *
+     * @param mediaId The id of the media to be loaded
+     * @return JSON representation of Media object
+     */
+    @Path("/{mediaId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getMedia(@PathParam("mediaId") String mediaId) {
+        String returnJSON;
+        try {
+            MediaReader mr = new MediaReader();
+            Media media = mr.getMedia(Integer.parseInt(mediaId));
+            Gson gson = new Gson();
+            returnJSON = gson.toJson(media);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+        } finally {
+        }
+        return returnJSON;
+    }
+
+
 //    /**
 //     * Restful method to return list of media for a given event id
 //     *

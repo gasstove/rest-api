@@ -76,22 +76,8 @@ public class EventReader {
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
-
-            stmt = conn.prepareStatement("SELECT actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem WHERE aem.event_id=? AND aem.actor_id = actor.id");
-            stmt.setInt(1, eId);
-            rs = stmt.executeQuery();
-            ArrayList<Actor> actors = new ArrayList<Actor>();
-            while (rs.next()) {
-                Actor a = new Actor();
-                a.setId(rs.getInt("id"));
-                a.setFirst(rs.getString("first"));
-                a.setLast(rs.getString("last"));
-                a.setContactMethod(rs.getString("contact_method"));
-                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
-                actors.add(a);
-            }
-            e.setUsers(actors);
-
+            ActorReader ar = new ActorReader(conn);
+            e.setUsers(ar.getActorsForEvent(eId));
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
