@@ -23,28 +23,12 @@ public class Media {
         return cards;
     }
 
-    public String getOwnerName() {
-        return owner_name;
-    }
-
-    public void setOwnerName(String owner_name) {
-        this.owner_name = owner_name;
-    }
-
     public int getId() {
         return id;
     }
 
     public void setId(int id) {
         this.id = id;
-    }
-
-    public int getOwnerId() {
-        return owner_id;
-    }
-
-    public void setOwnerId(int owner_id) {
-        this.owner_id = owner_id;
     }
 
     public String getType() {
