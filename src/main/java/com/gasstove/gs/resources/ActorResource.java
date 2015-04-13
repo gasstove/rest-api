@@ -30,7 +30,8 @@ public class ActorResource {
     public String getActors() {
         String returnJSON = "";
         try {
-            ArrayList<Actor> actors = ActorReader.getActorsBasicInfo();
+            ActorReader ar = new ActorReader();
+            ArrayList<Actor> actors = ar.getActorsBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(actors);
         } catch (Exception exp) {
@@ -53,7 +54,8 @@ public class ActorResource {
     public String getActor(@PathParam("actorId") String actorId) {
         String returnJSON = "";
         try {
-            Actor actor = ActorReader.getActorFull(Integer.parseInt(actorId));
+            ActorReader ar = new ActorReader();
+            Actor actor = ar.getActorFull(Integer.parseInt(actorId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(actor);
         } catch (Exception exp) {

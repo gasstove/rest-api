@@ -32,8 +32,8 @@ public class ActorReaderTest {
     @Test
     public void testGetActors() {
         try {
-
-            ArrayList<Actor> list = ActorReader.getActorsBasicInfo();
+            ActorReader ar = new ActorReader();
+            ArrayList<Actor> list = ar.getActorsBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
 
@@ -51,8 +51,8 @@ public class ActorReaderTest {
     public void testGetActor() {
 
         try {
-
-            Actor a = ActorReader.getActorFull(TestDefaults.actor_id);
+            ActorReader ar = new ActorReader();
+            Actor a = ar.getActorFull(TestDefaults.actor_id);
             assertTrue(a.getFirst().length() > 0);
             assertTrue(a.getId() == TestDefaults.actor_id);
             assertNotNull(a.getEvents());
@@ -64,7 +64,6 @@ public class ActorReaderTest {
             exp.printStackTrace();
             fail();
         }
-
     }
 
 }

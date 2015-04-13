@@ -64,4 +64,5 @@ public class Actor {
     public void setEvents(ArrayList<Event> events) {
         this.events = events;
     }
+
 }

@@ -33,7 +33,8 @@ public class EventReaderTest {
     @Test
     public void testGetEvents() {
         try {
-            ArrayList<Event> list = EventReader.getEventsBasicInfo();
+            EventReader er = new EventReader();
+            ArrayList<Event> list = er.getEventsBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getName() != null);
         } catch (Exception exp) {
@@ -49,7 +50,8 @@ public class EventReaderTest {
     public void testGetEvent() {
 
         try {
-            Event e = EventReader.getEventFull(TestDefaults.event_id);
+            EventReader er = new EventReader();
+            Event e = er.getEventFull(TestDefaults.event_id);
             assertTrue(e.getName().length() > 0);
             assertTrue(e.getId() == TestDefaults.event_id);
             assertNotNull(e.getUsers());

@@ -30,7 +30,8 @@ public class EventResource {
     public String getEvents() {
         String returnJSON;
         try {
-            ArrayList<Event> events = EventReader.getEventsBasicInfo();
+            EventReader er = new EventReader();
+            ArrayList<Event> events = er.getEventsBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {
@@ -53,7 +54,8 @@ public class EventResource {
     public String getEvent(@PathParam("eventId") String eventId) {
         String returnJSON;
         try {
-            Event event = EventReader.getEventFull(Integer.parseInt(eventId));
+            EventReader er = new EventReader();
+            Event event = er.getEventFull(Integer.parseInt(eventId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(event);
         } catch (Exception exp) {

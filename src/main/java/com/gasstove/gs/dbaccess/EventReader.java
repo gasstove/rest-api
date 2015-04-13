@@ -14,21 +14,32 @@ import java.util.ArrayList;
  */
 public class EventReader {
 
+    private Connection conn;
+
+    public EventReader() {
+        try {
+            conn = (new DBConnection()).getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public EventReader(Connection conn) {
+        this.conn = conn;
+    }
+
     /**
      * Returns a list of all the events in the db.
      * Provides for each event: id, name
+     *
      * @return ArrayList<Event> a list of event objects
      */
-    public static ArrayList<Event> getEventsBasicInfo(){
-        Statement stmt;
-        DBConnection db = new DBConnection();
+    public ArrayList<Event> getEventsBasicInfo() {
         ArrayList<Event> events = new ArrayList<Event>();
-        String sql = "Select * FROM event";
         try {
-            Connection conn = db.getConnection();
-            stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM event");
+            while (rs.next()) {
                 Event e = new Event();
                 e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
@@ -49,18 +60,14 @@ public class EventReader {
      * @param eId the event id to query for
      * @return Event a fully populated event object
      */
-    public static Event getEventFull(int eId){
-        DBConnection db = new DBConnection();
-        String sqlE = "Select * FROM event where id = ?";
-        String sqlA = "Select actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem where aem.event_id=? and aem.actor_id = actor.id";
+    public Event getEventFull(int eId) {
         Event e = new Event();
         try {
-            Connection conn = db.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sqlE);
-            stmt.setInt(1,eId);
+            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM event WHERE id = ?");
+            stmt.setInt(1, eId);
 
             ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
                 e.setOpenDate(rs.getDate("open_date"));
@@ -70,11 +77,11 @@ public class EventReader {
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
 
-            stmt = conn.prepareStatement(sqlA);
-            stmt.setInt(1,eId);
+            stmt = conn.prepareStatement("SELECT actor.id, first, last, contact_method, is_subscriber FROM actor, actor_event_mapping aem WHERE aem.event_id=? AND aem.actor_id = actor.id");
+            stmt.setInt(1, eId);
             rs = stmt.executeQuery();
             ArrayList<Actor> actors = new ArrayList<Actor>();
-            while(rs.next()) {
+            while (rs.next()) {
                 Actor a = new Actor();
                 a.setId(rs.getInt("id"));
                 a.setFirst(rs.getString("first"));
@@ -89,6 +96,26 @@ public class EventReader {
             sq.printStackTrace();
         }
         return e;
+    }
+
+    public ArrayList<Event> getEventsForActor(int aId) {
+        ArrayList<Event> events = new ArrayList<Event>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? AND aem.event_id = event.id");
+            stmt.setInt(1, aId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Event e = new Event();
+                e.setId(rs.getInt("eid"));
+                e.setName(rs.getString("name"));
+                e.setOpenDate(rs.getDate("open_date"));
+                e.setCloseDate(rs.getDate("close_date"));
+                events.add(e);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return events;
     }
 
 }

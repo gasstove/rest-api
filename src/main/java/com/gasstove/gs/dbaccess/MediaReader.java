@@ -12,20 +12,32 @@ import java.util.ArrayList;
  */
 public class MediaReader {
 
+    private Connection conn;
+
+    public MediaReader() {
+        try {
+            conn = (new DBConnection()).getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public MediaReader(Connection conn) {
+        this.conn = conn;
+    }
+
     /**
      * Returns a list of all the medias in the db.
      * Provides for each media: id, type, file_name
+     *
      * @return ArrayList<Media> a list of media objects
      */
-    public static ArrayList<Media> getMediasBasicInfo(){
-        DBConnection db = new DBConnection();
+    public ArrayList<Media> getMediasBasicInfo() {
         ArrayList<Media> medias = new ArrayList<Media>();
-        String sql = "Select * FROM media";
         try {
-            Connection conn = db.getConnection();
             Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while(rs.next()){
+            ResultSet rs = stmt.executeQuery("Select * FROM media");
+            while (rs.next()) {
                 Media m = new Media();
                 m.setId(rs.getInt("id"));
                 m.setType(rs.getString("type"));
@@ -39,12 +51,10 @@ public class MediaReader {
     }
 
 
-//    public static Media getMedia(int mId){
+//    public Media getMedia(int mId){
 //
 //        Media media = new Media();
 //        try {
-//            DBConnection db = new DBConnection();
-//            Connection conn = db.getConnection();
 //
 //            // query media table
 //            String sqlM = "Select * FROM media where id = ?";
@@ -89,13 +99,10 @@ public class MediaReader {
 //        return media;
 //    }
 
-//    public static ArrayList<Media> getMediaForEvent(int eId){
+//    public ArrayList<Media> getMediaForEvent(int eId){
 //        ArrayList<Media> medias = new ArrayList<Media>();
 //
 //        try{
-//
-//            DBConnection db = new DBConnection();
-//            Connection conn = db.getConnection();
 //
 //            // query actor_event_mapping table for actoreventids
 //            String sql = "Select media.id as media_id, media.type as media_type, media.file_name as media_file_name, actor.id as actor_id, actor.first as actor_first, actor.last as actor_last ";

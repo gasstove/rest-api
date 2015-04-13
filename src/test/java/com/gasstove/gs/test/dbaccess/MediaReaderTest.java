@@ -18,7 +18,8 @@ public class MediaReaderTest {
     @Test
     public void testGetMedias() {
         try {
-            ArrayList<Media> list = MediaReader.getMediasBasicInfo();
+            MediaReader mr = new MediaReader();
+            ArrayList<Media> list = mr.getMediasBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFileName() != null);
         } catch (Exception exp) {
@@ -30,7 +31,8 @@ public class MediaReaderTest {
 //    @Test
 //    public void testGetMedia() {
 //        try {
-//            Media m = MediaReader.getMedia(7295);
+//            MediaReader mr = new MediaReader();
+//            Media m = mr.getMedia(7295);
 //            assertTrue(m.getId() == 7295);
 //            assertTrue(m.getFileName().length()>0);
 //            assertTrue(m.getType().length()>0);
@@ -45,7 +47,8 @@ public class MediaReaderTest {
 //    @Test
 //    public void testGetMediaForEvent() {
 //        try {
-//            ArrayList<Media> m = MediaReader.getMediaForEvent(745);
+//            MediaReader mr = new MediaReader();
+//            ArrayList<Media> m = mr.getMediaForEvent(745);
 //            assertNotNull(m);
 //            assertTrue(m.size()>0);
 //        } catch (Exception exp) {
