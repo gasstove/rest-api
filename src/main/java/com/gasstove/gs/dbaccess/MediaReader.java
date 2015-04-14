@@ -64,7 +64,7 @@ public class MediaReader {
                 media.setId(rs.getInt("id"));
                 media.setType(rs.getString("type"));
                 media.setFileName(rs.getString("file_name"));
-                media.setActorId(rs.getInt("actor_id"));
+                media.setUserId(rs.getInt("user_id"));
             }
 
             // query media_mapping table
@@ -93,8 +93,8 @@ public class MediaReader {
         ArrayList<MediaEvent> medias = new ArrayList<MediaEvent>();
 
         try{
-            // query actor_event_mapping table for actoreventids
-            String sql = "SELECT media.id as media_id, media.type as media_type, media.file_name as media_file_name, media.actor_id as actor_id, mm.num_downloads as num_downloads, mm.shared as shared, mm.comment as comment, mm.num_likes as num_likes, mm.num_dislikes as num_dislikes";
+            // query user_event_mapping table for usereventids
+            String sql = "SELECT media.id as media_id, media.type as media_type, media.file_name as media_file_name, media.user_id as user_id, mm.num_downloads as num_downloads, mm.shared as shared, mm.comment as comment, mm.num_likes as num_likes, mm.num_dislikes as num_dislikes";
             sql += " FROM media_mapping mm, media";
             sql += " WHERE  mm.event_id=?";
             sql += " AND media.id=mm.media_id";
@@ -104,10 +104,9 @@ public class MediaReader {
             while(rs.next()){
                 MediaEvent m = new MediaEvent();
                 m.setMediaId(rs.getInt("media_id"));
-                m.setActorId(rs.getInt("actor_id"));
+                m.setUserId(rs.getInt("user_id"));
                 m.setMediaType(rs.getString("media_type"));
                 m.setMediaFileName(rs.getString("media_file_name"));
-                m.setActorId(rs.getInt("actor_id"));
                 m.setNumDislikes(rs.getInt("num_dislikes"));
                 m.setNumDownloads(rs.getInt("num_downloads"));
                 m.setNumLikes(rs.getInt("num_likes"));

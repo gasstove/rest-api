@@ -2,18 +2,10 @@ package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.gasstove.gs.test.util.TestDefaults;
-import com.googlecode.jeeunit.concurrent.Concurrent;
-import com.googlecode.jeeunit.concurrent.ConcurrentParameterized;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
 
 import java.net.HttpURLConnection;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;

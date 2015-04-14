@@ -6,10 +6,10 @@ import java.util.Date;
 /**
  * Created by smorris on 3/24/15.
  */
-public class ActorEvent {
+public class UserEvent {
 
-    // actor_event table
-    private Actor actor;
+    // user_event table
+    private User user;
     private Role role;
     private Event event;
     private Date joinDate;
@@ -17,12 +17,12 @@ public class ActorEvent {
     // refs
     private ArrayList<MediaEvent> mediaEvents = new ArrayList<MediaEvent>();
 
-    public Actor getActor() {
-        return actor;
+    public User getUser() {
+        return user;
     }
 
-    public void setActor(Actor actor) {
-        this.actor = actor;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public Role getRole() {

@@ -1,7 +1,7 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.ActorReader;
-import com.gasstove.gs.models.Actor;
+import com.gasstove.gs.dbaccess.UserReader;
+import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.util.TestDefaults;
 import org.junit.Test;
 
@@ -13,7 +13,7 @@ import static org.junit.Assert.*;
  * Tests methods for EventReader
  *
  */
-public class ActorReaderTest {
+public class UserReaderTest {
 
     /**
      * The constructor sets up database for so we can set up a Model DataBase Access
@@ -21,7 +21,7 @@ public class ActorReaderTest {
      *
      * @throws Exception This happens if the database set up has trouble
      */
-    public ActorReaderTest() throws Exception {
+    public UserReaderTest() throws Exception {
 
     }
 
@@ -30,10 +30,10 @@ public class ActorReaderTest {
      * We don't bother parsing back the response from JSON in this case.
      */
     @Test
-    public void testGetActors() {
+    public void testGetUsers() {
         try {
-            ActorReader ar = new ActorReader();
-            ArrayList<Actor> list = ar.getActorsBasicInfo();
+            UserReader ar = new UserReader();
+            ArrayList<User> list = ar.getUsersBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
 
@@ -48,13 +48,13 @@ public class ActorReaderTest {
      * This tests the get event method. The method should return am event
      */
     @Test
-    public void testGetActor() {
+    public void testGetUser() {
 
         try {
-            ActorReader ar = new ActorReader();
-            Actor a = ar.getActorFull(TestDefaults.actor_id);
+            UserReader ar = new UserReader();
+            User a = ar.getUserFull(TestDefaults.user_id);
             assertTrue(a.getFirst().length() > 0);
-            assertTrue(a.getId() == TestDefaults.actor_id);
+            assertTrue(a.getId() == TestDefaults.user_id);
             assertNotNull(a.getEvents());
             assertNotNull(a.getLast());
             assertNotNull(a.getContactMethod());

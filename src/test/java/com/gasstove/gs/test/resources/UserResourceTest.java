@@ -3,7 +3,6 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.gasstove.gs.test.util.TestDefaults;
 import org.apache.commons.io.IOUtils;
-import org.junit.Before;
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -18,7 +17,7 @@ import static org.junit.Assert.*;
  *
  * @author mnjuhn
  */
-public class ActorResourceTest {
+public class UserResourceTest {
 
     // standard response values per test
     String responseStatus;
@@ -33,20 +32,20 @@ public class ActorResourceTest {
      *
      * @throws Exception This happens if the database set up has trouble
      */
-    public ActorResourceTest() throws Exception {
+    public UserResourceTest() throws Exception {
     }
 
     /**
-     * This tests the getActors resource. The method should return a list of actors.
+     * This tests the getUsers resource. The method should return a list of users.
      *
      */
     @Test
-    public void testGetActors() {
+    public void testGetUsers() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/actors/", "GET", "");
+                    TestConfiguration.sendRequest("/users/", "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
@@ -63,15 +62,15 @@ public class ActorResourceTest {
     }
 
     /**
-     * This tests the get actor method. The method should return an actor
+     * This tests the get user method. The method should return an user
      */
     @Test
-    public void testGetActor() {
+    public void testGetUser() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/actors/"+ TestDefaults.actor_id, "GET", "");
+                    TestConfiguration.sendRequest("/users/"+ TestDefaults.user_id, "GET", "");
 
             this.responseStatus = conn.getResponseMessage();
             this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");

@@ -17,14 +17,14 @@ public class MediaEvent {
     // media information
     private String mediaType;
     private String mediaFileName;
-    private Integer actorId;
+    private Integer userId;
 
-    public Integer getActorId() {
-        return actorId;
+    public Integer getUserId() {
+        return userId;
     }
 
-    public void setActorId(Integer actorId) {
-        this.actorId = actorId;
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 
     public Boolean getShared() {

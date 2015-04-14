@@ -1,6 +1,5 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.Actor;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.util.DBConnection;
 
@@ -55,7 +54,7 @@ public class EventReader {
 
     /**
      * Get an event by id and return a fully populated event object that includes
-     * the list of actors in the event.
+     * the list of users in the event.
      *
      * @param eId the event id to query for
      * @return Event a fully populated event object
@@ -76,18 +75,18 @@ public class EventReader {
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
-            ActorReader ar = new ActorReader(conn);
-            e.setUsers(ar.getActorsForEvent(eId));
+            UserReader ar = new UserReader(conn);
+            e.setUsers(ar.getUsersForEvent(eId));
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
         return e;
     }
 
-    public ArrayList<Event> getEventsForActor(int aId) {
+    public ArrayList<Event> getEventsForUser(int aId) {
         ArrayList<Event> events = new ArrayList<Event>();
         try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, actor_event_mapping aem WHERE aem.actor_id=? AND aem.event_id = event.id");
+            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, user_event_mapping aem WHERE aem.user_id=? AND aem.event_id = event.id");
             stmt.setInt(1, aId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {

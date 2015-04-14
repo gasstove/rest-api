@@ -18,7 +18,7 @@ public class Event {
     private Boolean joinAllowAuto;
 
     // refs
-    private ArrayList<Actor> users;
+    private ArrayList<User> users;
 
     public Date getCloseDate() {
         return closeDate;
@@ -76,11 +76,11 @@ public class Event {
         this.joinAllowAuto = joinAllowAuto;
     }
 
-    public ArrayList<Actor> getUsers() {
+    public ArrayList<User> getUsers() {
         return users;
     }
 
-    public void setUsers(ArrayList<Actor> users) {
+    public void setUsers(ArrayList<User> users) {
         this.users = users;
     }
 

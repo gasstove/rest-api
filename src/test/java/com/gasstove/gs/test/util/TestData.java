@@ -52,7 +52,7 @@ public class TestData {
     private final int MIN_EVENT_DURATION = 5;   // hours
     private final int MAX_EVENT_DURATION = 10;  // hours
 
-    private final int NUM_ACTORS = 50;
+    private final int NUM_USERS = 50;
     private final int NUM_EVENTS = 10;
 
     private Connection connection = null;
@@ -91,7 +91,7 @@ public class TestData {
 
         sql = "CREATE TABLE \"media_mapping\" (" +
                 "\'id\'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "\'mediaId\' int NOT NULL, " +
+                "\'media_id\' int NOT NULL, " +
                 "\'event_id'	int NOT NULL, " +
                 "\'num_downloads'	int NOT NULL, " +
                 "\'shared'	boolean NOT NULL, " +
@@ -105,7 +105,7 @@ public class TestData {
                 "'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "'type'	varchar NOT NULL, " +
                 "'file_name'	varchar NOT NULL, " +
-                "'actor_id'	INTEGER " +
+                "'user_id'	INTEGER " +
                 ")";
         stmt.execute(sql);
 
@@ -120,16 +120,16 @@ public class TestData {
                 ")";
         stmt.execute(sql);
 
-         sql =  "CREATE TABLE actor_event_mapping (" +
+         sql =  "CREATE TABLE user_event_mapping (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "event_id int NOT NULL, " +
-                "actor_id int NOT NULL, " +
+                "user_id int NOT NULL, " +
                 "role_id int NOT NULL, " +
                 "join_date datetime NOT NULL " +
                 ")";
          stmt.execute(sql);
 
-         sql =  "CREATE TABLE actor( " +
+         sql =  "CREATE TABLE user( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "first varchar NOT NULL, " +
                 "last varchar NOT NULL, " +
@@ -150,7 +150,7 @@ public class TestData {
         stmt = connection.createStatement();
         stmt.execute(sql);
 
-        sql = "DELETE FROM actor";
+        sql = "DELETE FROM user";
         stmt = connection.createStatement();
         stmt.execute(sql);
 
@@ -162,7 +162,7 @@ public class TestData {
         stmt = connection.createStatement();
         stmt.execute(sql);
 
-        sql = "DELETE FROM actor_event_mapping";
+        sql = "DELETE FROM user_event_mapping";
         stmt = connection.createStatement();
         stmt.execute(sql);
 
@@ -182,7 +182,7 @@ public class TestData {
         HashSet<Media> all_medias = new HashSet<Media>();
 
         // create users
-        for (int i = 0; i < NUM_ACTORS; i++)
+        for (int i = 0; i < NUM_USERS; i++)
             all_users.add(new User(userNames[i]));
 
         // create events
@@ -240,7 +240,7 @@ public class TestData {
         for(Media media : data.all_medias)
             media.insert_db();
 
-        // insert guest lists into actor_event_mapping
+        // insert guest lists into user_event_mapping
         for(Event event : data.all_events) {
             System.out.println("Inserting "+event.users.size()+" guests for event " + event.name +".");
             event.insert_guests_db();
@@ -296,10 +296,11 @@ public class TestData {
                 throw new SQLException("Repeat insertion of media " + id);
 
             // insert the media
-            String sql = "INSERT into media(type, file_name) VALUES(?,?)";
+            String sql = "INSERT into media(type, file_name, user_id) VALUES(?,?,?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1,mediaType);
             statement.setString(2, "media_" + filename_ext);
+            statement.setString(3, owner.id.toString() );
             statement.execute();
 
             // get media id
@@ -312,8 +313,7 @@ public class TestData {
 
         public void insert_event_mapping_db() throws SQLException {
             for(Event event : events) {
-
-                String sql = "INSERT into media_mapping(mediaId, event_id,num_downloads,shared) VALUES(?,?,?,?)";
+                String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, this.id);
                 statement.setInt(2, event.id );
@@ -379,7 +379,7 @@ public class TestData {
 
             // add guests to this event
             for(User user : this.users) {
-                String sql = "INSERT into actor_event_mapping(event_id, actor_id,role_id,join_date) VALUES(?,?,?,?)";
+                String sql = "INSERT into user_event_mapping(event_id, user_id,role_id,join_date) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, this.id);
                 statement.setInt(2, user.id);
@@ -387,8 +387,8 @@ public class TestData {
                 statement.setDate(4, new java.sql.Date(this.open_date));
                 statement.execute();
 
-                // extract actor_event ids
-                sql = "SELECT Max(id) from actor_event_mapping";
+                // extract user_event ids
+                sql = "SELECT Max(id) from user_event_mapping";
                 stmt = connection.createStatement();
                 ResultSet r = stmt.executeQuery(sql);
                 if (r.next())
@@ -420,15 +420,15 @@ public class TestData {
 
             if(id!=null)
                 throw new SQLException("Repeat insertion of user " + id);
-            String sql = "INSERT into actor(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
+            String sql = "INSERT into user(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, this.first);
             statement.setString(2, this.last);
             statement.setInt(3, this.is_subscriber ? 1 : 0 );
             statement.execute();
 
-            // extract actor id
-            sql = "SELECT Max(id) from actor";
+            // extract user id
+            sql = "SELECT Max(id) from user";
             stmt = connection.createStatement();
             ResultSet r = stmt.executeQuery(sql);
             if (r.next())

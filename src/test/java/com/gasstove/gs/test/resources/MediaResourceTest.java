@@ -57,7 +57,6 @@ public class MediaResourceTest {
             // check to ensure we get ok message for response and that it contains a network name and description
             assertEquals(expectedResponseStatus, this.responseStatus);
 
-            System.out.println(this.responseJSON);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();

@@ -5,9 +5,9 @@ import java.util.ArrayList;
 /**
  * Created by smorris on 3/24/15.
  */
-public class Actor {
+public class User {
 
-    // actor table
+    // user table
     private int id;
     private String first;
     private String last;
