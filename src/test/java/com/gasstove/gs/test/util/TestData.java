@@ -91,7 +91,7 @@ public class TestData {
 
         sql = "CREATE TABLE \"media_mapping\" (" +
                 "\'id\'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "\'media_id\' int NOT NULL, " +
+                "\'mediaId\' int NOT NULL, " +
                 "\'event_id'	int NOT NULL, " +
                 "\'num_downloads'	int NOT NULL, " +
                 "\'shared'	boolean NOT NULL, " +
@@ -313,7 +313,7 @@ public class TestData {
         public void insert_event_mapping_db() throws SQLException {
             for(Event event : events) {
 
-                String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
+                String sql = "INSERT into media_mapping(mediaId, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, this.id);
                 statement.setInt(2, event.id );

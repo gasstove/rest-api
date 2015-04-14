@@ -11,7 +11,7 @@ public class Media {
     private int id;
     private String type;
     private String fileName;
-    private int actor_id;
+    private int actorId;
 
     // refs
     private ArrayList<MediaEvent> media_events;
@@ -40,12 +40,12 @@ public class Media {
         this.fileName = fileName;
     }
 
-    public int getActor_id() {
-        return actor_id;
+    public int getActorId() {
+        return actorId;
     }
 
-    public void setActor_id(int actor_id) {
-        this.actor_id = actor_id;
+    public void setActorId(int actorId) {
+        this.actorId = actorId;
     }
 
     public void add_media_event(MediaEvent me){

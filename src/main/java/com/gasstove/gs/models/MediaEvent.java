@@ -6,28 +6,65 @@ package com.gasstove.gs.models;
 public class MediaEvent {
 
     // media_mapping table
-    public int media_id;
-    public int event_id;
-    public int numDownloads;
-    public Boolean shared;
-    public String comment;
-    public int numLikes;
-    public int numDislikes;
+    private int mediaId;
+    private int eventId;
+    private int numDownloads;
+    private Boolean shared;
+    private String comment;
+    private int numLikes;
+    private int numDislikes;
 
-    public int getMedia_id() {
-        return media_id;
+    // media information
+    private String mediaType;
+    private String mediaFileName;
+    private Integer actorId;
+
+    public Integer getActorId() {
+        return actorId;
     }
 
-    public void setMedia_id(int media_id) {
-        this.media_id = media_id;
+    public void setActorId(Integer actorId) {
+        this.actorId = actorId;
     }
 
-    public int getEvent_id() {
-        return event_id;
+    public Boolean getShared() {
+        return shared;
     }
 
-    public void setEvent_id(int event_id) {
-        this.event_id = event_id;
+    public void setShared(Boolean shared) {
+        this.shared = shared;
+    }
+
+    public String getMediaType() {
+        return mediaType;
+    }
+
+    public void setMediaType(String mediaType) {
+        this.mediaType = mediaType;
+    }
+
+    public String getMediaFileName() {
+        return mediaFileName;
+    }
+
+    public void setMediaFileName(String mediaFileName) {
+        this.mediaFileName = mediaFileName;
+    }
+
+    public int getMediaId() {
+        return mediaId;
+    }
+
+    public void setMediaId(int mediaId) {
+        this.mediaId = mediaId;
+    }
+
+    public int getEventId() {
+        return eventId;
+    }
+
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     public int getNumDownloads() {

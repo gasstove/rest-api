@@ -146,7 +146,7 @@ public class ActorReader {
 //        String sqlEM = "Select media.id as mid, * FROM media, " +
 //                                "media_mapping mmm," +
 //                                "actor_event_mapping aem " +
-//                                "WHERE aem.id=mm.actor.event_mapping_id and mm.media_id = media.id";
+//                                "WHERE aem.id=mm.actor.event_mapping_id and mm.mediaId = media.id";
 //        Actor a = new Actor();
 //        try {
 //            Connection conn = db.getConnection();

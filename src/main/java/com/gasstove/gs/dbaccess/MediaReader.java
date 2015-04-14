@@ -64,7 +64,7 @@ public class MediaReader {
                 media.setId(rs.getInt("id"));
                 media.setType(rs.getString("type"));
                 media.setFileName(rs.getString("file_name"));
-                media.setActor_id(rs.getInt("actor_id"));
+                media.setActorId(rs.getInt("actor_id"));
             }
 
             // query media_mapping table
@@ -73,10 +73,11 @@ public class MediaReader {
             rs = stmt.executeQuery();
             while(rs.next()) {
                 MediaEvent me = new MediaEvent();
+                me.setMediaId(mId);
                 me.setComment(rs.getString("comment"));
                 me.setShared(rs.getBoolean("shared"));
                 me.setNumDownloads(rs.getInt("num_downloads"));
-                me.setEvent_id(rs.getInt("event_id"));
+                me.setEventId(rs.getInt("event_id"));
                 me.setNumDislikes(rs.getInt("num_dislikes"));
                 me.setNumLikes(rs.getInt("num_likes"));
                 media.add_media_event(me);
@@ -88,37 +89,37 @@ public class MediaReader {
         return media;
     }
 
-//    public ArrayList<Media> getMediaForEvent(int eId){
-//        ArrayList<Media> medias = new ArrayList<Media>();
-//
-//        try{
-//
-//            // query actor_event_mapping table for actoreventids
-//            String sql = "Select media.id as media_id, media.type as media_type, media.file_name as media_file_name, actor.id as actor_id, actor.first as actor_first, actor.last as actor_last ";
-//            sql += "FROM actor_event_mapping aem , media_mapping mm, media, actor ";
-//            sql += "WHERE  aem.event_id=? ";
-//            sql += "AND aem.id=mm.actor_event_mapping_id ";
-//            sql += "AND media.id=mm.media_id ";
-//            sql += "AND actor.id=aem.actor_id ";
-//
-//            PreparedStatement stmt = conn.prepareStatement(sql);
-//            stmt.setInt(1,eId);
-//            ResultSet rs = stmt.executeQuery();
-//            while(rs.next()){
-//                Media m = new Media();
-//                m.setType(rs.getString("media_type"));
-//                m.setFileName(rs.getString("media_file_name"));
-//                m.setId(rs.getInt("media_id"));
-//                m.setOwnerName(rs.getString("actor_first")+" "+rs.getString("actor_last"));
-//                m.setOwnerId(rs.getInt("actor_id"));
-//                medias.add(m);
-//            }
-//
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//        return medias;
-//    }
+    public ArrayList<MediaEvent> getMediaForEvent(int eId){
+        ArrayList<MediaEvent> medias = new ArrayList<MediaEvent>();
+
+        try{
+            // query actor_event_mapping table for actoreventids
+            String sql = "SELECT media.id as media_id, media.type as media_type, media.file_name as media_file_name, media.actor_id as actor_id, mm.num_downloads as num_downloads, mm.shared as shared, mm.comment as comment, mm.num_likes as num_likes, mm.num_dislikes as num_dislikes";
+            sql += " FROM media_mapping mm, media";
+            sql += " WHERE  mm.event_id=?";
+            sql += " AND media.id=mm.media_id";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setInt(1,eId);
+            ResultSet rs = stmt.executeQuery();
+            while(rs.next()){
+                MediaEvent m = new MediaEvent();
+                m.setMediaId(rs.getInt("media_id"));
+                m.setActorId(rs.getInt("actor_id"));
+                m.setMediaType(rs.getString("media_type"));
+                m.setMediaFileName(rs.getString("media_file_name"));
+                m.setActorId(rs.getInt("actor_id"));
+                m.setNumDislikes(rs.getInt("num_dislikes"));
+                m.setNumDownloads(rs.getInt("num_downloads"));
+                m.setNumLikes(rs.getInt("num_likes"));
+                m.setShared(rs.getBoolean("shared"));
+                m.setComment(rs.getString("comment"));
+                medias.add(m);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return medias;
+    }
 
 
 }

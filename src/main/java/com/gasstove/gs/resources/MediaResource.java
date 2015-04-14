@@ -2,6 +2,7 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.models.Media;
+import com.gasstove.gs.models.MediaEvent;
 import com.google.gson.Gson;
 
 import javax.ws.rs.*;
@@ -64,28 +65,29 @@ public class MediaResource {
     }
 
 
-//    /**
-//     * Restful method to return list of media for a given event id
-//     *
-//     * @param eventId The id of the media to be loaded
-//     * @return JSON representation of Media object
-//     */
-//    @Path("/{eventId: [0-9]+}")
-//    @GET
-//    @Produces({MediaType.APPLICATION_JSON})
-//    public String getMediaForEvent(@PathParam("eventId") String eventId) {
-//        String returnJSON = "";
-//        try {
-//            ArrayList<Media> medias = MediaReader.getMediaForEvent(Integer.parseInt(eventId));
-//            Gson gson = new Gson();
-//            returnJSON = gson.toJson(medias);
-//        } catch (Exception exp) {
-//            exp.printStackTrace();
-//            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
-//        } finally {
-//        }
-//        return returnJSON;
-//    }
+    /**
+     * Restful method to return list of media for a given event id
+     *
+     * @param eventId The id of the media to be loaded
+     * @return JSON representation of Media object
+     */
+    @Path("/event/{eventId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getMediaForEvent(@PathParam("eventId") String eventId) {
+        String returnJSON = "";
+        try {
+            MediaReader mr = new MediaReader();
+            ArrayList<MediaEvent> medias = mr.getMediaForEvent(Integer.parseInt(eventId));
+            Gson gson = new Gson();
+            returnJSON = gson.toJson(medias);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+        } finally {
+        }
+        return returnJSON;
+    }
 
 
 }
