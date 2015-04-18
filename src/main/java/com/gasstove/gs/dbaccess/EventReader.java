@@ -64,7 +64,6 @@ public class EventReader {
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM event WHERE id = ?");
             stmt.setInt(1, eId);
-
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 e.setId(rs.getInt("id"));
@@ -77,6 +76,10 @@ public class EventReader {
             }
             UserReader ar = new UserReader(conn);
             e.setUsers(ar.getUsersForEvent(eId));
+
+            MediaReader mr = new MediaReader(conn);
+            e.setMedias(mr.getMediaForEvent(eId));
+
         } catch (SQLException sq) {
             sq.printStackTrace();
         }

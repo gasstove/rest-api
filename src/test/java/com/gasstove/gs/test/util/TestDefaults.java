@@ -5,5 +5,5 @@ package com.gasstove.gs.test.util;
  */
 public class TestDefaults {
     public static int user_id = 1;
-    public static int event_id = 1;
+    public static int event_id = 3;
 }

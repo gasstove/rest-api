@@ -19,6 +19,7 @@ public class Event {
 
     // refs
     private ArrayList<User> users;
+    private ArrayList<MediaEvent> medias;
 
     public Date getCloseDate() {
         return closeDate;
@@ -84,4 +85,11 @@ public class Event {
         this.users = users;
     }
 
+    public ArrayList<MediaEvent> getMedias() {
+        return medias;
+    }
+
+    public void setMedias(ArrayList<MediaEvent> medias) {
+        this.medias = medias;
+    }
 }
