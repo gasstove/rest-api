@@ -16,22 +16,8 @@ import static org.junit.Assert.*;
  */
 public class EventReaderTest {
 
-    /**
-     * The constructor sets up database for so we can set up a Model DataBase Access
-     * reader and writer;
-     *
-     * @throws Exception This happens if the database set up has trouble
-     */
-    public EventReaderTest() throws Exception {
-
-    }
-
-    /**
-     * This tests the get networks method. The method should return a list of networks.
-     * We don't bother parsing back the response from JSON in this case.
-     */
     @Test
-    public void testGetEvents() {
+    public void testGetEventsBasicInfo() {
         try {
             EventReader er = new EventReader();
             ArrayList<Event> list = er.getEventsBasicInfo();
@@ -43,12 +29,8 @@ public class EventReaderTest {
         }
     }
 
-    /**
-     * This tests the get event method. The method should return am event
-     */
     @Test
-    public void testGetEvent() {
-
+    public void testGetEventFull() {
         try {
             EventReader er = new EventReader();
             Event e = er.getEventFull(TestDefaults.event_id);
@@ -61,7 +43,23 @@ public class EventReaderTest {
             exp.printStackTrace();
             fail();
         }
+    }
 
+    @Test
+    public void testGetEventsForUser() {
+        try {
+            EventReader er = new EventReader();
+            ArrayList<Event> es = er.getEventsForUser(TestDefaults.user_id);
+            assertNotNull(es);
+            assertTrue(es.size()>0);
+            Event e = es.get(0);
+            assertTrue(e.getName().length() > 0);
+            assertNotNull(e.getCloseDate());
+            assertNotNull(e.getOpenDate());
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
     }
 
 }

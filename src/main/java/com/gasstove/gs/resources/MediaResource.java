@@ -64,7 +64,6 @@ public class MediaResource {
         return returnJSON;
     }
 
-
     /**
      * Restful method to return list of media for a given event id
      *

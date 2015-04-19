@@ -15,22 +15,12 @@ import static org.junit.Assert.*;
  */
 public class UserReaderTest {
 
-    /**
-     * The constructor sets up database for so we can set up a Model DataBase Access
-     * reader and writer;
-     *
-     * @throws Exception This happens if the database set up has trouble
-     */
     public UserReaderTest() throws Exception {
 
     }
 
-    /**
-     * This tests the get networks method. The method should return a list of networks.
-     * We don't bother parsing back the response from JSON in this case.
-     */
     @Test
-    public void testGetUsers() {
+    public void testGetUsersBasicInfo() {
         try {
             UserReader ar = new UserReader();
             ArrayList<User> list = ar.getUsersBasicInfo();
@@ -44,11 +34,8 @@ public class UserReaderTest {
 
     }
 
-    /**
-     * This tests the get event method. The method should return am event
-     */
     @Test
-    public void testGetUser() {
+    public void testGetUserFull() {
 
         try {
             UserReader ar = new UserReader();
@@ -59,11 +46,26 @@ public class UserReaderTest {
             assertNotNull(a.getLast());
             assertNotNull(a.getContactMethod());
             assertNotNull(a.isSubscriber());
-
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
         }
     }
 
+    @Test
+    public void testGetUsersForEvent() {
+        try {
+            UserReader ar = new UserReader();
+            ArrayList<User> us = ar.getUsersForEvent(TestDefaults.event_id);
+            assertNotNull(us);
+            assertTrue(us.size()>0);
+            User u = us.get(0);
+            assertTrue(u.getFirst().length() > 0);
+            assertNotNull(u.getLast());
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
+    }
 }
+

@@ -51,7 +51,7 @@ public class UserResource {
     @Path("/{userId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getUsrt(@PathParam("userId") String userId) {
+    public String getUser(@PathParam("userId") String userId) {
         String returnJSON = "";
         try {
             UserReader ar = new UserReader();

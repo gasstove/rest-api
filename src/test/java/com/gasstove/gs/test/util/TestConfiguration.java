@@ -10,8 +10,6 @@ public class TestConfiguration {
   public static final String SERVER_BASE_URI = "http://localhost:50000";
   public static final String REST_API_PATH = "/gs-rest-api";
 
-
-
   public static HttpURLConnection sendRequest(String uri, String method, String data) {
 
     try {
@@ -27,7 +25,6 @@ public class TestConfiguration {
       conn.setUseCaches(false);
       conn.setAllowUserInteraction(false);
       conn.setRequestMethod(method);
-
 
       if(method.equals("POST") || method.equals("PUT")){
     	  byte[] outputBytes = data.getBytes();

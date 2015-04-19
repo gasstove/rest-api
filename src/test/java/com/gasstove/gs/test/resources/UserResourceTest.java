@@ -1,5 +1,7 @@
 package com.gasstove.gs.test.resources;
 
+import com.gasstove.gs.resources.EventResource;
+import com.gasstove.gs.resources.UserResource;
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.gasstove.gs.test.util.TestDefaults;
 import org.apache.commons.io.IOUtils;
@@ -19,41 +21,39 @@ import static org.junit.Assert.*;
  */
 public class UserResourceTest {
 
-    // standard response values per test
-    String responseStatus;
-    String responseJSON;
-    private final String expectedResponseStatus = "OK";
-    private final int expectedResponseCode = 200;
+    //  Tests for java classes ....................................................................
 
-    /**
-     * The constructor sets up database for so we can set up a Model DataBase Access
-     * reader and writer; these are used to insert and delete records directly to
-     * facilitate testing of the API.
-     *
-     * @throws Exception This happens if the database set up has trouble
-     */
-    public UserResourceTest() throws Exception {
-    }
-
-    /**
-     * This tests the getUsers resource. The method should return a list of users.
-     *
-     */
     @Test
     public void testGetUsers() {
+        UserResource ur = new UserResource();
+        String response = ur.getUsers();
+        assertTrue(response.length() > 0);
+    }
+
+    @Test
+    public void testGetUser() {
+        UserResource ur = new UserResource();
+        String response = ur.getUser(TestDefaults.user_id.toString());
+        assertTrue(response.length() > 0);
+    }
+
+    //  Tests that use the http service .........................................................
+
+    @Test
+    public void testGetUsersHttp() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
                     TestConfiguration.sendRequest("/users/", "GET", "");
 
-            this.responseStatus = conn.getResponseMessage();
-            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+            String responseStatus = conn.getResponseMessage();
+            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
 
             // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(expectedResponseStatus, this.responseStatus);
+            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+            assertTrue(responseJSON.length() > 0);
 
-            assertTrue(this.responseJSON.length() > 0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
@@ -61,24 +61,21 @@ public class UserResourceTest {
 
     }
 
-    /**
-     * This tests the get user method. The method should return an user
-     */
     @Test
-    public void testGetUser() {
+    public void testGetUserHttp() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
                     TestConfiguration.sendRequest("/users/"+ TestDefaults.user_id, "GET", "");
 
-            this.responseStatus = conn.getResponseMessage();
-            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+            String responseStatus = conn.getResponseMessage();
+            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
 
             // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(expectedResponseStatus, this.responseStatus);
+            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+            assertTrue(responseJSON.length() > 0);
 
-            assertTrue(this.responseJSON.length() > 0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();

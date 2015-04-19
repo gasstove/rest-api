@@ -2,6 +2,7 @@ package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.resources.MediaResource;
 import com.gasstove.gs.test.util.TestConfiguration;
+import com.gasstove.gs.test.util.TestDefaults;
 import org.apache.commons.io.IOUtils;
 import org.junit.Test;
 
@@ -20,42 +21,46 @@ import static org.junit.Assert.fail;
  * @author mnjuhn
  */
 public class MediaResourceTest {
-    // standard response values per test
-    String responseStatus;
-    String responseJSON;
-    private final String expectedResponseStatus = "OK";
-    private final int expectedResponseCode = 200;
 
-
-    /**
-     * The constructor sets up database for so we can set up a Model DataBase Access
-     * reader and writer; these are used to insert and delete records directly to
-     * facilitate testing of the API.
-     *
-     * @throws Exception This happens if the database set up has trouble
-     */
-    public MediaResourceTest() throws Exception {
-    }
-
-//    @Before
-//    public void setup() {
-//        // Setup server request
-//        System.out.println("Testing Image Resource");
-//    }
+    //  Tests for java classes ..................................................................
 
     @Test
     public void testGetMedias() {
+        MediaResource mr = new MediaResource();
+        String responseJSON = mr.getMedias();
+        assertTrue(responseJSON.length() > 0);
+    }
+
+    @Test
+    public void testGetMedia() {
+        MediaResource mr = new MediaResource();
+        String responseJSON = mr.getMedia(TestDefaults.media_id.toString());
+        assertTrue(responseJSON.length() > 0);
+    }
+
+    @Test
+    public void testGetMediaForEvent() {
+        MediaResource mr = new MediaResource();
+        String responseJSON = mr.getMediaForEvent(TestDefaults.event_id.toString());
+        assertTrue(responseJSON.length() > 0);
+    }
+
+    //  Tests that use the http service .........................................................
+
+    @Test
+    public void testGetMediasHttp() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
                     TestConfiguration.sendRequest("/medias/", "GET", "");
 
-            this.responseStatus = conn.getResponseMessage();
-            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+            String responseStatus = conn.getResponseMessage();
+            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
 
             // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(expectedResponseStatus, this.responseStatus);
+            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+            assertTrue(responseJSON.length() > 0);
 
         } catch (Exception exp) {
             exp.printStackTrace();
@@ -65,20 +70,20 @@ public class MediaResourceTest {
     }
 
     @Test
-    public void testGetMedia() {
+    public void testGetMediaHttp() {
 
         try {
             // Hit URL to get all networks and save response text
             HttpURLConnection conn =
                     TestConfiguration.sendRequest("/medias/1", "GET", "");
 
-            this.responseStatus = conn.getResponseMessage();
-            this.responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+            String responseStatus = conn.getResponseMessage();
+            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
 
             // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(expectedResponseStatus, this.responseStatus);
+            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+            assertTrue(responseJSON.length() > 0);
 
-            assertTrue(this.responseJSON.length() > 0);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
@@ -86,15 +91,5 @@ public class MediaResourceTest {
 
     }
 
-    @Test
-    public void testGetMediaForEvent() {
-
-        MediaResource mr = new MediaResource();
-
-        this.responseJSON = mr.getMediaForEvent("1");
-
-        assertTrue(this.responseJSON.length() > 0);
-
-    }
 
 }
