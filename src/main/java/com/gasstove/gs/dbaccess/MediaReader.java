@@ -105,6 +105,7 @@ public class MediaReader {
                 MediaEvent m = new MediaEvent();
                 m.setMediaId(rs.getInt("media_id"));
                 m.setUserId(rs.getInt("user_id"));
+                m.setEventId(eId);
                 m.setMediaType(rs.getString("media_type"));
                 m.setMediaFileName(rs.getString("media_file_name"));
                 m.setNumDislikes(rs.getInt("num_dislikes"));
