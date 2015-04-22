@@ -39,10 +39,10 @@ public class UserReaderTest {
 
         try {
             UserReader ar = new UserReader();
-            User a = ar.getUserFull(TestDefaults.user_id);
+            User a = ar.getUserBasicInfo(TestDefaults.user_id);
             assertTrue(a.getFirst().length() > 0);
             assertTrue(a.getId() == TestDefaults.user_id);
-            assertNotNull(a.getEvents());
+//            assertNotNull(a.getEventsBasicInfo());
             assertNotNull(a.getLast());
             assertNotNull(a.getContactMethod());
             assertNotNull(a.isSubscriber());

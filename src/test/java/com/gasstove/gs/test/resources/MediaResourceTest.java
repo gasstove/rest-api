@@ -27,23 +27,23 @@ public class MediaResourceTest {
     @Test
     public void testGetMedias() {
         MediaResource mr = new MediaResource();
-        String responseJSON = mr.getMedias();
+        String responseJSON = mr.getMediasBasicInfo();
         assertTrue(responseJSON.length() > 0);
     }
 
     @Test
     public void testGetMedia() {
         MediaResource mr = new MediaResource();
-        String responseJSON = mr.getMedia(TestDefaults.media_id.toString());
+        String responseJSON = mr.getMediaBasicInfo(TestDefaults.media_id.toString());
         assertTrue(responseJSON.length() > 0);
     }
 
-    @Test
-    public void testGetMediaForEvent() {
-        MediaResource mr = new MediaResource();
-        String responseJSON = mr.getMediaForEvent(TestDefaults.event_id.toString());
-        assertTrue(responseJSON.length() > 0);
-    }
+//    @Test
+//    public void testGetMediaForEvent() {
+//        MediaResource mr = new MediaResource();
+//        String responseJSON = mr.getMediaForEvent(TestDefaults.event_id.toString());
+//        assertTrue(responseJSON.length() > 0);
+//    }
 
     //  Tests that use the http service .........................................................
 

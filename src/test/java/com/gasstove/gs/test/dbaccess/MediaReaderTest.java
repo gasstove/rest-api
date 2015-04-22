@@ -34,7 +34,7 @@ public class MediaReaderTest {
     public void testGetMedia() {
         try {
             MediaReader mr = new MediaReader();
-            Media m = mr.getMedia(TestDefaults.media_id);
+            Media m = mr.getMediaBasicInfo(TestDefaults.media_id);
             assertTrue(m.getId() == TestDefaults.media_id);
             assertTrue(m.getFileName().length()>0);
             assertTrue(m.getType().length()>0);
@@ -44,17 +44,17 @@ public class MediaReaderTest {
         }
     }
 
-    @Test
-    public void testGetMediaForEvent() {
-        try {
-            MediaReader mr = new MediaReader();
-            ArrayList<MediaEvent> m = mr.getMediaForEvent(TestDefaults.event_id);
-            assertNotNull(m);
-            assertTrue(m.size()>0);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
-    }
+//    @Test
+//    public void testGetMediaForEvent() {
+//        try {
+//            MediaReader mr = new MediaReader();
+//            ArrayList<MediaEvent> m = mr.getMediaForEvent(TestDefaults.event_id);
+//            assertNotNull(m);
+//            assertTrue(m.size()>0);
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            fail();
+//        }
+//    }
 
 }

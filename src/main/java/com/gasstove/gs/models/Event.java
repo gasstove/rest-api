@@ -18,8 +18,8 @@ public class Event {
     private Boolean joinAllowAuto;
 
     // refs
-    private ArrayList<User> users;
-    private ArrayList<MediaEvent> medias;
+//    private ArrayList<User> users;
+//    private ArrayList<MediaEvent> medias;
 
     public Date getCloseDate() {
         return closeDate;
@@ -77,19 +77,19 @@ public class Event {
         this.joinAllowAuto = joinAllowAuto;
     }
 
-    public ArrayList<User> getUsers() {
-        return users;
-    }
-
-    public void setUsers(ArrayList<User> users) {
-        this.users = users;
-    }
-
-    public ArrayList<MediaEvent> getMedias() {
-        return medias;
-    }
-
-    public void setMedias(ArrayList<MediaEvent> medias) {
-        this.medias = medias;
-    }
+//    public ArrayList<User> getUsersBasicInfo() {
+//        return users;
+//    }
+//
+//    public void setUsers(ArrayList<User> users) {
+//        this.users = users;
+//    }
+//
+//    public ArrayList<MediaEvent> getMediasBasicInfo() {
+//        return medias;
+//    }
+//
+//    public void setMedias(ArrayList<MediaEvent> medias) {
+//        this.medias = medias;
+//    }
 }

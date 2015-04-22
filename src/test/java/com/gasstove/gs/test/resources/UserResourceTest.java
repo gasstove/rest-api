@@ -1,6 +1,5 @@
 package com.gasstove.gs.test.resources;
 
-import com.gasstove.gs.resources.EventResource;
 import com.gasstove.gs.resources.UserResource;
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.gasstove.gs.test.util.TestDefaults;
@@ -26,14 +25,14 @@ public class UserResourceTest {
     @Test
     public void testGetUsers() {
         UserResource ur = new UserResource();
-        String response = ur.getUsers();
+        String response = ur.getUsersBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
     public void testGetUser() {
         UserResource ur = new UserResource();
-        String response = ur.getUser(TestDefaults.user_id.toString());
+        String response = ur.getUserBasicInfo(TestDefaults.user_id.toString());
         assertTrue(response.length() > 0);
     }
 

@@ -33,10 +33,9 @@ public class EventReaderTest {
     public void testGetEventFull() {
         try {
             EventReader er = new EventReader();
-            Event e = er.getEventFull(TestDefaults.event_id);
+            Event e = er.getEventBasicInfo(TestDefaults.event_id);
             assertTrue(e.getName().length() > 0);
             assertTrue(e.getId() == TestDefaults.event_id);
-            assertNotNull(e.getUsers());
             assertNotNull(e.getCloseDate());
             assertNotNull(e.getOpenDate());
         } catch (Exception exp) {

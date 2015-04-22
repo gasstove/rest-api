@@ -27,7 +27,7 @@ public class EventResource {
     @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEvents() {
+    public String getEventsBasicInfo() {
         String returnJSON;
         try {
             EventReader er = new EventReader();
@@ -51,13 +51,31 @@ public class EventResource {
     @Path("/{eventId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEvent(@PathParam("eventId") String eventId) {
+    public String getEventBasicInfo(@PathParam("eventId") String eventId) {
         String returnJSON;
         try {
             EventReader er = new EventReader();
-            Event event = er.getEventFull(Integer.parseInt(eventId));
+            Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(event);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+        } finally {
+        }
+        return returnJSON;
+    }
+
+    @Path("/user/{userId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEventsForUser(@PathParam("userId") String userId) {
+        String returnJSON = "";
+        try {
+            EventReader er = new EventReader();
+            ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
+            Gson gson = new Gson();
+            returnJSON = gson.toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);

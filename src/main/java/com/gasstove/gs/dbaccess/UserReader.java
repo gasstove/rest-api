@@ -43,11 +43,13 @@ public class UserReader {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM user");
             while (rs.next()) {
-                User a = new User();
-                a.setId(rs.getInt("id"));
-                a.setFirst(rs.getString("first"));
-                a.setLast(rs.getString("last"));
-                users.add(a);
+                User user = new User();
+                user.setId(rs.getInt("id"));
+                user.setFirst(rs.getString("first"));
+                user.setLast(rs.getString("last"));
+                user.setContactMethod(rs.getString("contact_method"));
+                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
+                users.add(user);
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -56,13 +58,11 @@ public class UserReader {
     }
 
     /**
-     * Get an an by id and return a fully populated actror object that includes
-     * the list of events the user is in
      *
      * @param uId the user id to query for
      * @return User a fully populated user object
      */
-    public User getUserFull(int uId) {
+    public User getUserBasicInfo(int uId) {
         User user = new User();
         try {
 
@@ -78,9 +78,9 @@ public class UserReader {
                 user.setIsSubscriber(rs.getBoolean("is_subscriber"));
             }
 
-            // use EventReader to query events
-            EventReader er = new EventReader(conn);
-            user.setEvents(er.getEventsForUser(user.getId()));
+//            // use EventReader to query events
+//            EventReader er = new EventReader(conn);
+//            user.setEvents(er.getEventsForUser(user.getId()));
 
         } catch (SQLException sq) {
             sq.printStackTrace();

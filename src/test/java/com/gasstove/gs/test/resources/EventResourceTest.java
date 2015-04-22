@@ -27,14 +27,14 @@ public class EventResourceTest {
     @Test
     public void testGetEvents() {
         EventResource er = new EventResource();
-        String response = er.getEvents();
+        String response = er.getEventsBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
     public void testGetEvent() {
         EventResource er = new EventResource();
-        String response = er.getEvent(TestDefaults.event_id.toString());
+        String response = er.getEventBasicInfo(TestDefaults.event_id.toString());
         assertTrue(response.length() > 0);
     }
 

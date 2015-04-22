@@ -16,7 +16,7 @@ public class Media {
     private Date dateTaken;
 
     // refs
-    private ArrayList<MediaEvent> media_events;
+//    private ArrayList<MediaEvent> media_events;
 
 
     public Date getDateTaken() {
@@ -59,11 +59,11 @@ public class Media {
         this.userId = userId;
     }
 
-    public void add_media_event(MediaEvent me){
-        if(media_events==null)
-            media_events = new ArrayList<MediaEvent>();
-        media_events.add(me);
-    }
+//    public void add_media_event(MediaEvent me){
+//        if(media_events==null)
+//            media_events = new ArrayList<MediaEvent>();
+//        media_events.add(me);
+//    }
 
 
 }

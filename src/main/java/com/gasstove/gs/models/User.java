@@ -15,7 +15,7 @@ public class User {
     private String contactMethod;
 
     // refs
-    private ArrayList<Event> events;
+//    private ArrayList<Event> events;
 
     public int getId() {
         return id;
@@ -57,12 +57,12 @@ public class User {
         this.contactMethod = contactMethod;
     }
 
-    public ArrayList<Event> getEvents() {
-        return events;
-    }
-
-    public void setEvents(ArrayList<Event> events) {
-        this.events = events;
-    }
+//    public ArrayList<Event> getEventsBasicInfo() {
+//        return events;
+//    }
+//
+//    public void setEvents(ArrayList<Event> events) {
+//        this.events = events;
+//    }
 
 }
