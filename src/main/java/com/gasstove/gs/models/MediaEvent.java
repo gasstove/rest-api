@@ -1,5 +1,7 @@
 package com.gasstove.gs.models;
 
+import java.util.Date;
+
 /**
  * Created by smorris on 3/24/15.
  */
@@ -18,6 +20,15 @@ public class MediaEvent {
     private String mediaType;
     private String mediaFileName;
     private Integer userId;
+    private Date mediaDateTaken;
+
+    public Date getMediaDateTaken() {
+        return mediaDateTaken;
+    }
+
+    public void setMediaDateTaken(Date mediaDateTaken) {
+        this.mediaDateTaken = mediaDateTaken;
+    }
 
     public Integer getUserId() {
         return userId;

@@ -105,7 +105,8 @@ public class TestData {
                 "'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "'type'	varchar NOT NULL, " +
                 "'file_name'	varchar NOT NULL, " +
-                "'user_id'	INTEGER " +
+                "'user_id'	INTEGER, " +
+                "'date_taken' datetime NOT NULL " +
                 ")";
         stmt.execute(sql);
 
@@ -274,12 +275,14 @@ public class TestData {
         User owner;
         String mediaType;
         Integer filename_ext;
+        long date_taken;
 
         ArrayList<Event> events = new ArrayList<Event>();
 
         public Media(User owner){
             this.owner = owner;
             this.mediaType = mediaTypes[randBetween(0,3)];
+            this.date_taken = randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR).getTime();
         }
 
         public void set_fileext(Integer f){
@@ -296,11 +299,12 @@ public class TestData {
                 throw new SQLException("Repeat insertion of media " + id);
 
             // insert the media
-            String sql = "INSERT into media(type, file_name, user_id) VALUES(?,?,?)";
+            String sql = "INSERT into media(type, file_name, user_id, date_taken) VALUES(?,?,?,?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1,mediaType);
             statement.setString(2, "media_" + filename_ext);
             statement.setString(3, owner.id.toString() );
+            statement.setDate(4, new java.sql.Date(this.date_taken)  );
             statement.execute();
 
             // get media id
@@ -450,6 +454,7 @@ public class TestData {
             // generate each media, assign it to an event(s)
             for(int i=0 ; i<num_media ; i++ ){
                 Media media = new Media(this);
+
                 medias.add(media);
 
                 // how many events does it belong to?

@@ -1,6 +1,7 @@
 package com.gasstove.gs.models;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  * Created by smorris on 3/24/15.
@@ -12,9 +13,19 @@ public class Media {
     private String type;
     private String fileName;
     private int userId;
+    private Date dateTaken;
 
     // refs
     private ArrayList<MediaEvent> media_events;
+
+
+    public Date getDateTaken() {
+        return dateTaken;
+    }
+
+    public void setDateTaken(Date dateTaken) {
+        this.dateTaken = dateTaken;
+    }
 
     public int getId() {
         return id;

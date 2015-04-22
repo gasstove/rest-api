@@ -42,6 +42,7 @@ public class MediaReader {
                 m.setId(rs.getInt("id"));
                 m.setType(rs.getString("type"));
                 m.setFileName(rs.getString("file_name"));
+                m.setDateTaken(rs.getDate("date_taken"));
                 medias.add(m);
             }
         } catch (SQLException e) {
@@ -49,7 +50,6 @@ public class MediaReader {
         }
         return medias;
     }
-
 
     public Media getMedia(int mId){
 
@@ -65,6 +65,7 @@ public class MediaReader {
                 media.setType(rs.getString("type"));
                 media.setFileName(rs.getString("file_name"));
                 media.setUserId(rs.getInt("user_id"));
+                media.setDateTaken(rs.getDate("date_taken"));
             }
 
             // query media_mapping table
@@ -94,7 +95,7 @@ public class MediaReader {
 
         try{
             // query user_event_mapping table for usereventids
-            String sql = "SELECT media.id as media_id, media.type as media_type, media.file_name as media_file_name, media.user_id as user_id, mm.num_downloads as num_downloads, mm.shared as shared, mm.comment as comment, mm.num_likes as num_likes, mm.num_dislikes as num_dislikes";
+            String sql = "SELECT media.id as media_id, media.type as media_type, media.file_name as media_file_name, media.date_taken as media_date_taken, media.user_id as user_id, mm.num_downloads as num_downloads, mm.shared as shared, mm.comment as comment, mm.num_likes as num_likes, mm.num_dislikes as num_dislikes";
             sql += " FROM media_mapping mm, media";
             sql += " WHERE  mm.event_id=?";
             sql += " AND media.id=mm.media_id";
@@ -108,6 +109,7 @@ public class MediaReader {
                 m.setEventId(eId);
                 m.setMediaType(rs.getString("media_type"));
                 m.setMediaFileName(rs.getString("media_file_name"));
+                m.setMediaDateTaken(rs.getDate("media_date_taken"));
                 m.setNumDislikes(rs.getInt("num_dislikes"));
                 m.setNumDownloads(rs.getInt("num_downloads"));
                 m.setNumLikes(rs.getInt("num_likes"));
