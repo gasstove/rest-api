@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by seanmorris on 3/22/15.
+ * Complete information for a single event
  */
 public class Event {
 

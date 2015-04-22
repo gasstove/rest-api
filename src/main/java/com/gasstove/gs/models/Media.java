@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by smorris on 3/24/15.
+ * Complete information for a single media item
  */
 public class Media {
 

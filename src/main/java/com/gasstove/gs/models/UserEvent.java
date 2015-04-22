@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 /**
- * Created by smorris on 3/24/15.
+ * Information for a given user in an event
  */
 public class UserEvent {
 
@@ -15,7 +15,8 @@ public class UserEvent {
     private Date joinDate;
 
     // refs
-    private ArrayList<MediaEvent> mediaEvents = new ArrayList<MediaEvent>();
+    private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();
+    private ArrayList<MediaEvent> sharedMedia = new ArrayList<MediaEvent>();
 
     public User getUser() {
         return user;
@@ -41,11 +42,11 @@ public class UserEvent {
         this.event = event;
     }
 
-    public ArrayList<MediaEvent> getMediaEvents() {
-        return mediaEvents;
+    public ArrayList<MediaEvent> getMyMedia() {
+        return myMedia;
     }
 
-    public void setMediaEvents(ArrayList<MediaEvent> mediaEvents) {
-        this.mediaEvents = mediaEvents;
+    public void setMyMedia(ArrayList<MediaEvent> myMedia) {
+        this.myMedia = myMedia;
     }
 }

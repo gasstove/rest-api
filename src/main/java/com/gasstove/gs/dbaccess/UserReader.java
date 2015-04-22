@@ -59,33 +59,33 @@ public class UserReader {
      * Get an an by id and return a fully populated actror object that includes
      * the list of events the user is in
      *
-     * @param aId the user id to query for
+     * @param uId the user id to query for
      * @return User a fully populated user object
      */
-    public User getUserFull(int aId) {
-        User a = new User();
+    public User getUserFull(int uId) {
+        User user = new User();
         try {
 
             // query for user
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user where id = ?");
-            stmt.setInt(1, aId);
+            stmt.setInt(1, uId);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                a.setId(rs.getInt("id"));
-                a.setFirst(rs.getString("first"));
-                a.setLast(rs.getString("last"));
-                a.setContactMethod(rs.getString("contact_method"));
-                a.setIsSubscriber(rs.getBoolean("is_subscriber"));
+                user.setId(rs.getInt("id"));
+                user.setFirst(rs.getString("first"));
+                user.setLast(rs.getString("last"));
+                user.setContactMethod(rs.getString("contact_method"));
+                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
             }
 
             // use EventReader to query events
             EventReader er = new EventReader(conn);
-            a.setEvents(er.getEventsForUser(a.getId()));
+            user.setEvents(er.getEventsForUser(user.getId()));
 
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
-        return a;
+        return user;
     }
 
     public ArrayList<User> getUsersForEvent(int eId){

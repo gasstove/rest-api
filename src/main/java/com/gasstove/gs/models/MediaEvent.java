@@ -3,7 +3,7 @@ package com.gasstove.gs.models;
 import java.util.Date;
 
 /**
- * Created by smorris on 3/24/15.
+ * Media information in an event context
  */
 public class MediaEvent {
 
