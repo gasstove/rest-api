@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Complete information for a single event
  */
-public class Event {
+public class Event extends DBObject {
 
     // events table
     private int id;
