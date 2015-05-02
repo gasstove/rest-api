@@ -1,70 +1,73 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.Event;
 import org.omg.CORBA_2_3.portable.OutputStream;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 
 public class EventWriter extends WriterBase {
 
-    private static final String ROUTE_LINK_INSERT_SP = "PKG_ROUTE_LINKS.INS";
-    private static final String ROUTE_LINK_UPDATE_SP = "PKG_ROUTE_LINKS.UPD";
-    private static final String ROUTE_LINK_DELETE_SP = "PKG_ROUTE_LINKS.DEL";
-
-    public EventWriter(Connection connection) {
-        super(connection);
+    public EventWriter(Connection dbConn) {
+        super(dbConn);
     }
 
+    public int insert(DBObject object) throws Exception {
 
-    public Long insert(DBObject object) throws Exception {
+        Event event = (Event) object;
 
-        String qName = "routeIns";
-        String[] params = new String[5] ;
+        String sql = "INSERT into event(id,name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,?,?,?,?)";
+        PreparedStatement statement = dbConn.prepareStatement(sql);
+        statement.setInt(1, event.getId());
+        statement.setString(2, event.getName());
+        statement.setDate(3, new java.sql.Date(event.getOpenDate().getTime()));
+        statement.setDate(4, new java.sql.Date(event.getCloseDate().getTime()));
+        statement.setBoolean(5, false);     // join_invitation
+        statement.setBoolean(6, false);     // join_allow_by_accept
+        statement.setBoolean(7, false);     // join_allow_auto
+        int r = statement.executeUpdate();
 
-//        params[0] = oraSPParams.intParam(1, oraSPEnums.spParamDir.OUT,0L);
-//        params[1] = oraSPParams.intParam(2, oraSPEnums.spParamDir.IN,routeLink.getRouteId());
-//        params[2] = oraSPParams.intParam(3, oraSPEnums.spParamDir.IN,routeLink.getLinkId());
-//        params[3] = oraSPParams.intParam(4, oraSPEnums.spParamDir.IN, (long)routeLink.getLinkOrder());
-//        params[4] = oraSPParams.intParam(5, oraSPEnums.spParamDir.OUT,0L);
+        if(r!=1)
+            throw new Exception("Insert failed for event " + + event.getId());
 
-        executeSP(qName, ROUTE_LINK_INSERT_SP, params);
-
-        return null; //params[0].getIntValue() ;
+        // return new id (IS THIS CORRECT?)
+        ResultSet rs = dbConn.createStatement().executeQuery("SELECT Max(id) from event");
+        return rs.next() ? rs.getInt(1) : -1;
     }
 
-    public Long update(DBObject object) throws Exception{
+    public void update(DBObject object) throws Exception{
+        Event event = (Event) object;
 
-        String qName = "routeUdt";
-        String[] params = new String[6] ;
+        String sql = "UPDATE event SET " +
+                            "name=?," +
+                            "open_date=?," +
+                            "close_date=?," +
+                            "join_invitation=?," +
+                            "join_allow_by_accept=?," +
+                            "join_allow_auto=? " +
+                            "WHERE id=?";
+        PreparedStatement statement = dbConn.prepareStatement(sql);
+        statement.setString(1,event.getName());
+        statement.setDate(2,new java.sql.Date(event.getOpenDate().getTime()));
+        statement.setDate(3,new java.sql.Date(event.getCloseDate().getTime()));
+        statement.setBoolean(4,false);     // join_invitation
+        statement.setBoolean(5,false);     // join_allow_by_accept
+        statement.setBoolean(6,false);     // join_allow_auto
+        statement.setInt(7,event.getId());
+        int r = statement.executeUpdate();
 
-
-//        params[0] = oraSPParams.intParam(1, oraSPEnums.spParamDir.IN,routeLink.getId());
-//        params[1] = oraSPParams.intParam(2, oraSPEnums.spParamDir.IN,routeLink.getRouteId());
-//        params[2] = oraSPParams.intParam(3, oraSPEnums.spParamDir.IN,routeLink.getLinkId());
-//        params[3] = oraSPParams.intParam(4, oraSPEnums.spParamDir.IN, (long) routeLink.getLinkOrder());
-//        params[4] = oraSPParams.strParam(5, oraSPEnums.spParamDir.IN,routeLink.getModStamp());
-//        params[5] = oraSPParams.intParam(6, oraSPEnums.spParamDir.OUT,0L);
-
-
-        executeSP(qName, ROUTE_LINK_UPDATE_SP, params);
-
-        return null; // params[5].getIntValue() ;
+        if(r!=1)
+            throw new Exception("Update failed for event " + + event.getId());
     }
 
-    public Long delete(DBObject object) throws Exception {
-
-        String qName = "routeDel";
-        String[] params = new String[4] ;
-
-//        params[0] = oraSPParams.intParam(1, oraSPEnums.spParamDir.IN,routeLink.getId());
-//        params[1] = oraSPParams.intParam(2, oraSPEnums.spParamDir.IN,routeLink.getRouteId());
-//        params[2] = oraSPParams.strParam(3, oraSPEnums.spParamDir.IN,routeLink.getModStamp());
-//        params[3] = oraSPParams.intParam(4, oraSPEnums.spParamDir.OUT,0L);
-
-        executeSP(qName, ROUTE_LINK_DELETE_SP, params);
-
-        return null; //params[3].getIntValue() ;
+    public void delete(DBObject object) throws Exception {
+        String sql = "DELETE from event WHERE id=?";
+        PreparedStatement statement = dbConn.prepareStatement(sql);
+        statement.setInt(1, ((Event) object).getId());
+        statement.executeUpdate();
     }
-
 
 }

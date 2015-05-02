@@ -1,6 +1,5 @@
 package com.gasstove.gs.dbaccess;
 
-
 //import org.joda.time.DateTime;
 //import core.oraExecuteSP;
 //import core.oraSPParams;
@@ -15,20 +14,20 @@ public abstract class WriterBase implements WriterInterface {
     public static enum CrudFlag {CREATE,UPDATE,DELETE};
 
     public java.sql.Connection dbConn = null;
-    public String dbSchema;
+//    public String dbSchema;
     public String dbUserName;
 
     // Oracle constants
-    public static final int DEFAULT_SRID = 8307;
-    public static final int DEF_FETCH_SIZE = 5000;
-    public static final String DEF_DATE_FORMAT = "DD-MON-YYYY HH24:MI:SS.FF6";
+//    public static final int DEFAULT_SRID = 8307;
+//    public static final int DEF_FETCH_SIZE = 5000;
+//    public static final String DEF_DATE_FORMAT = "DD-MON-YYYY HH24:MI:SS.FF6";
 
-    // The following 2 format strings MUST BE KEPT IN SYNC!
-    protected static final String timeFormat = "yyyy/MM/dd HH:mm:ss"; // FORMAT FOR DateTime string
-    protected static final String dbTimeFormat = "YYYY/MM/DD HH24:MI:SS"; // FORMAT FOR ORACLE TO_TIMESTAMP
+//    // The following 2 format strings MUST BE KEPT IN SYNC!
+//    protected static final String timeFormat = "yyyy/MM/dd HH:mm:ss"; // FORMAT FOR DateTime string
+//    protected static final String dbTimeFormat = "YYYY/MM/DD HH24:MI:SS"; // FORMAT FOR ORACLE TO_TIMESTAMP
 
     public WriterBase(java.sql.Connection dbConn) {
-        this.setDBSchema();
+//        this.setDBSchema();
         this.dbConn = dbConn;
 
         // try to get database username from connection
@@ -40,15 +39,14 @@ public abstract class WriterBase implements WriterInterface {
     }
 
 
-    //RouteLink rl ;
     public Long processTransAction(DBObject object,CrudFlag crudFlag) throws Exception {
         Long retVal = 0L;
         switch (crudFlag){
             case CREATE:
-                retVal = insert(object) ;
+                insert(object) ;
                 break;
             case UPDATE:
-                retVal = update(object);
+                update(object);
                 break;
             case DELETE:
                 delete(object);
@@ -59,26 +57,26 @@ public abstract class WriterBase implements WriterInterface {
         return retVal ;
     }
 
-    /**
-     * Set Database schema to write out to value of dbSchema property,
-     * Defaults to VIA schema.
-     */
-    private void setDBSchema() {
-        this.dbSchema = System.getenv("dbSchema");
-        if ( dbSchema == null ) {
-            this.dbSchema = System.getProperty("dbSchema");
-            if ( dbSchema == null ) {
-                this.dbSchema = "VIA";
-            }
-        }
-    }
+//    /**
+//     * Set Database schema to write out to value of dbSchema property,
+//     * Defaults to VIA schema.
+//     */
+//    private void setDBSchema() {
+//        this.dbSchema = System.getenv("dbSchema");
+//        if ( dbSchema == null ) {
+//            this.dbSchema = System.getProperty("dbSchema");
+//            if ( dbSchema == null ) {
+//                this.dbSchema = "VIA";
+//            }
+//        }
+//    }
 
-    /**
-     * Return Connection associated with DB Base
-     */
-    public java.sql.Connection getConnection() {
-        return this.dbConn;
-    }
+//    /**
+//     * Return Connection associated with DB Base
+//     */
+//    public java.sql.Connection getConnection() {
+//        return this.dbConn;
+//    }
 
 //    /**
 //     * Create unique Query, Resultset, or SP Name
@@ -90,17 +88,15 @@ public abstract class WriterBase implements WriterInterface {
 //        String unique = prefaceName + "_" + this.dbUserName + "_" + new DateTime().getMillis();
 //        return unique;
 //    }
-
-    /**
-     * Wrapper Function to execute all Stored Procedure using oraExecuteSP library
-     * Assumes, last parameter in SP always holds result code which is 0 if successful
-     *
-     * @param spName a unique name that will be used to reference this sp in the list of sp's
-     * @param spStr This is the name of the SP to call (WITHOUT SCHEMA NAME)
-     * @param params Array of oraSPParams to execute a particular stored procedure
-     */
-    protected void executeSP(String spName, String spStr, String[] params) throws Exception {
-    }
+//
+//    /**
+//     * Wrapper Function to execute all Stored Procedure using oraExecuteSP library
+//     * Assumes, last parameter in SP always holds result code which is 0 if successful
+//     *
+//     * @param spName a unique name that will be used to reference this sp in the list of sp's
+//     * @param spStr This is the name of the SP to call (WITHOUT SCHEMA NAME)
+//     * @param params Array of oraSPParams to execute a particular stored procedure
+//     */
 //    void executeSP(String spName, String spStr, oraSPParams[] params) throws MODatabaseException {
 //        try {
 //            //  Create SP with given parameters

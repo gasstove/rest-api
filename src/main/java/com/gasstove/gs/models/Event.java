@@ -9,7 +9,7 @@ import java.util.Date;
 public class Event extends DBObject {
 
     // events table
-    private int id;
+    private int id = -1;
     private String name;
     private Date openDate;
     private Date closeDate;

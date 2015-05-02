@@ -78,10 +78,6 @@ public class UserReader {
                 user.setIsSubscriber(rs.getBoolean("is_subscriber"));
             }
 
-//            // use EventReader to query events
-//            EventReader er = new EventReader(conn);
-//            user.setEvents(er.getEventsForUser(user.getId()));
-
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
