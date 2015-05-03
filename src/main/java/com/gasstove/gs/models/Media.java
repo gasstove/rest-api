@@ -6,10 +6,10 @@ import java.util.Date;
 /**
  * Complete information for a single media item
  */
-public class Media {
+public class Media extends DBObject  {
 
     // medias table
-    private int id;
+    private int id = -1;
     private String type;
     private String fileName;
     private int userId;

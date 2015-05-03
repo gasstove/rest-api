@@ -1,14 +1,12 @@
 package com.gasstove.gs.models;
 
-import java.util.ArrayList;
-
 /**
  * Created by smorris on 3/24/15.
  */
-public class User {
+public class User extends DBObject  {
 
     // user table
-    private int id;
+    private int id = -1;
     private String first;
     private String last;
     private Boolean isSubscriber;

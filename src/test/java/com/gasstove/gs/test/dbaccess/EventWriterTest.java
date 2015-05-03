@@ -3,7 +3,6 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.dbaccess.EventWriter;
 import com.gasstove.gs.models.Event;
-import com.gasstove.gs.test.util.TestDefaults;
 import com.gasstove.gs.util.DBConnection;
 import org.junit.After;
 import org.junit.Before;
@@ -15,9 +14,6 @@ import java.util.Date;
 
 import static org.junit.Assert.*;
 
-/**
- * Created by gomes on 5/2/15.
- */
 public class EventWriterTest {
 
     Connection conn;
