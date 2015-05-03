@@ -10,14 +10,10 @@ import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.SQLException;
-import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-/**
- * Created by gomes on 5/2/15.
- */
 public class UserWriterTest {
 
     Connection conn;

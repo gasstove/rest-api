@@ -1,15 +1,19 @@
 package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.EventReader;
+import com.gasstove.gs.dbaccess.EventWriter;
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.util.DBConnection;
 import com.google.gson.Gson;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Restful Jersey based servlet for Image Resource
@@ -20,6 +24,19 @@ import java.util.ArrayList;
 
 @Path("/events")
 public class EventResource {
+
+
+//    @Context
+//    Request req;
+
+    @Context
+    HttpHeaders headers;
+
+
+//    @Context
+//    private ServletContext context;
+
+
 
     /** Returns ids and names of all events.
      *
@@ -83,5 +100,81 @@ public class EventResource {
         }
         return returnJSON;
     }
+
+    @Path("/")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON })
+    public String importScenario(String eventString)  {
+
+        Connection conn;
+        String returnJSON = "";
+
+        // check headers
+//        List<String> authHeaders = this.headers.getRequestHeader("Authorization");
+//        List<String> dbHeader = this.headers.getRequestHeader("DB");
+//        if (authHeaders==null || dbHeader==null)
+//            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
+
+        // authenticate
+//        String encodedUserPass = authHeaders.get(0);
+//        String dbName = dbHeader.get(0);
+//        OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
+
+        // connect to db
+        try {
+            conn = (new DBConnection()).getConnection();
+        } catch (SQLException e) {
+            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Username/Password", null);
+        }
+        if(conn==null)
+            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Username/Password", null);
+
+//        Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
+
+        try {
+
+            // tools
+            Gson gson = new Gson();
+            EventWriter eventWriter = new EventWriter(conn);
+            EventReader eventReader = new EventReader(conn);
+
+            // insert
+            Event event = gson.fromJson(eventString,Event.class);
+            int eventId = eventWriter.insert(event);
+
+            // check insert succeeded
+            if(eventId<0)
+                throw new Exception("Insert returned id=-1");
+
+            // serialize it and send it back to client
+            event = eventReader.getEventBasicInfo(eventId);
+
+            returnJSON = Response.JSONMessage(true, "New Scenario Successfully Saved", gson.toJson(event));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // rollback transaction
+            //oraDatabase.rollbackTransaction(conn);
+
+            returnJSON = Response.JSONMessage(false, "Error Saving New Scenario, " + e.getMessage(), null);
+
+        } finally {
+            try {
+                // close connection
+                conn.close();
+            } catch (SQLException exp) {
+                returnJSON = Response.JSONMessage(false, "Error closing db connection, " + exp.getMessage(), null);
+            }
+        }
+
+        return returnJSON;
+    }
+
+
+
+
+
+
 
 }

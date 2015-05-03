@@ -1,5 +1,7 @@
 package com.gasstove.gs.models;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -16,10 +18,6 @@ public class Event extends DBObject {
     private Boolean joinInvitation;
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
-
-    // refs
-//    private ArrayList<User> users;
-//    private ArrayList<MediaEvent> medias;
 
     public Date getCloseDate() {
         return closeDate;
