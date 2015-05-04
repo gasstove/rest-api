@@ -27,8 +27,9 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediasBasicInfo() {
         String returnJSON = "";
+        MediaReader mr = null;
         try {
-            MediaReader mr = new MediaReader();
+            mr = new MediaReader();
             ArrayList<Media> medias = mr.getMediasBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(medias);
@@ -36,6 +37,7 @@ public class MediaResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            mr.close();
         }
         return returnJSON;
     }
@@ -51,8 +53,9 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaBasicInfo(@PathParam("mediaId") String mediaId) {
         String returnJSON;
+        MediaReader mr = null;
         try {
-            MediaReader mr = new MediaReader();
+            mr = new MediaReader();
             Media media = mr.getMediaBasicInfo(Integer.parseInt(mediaId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(media);
@@ -60,6 +63,7 @@ public class MediaResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            mr.close();
         }
         return returnJSON;
     }
@@ -69,8 +73,9 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
         String returnJSON;
+        MediaReader mr = null;
         try {
-            MediaReader mr = new MediaReader();
+            mr = new MediaReader();
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getSharedMediaForEvent(eId);
             Gson gson = new Gson();
@@ -79,6 +84,7 @@ public class MediaResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            mr.close();
         }
         return returnJSON;
     }
@@ -88,8 +94,9 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId) {
         String returnJSON;
+        MediaReader mr = null;
         try {
-            MediaReader mr = new MediaReader();
+            mr = new MediaReader();
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getMediaForUserAndEvent(uId,eId);
@@ -99,6 +106,7 @@ public class MediaResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            mr.close();
         }
         return returnJSON;
     }

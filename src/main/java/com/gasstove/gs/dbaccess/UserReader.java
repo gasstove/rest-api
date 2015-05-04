@@ -31,6 +31,14 @@ public class UserReader {
         this.conn = conn;
     }
 
+    public void close(){
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Returns a list of all the users in the db.
      * Provides for each user: id, first, last

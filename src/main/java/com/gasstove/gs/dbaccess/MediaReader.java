@@ -26,6 +26,14 @@ public class MediaReader {
         this.conn = conn;
     }
 
+    public void close(){
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Returns a list of all the medias in the db.
      * Provides for each media: id, type, file_name

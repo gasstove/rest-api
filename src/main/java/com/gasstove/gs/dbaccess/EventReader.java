@@ -27,6 +27,14 @@ public class EventReader {
         this.conn = conn;
     }
 
+    public void close(){
+        try {
+            conn.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     /**
      * Returns a list of all the events in the db.
      * Provides for each event: id, name

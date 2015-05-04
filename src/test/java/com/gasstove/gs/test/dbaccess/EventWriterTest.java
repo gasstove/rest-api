@@ -28,7 +28,6 @@ public class EventWriterTest {
 
             // create an event
             event = new Event();
-            event.setId(-1);
             event.setName("test");
             event.setOpenDate(new Date(0));
             event.setCloseDate(new Date(1));

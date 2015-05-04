@@ -36,8 +36,6 @@ public class EventResource {
 //    @Context
 //    private ServletContext context;
 
-
-
     /** Returns ids and names of all events.
      *
      */
@@ -46,8 +44,9 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsBasicInfo() {
         String returnJSON;
+        EventReader er = null;
         try {
-            EventReader er = new EventReader();
+            er = new EventReader();
             ArrayList<Event> events = er.getEventsBasicInfo();
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
@@ -55,6 +54,7 @@ public class EventResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            er.close();
         }
         return returnJSON;
     }
@@ -70,8 +70,9 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventBasicInfo(@PathParam("eventId") String eventId) {
         String returnJSON;
+        EventReader er = null;
         try {
-            EventReader er = new EventReader();
+            er = new EventReader();
             Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(event);
@@ -79,6 +80,7 @@ public class EventResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            er.close();
         }
         return returnJSON;
     }
@@ -88,8 +90,9 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsForUser(@PathParam("userId") String userId) {
         String returnJSON = "";
+        EventReader er = null;
         try {
-            EventReader er = new EventReader();
+            er = new EventReader();
             ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
             Gson gson = new Gson();
             returnJSON = gson.toJson(events);
@@ -97,6 +100,7 @@ public class EventResource {
             exp.printStackTrace();
             returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
         } finally {
+            er.close();
         }
         return returnJSON;
     }
@@ -104,42 +108,40 @@ public class EventResource {
     @Path("/")
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
-    public String importScenario(String eventString)  {
+    public String insertEvent(String eventString)  {
 
-        Connection conn;
+        Connection conn = null;
         String returnJSON = "";
 
-        // check headers
-//        List<String> authHeaders = this.headers.getRequestHeader("Authorization");
-//        List<String> dbHeader = this.headers.getRequestHeader("DB");
-//        if (authHeaders==null || dbHeader==null)
-//            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
+        /** check headers
+        List<String> authHeaders = this.headers.getRequestHeader("Authorization");
+        List<String> dbHeader = this.headers.getRequestHeader("DB");
+        if (authHeaders==null || dbHeader==null)
+            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
+        */
 
-        // authenticate
-//        String encodedUserPass = authHeaders.get(0);
-//        String dbName = dbHeader.get(0);
-//        OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
+        /** authenticate
+        String encodedUserPass = authHeaders.get(0);
+        String dbName = dbHeader.get(0);
+        OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
+        */
 
-        // connect to db
+        /**
+         Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
+         */
+
         try {
+
+            // connect to db
             conn = (new DBConnection()).getConnection();
-        } catch (SQLException e) {
-            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Username/Password", null);
-        }
-        if(conn==null)
-            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Username/Password", null);
-
-//        Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
-
-        try {
 
             // tools
             Gson gson = new Gson();
             EventWriter eventWriter = new EventWriter(conn);
-            EventReader eventReader = new EventReader(conn);
 
             // insert
             Event event = gson.fromJson(eventString,Event.class);
+
             int eventId = eventWriter.insert(event);
 
             // check insert succeeded
@@ -147,9 +149,10 @@ public class EventResource {
                 throw new Exception("Insert returned id=-1");
 
             // serialize it and send it back to client
+            EventReader eventReader = new EventReader(conn);
             event = eventReader.getEventBasicInfo(eventId);
 
-            returnJSON = Response.JSONMessage(true, "New Scenario Successfully Saved", gson.toJson(event));
+            returnJSON = Response.JSONMessage(true, "New event successfully saved", gson.toJson(event));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -157,7 +160,7 @@ public class EventResource {
             // rollback transaction
             //oraDatabase.rollbackTransaction(conn);
 
-            returnJSON = Response.JSONMessage(false, "Error Saving New Scenario, " + e.getMessage(), null);
+            returnJSON = Response.JSONMessage(false, "Error saving new event, " + e.getMessage(), null);
 
         } finally {
             try {
@@ -170,11 +173,5 @@ public class EventResource {
 
         return returnJSON;
     }
-
-
-
-
-
-
 
 }
