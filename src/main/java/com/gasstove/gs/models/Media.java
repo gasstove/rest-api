@@ -1,5 +1,7 @@
 package com.gasstove.gs.models;
 
+import com.google.gson.Gson;
+
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,15 +11,20 @@ import java.util.Date;
 public class Media extends DBObject  {
 
     // medias table
-    private int id = -1;
     private String type;
     private String fileName;
     private int userId;
     private Date dateTaken;
 
-    // refs
-//    private ArrayList<MediaEvent> media_events;
+    public Media(){};
 
+    public Media(String json){
+        Media x = (new Gson()).fromJson(json,Media.class);
+        this.setType(x.getType());
+        this.setUserId(x.getUserId());
+        this.setFileName(x.getFileName());
+        this.setDateTaken(x.getDateTaken());
+    }
 
     public Date getDateTaken() {
         return dateTaken;
@@ -25,14 +32,6 @@ public class Media extends DBObject  {
 
     public void setDateTaken(Date dateTaken) {
         this.dateTaken = dateTaken;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public String getType() {
@@ -58,12 +57,5 @@ public class Media extends DBObject  {
     public void setUserId(int userId) {
         this.userId = userId;
     }
-
-//    public void add_media_event(MediaEvent me){
-//        if(media_events==null)
-//            media_events = new ArrayList<MediaEvent>();
-//        media_events.add(me);
-//    }
-
 
 }

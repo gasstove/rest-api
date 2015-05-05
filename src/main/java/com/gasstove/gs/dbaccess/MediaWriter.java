@@ -59,11 +59,12 @@ public class MediaWriter extends WriterBase {
             throw new Exception("Update failed for media " + + media.getId());
     }
 
-    public void delete(DBObject object) throws Exception {
+    public boolean delete(int id) throws Exception {
         String sql = "DELETE from media WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
-        statement.setInt(1, ((Media) object).getId());
-        statement.executeUpdate();
+        statement.setInt(1,id);
+        int r = statement.executeUpdate();
+        return r==1;
     }
 
 }

@@ -10,6 +10,10 @@ public class TestConfiguration {
     public static final String SERVER_BASE_URI = "http://localhost:50000";
     public static final String REST_API_PATH = "/gs-rest-api";
 
+    public static HttpURLConnection sendRequest(String uri, String method, int number) {
+        return sendRequest(uri,method,Integer.toString(number));
+    }
+
     public static HttpURLConnection sendRequest(String uri, String method, String data) {
 
         HttpURLConnection conn = null;

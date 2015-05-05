@@ -6,7 +6,7 @@ import java.util.Date;
 /**
  * Information for a given user in an event
  */
-public class UserEvent {
+public class UserEvent extends DBObject {
 
     // user_event table
     private User user;

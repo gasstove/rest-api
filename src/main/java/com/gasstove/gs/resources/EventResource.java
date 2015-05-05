@@ -13,7 +13,6 @@ import javax.ws.rs.core.MediaType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Restful Jersey based servlet for Image Resource
@@ -52,7 +51,7 @@ public class EventResource {
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             er.close();
         }
@@ -74,11 +73,10 @@ public class EventResource {
         try {
             er = new EventReader();
             Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(event);
+            returnJSON = event.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             er.close();
         }
@@ -98,7 +96,7 @@ public class EventResource {
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             er.close();
         }
@@ -110,8 +108,8 @@ public class EventResource {
     @Produces({ MediaType.APPLICATION_JSON })
     public String insertEvent(String eventString)  {
 
+        Response response;
         Connection conn = null;
-        String returnJSON = "";
 
         /** check headers
         List<String> authHeaders = this.headers.getRequestHeader("Authorization");
@@ -135,24 +133,21 @@ public class EventResource {
             // connect to db
             conn = (new DBConnection()).getConnection();
 
-            // tools
-            Gson gson = new Gson();
-            EventWriter eventWriter = new EventWriter(conn);
-
             // insert
-            Event event = gson.fromJson(eventString,Event.class);
+            int eventId = (new EventWriter(conn)).insert(new Event(eventString));
 
-            int eventId = eventWriter.insert(event);
-
+            System.out.println("Created event id: " + eventId);
             // check insert succeeded
             if(eventId<0)
-                throw new Exception("Insert returned id=-1");
+                throw new Exception("Insert returned id < 0");
 
             // serialize it and send it back to client
-            EventReader eventReader = new EventReader(conn);
-            event = eventReader.getEventBasicInfo(eventId);
+            Event event = (new EventReader(conn)).getEventBasicInfo(eventId);
 
-            returnJSON = Response.JSONMessage(true, "New event successfully saved", gson.toJson(event));
+            System.out.println("Found event");
+            System.out.println(event);
+
+            response = new Response(true, "New event successfully saved", event.toJson());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -160,18 +155,58 @@ public class EventResource {
             // rollback transaction
             //oraDatabase.rollbackTransaction(conn);
 
-            returnJSON = Response.JSONMessage(false, "Error saving new event, " + e.getMessage(), null);
+            response = new Response(false, "Error saving new event, " + e.getMessage(), null);
 
         } finally {
             try {
                 // close connection
                 conn.close();
             } catch (SQLException exp) {
-                returnJSON = Response.JSONMessage(false, "Error closing db connection, " + exp.getMessage(), null);
+                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
             }
         }
 
-        return returnJSON;
+        return response.toJSON();
+    }
+
+
+    @Path("/{eventId: [0-9]+}")
+    @DELETE
+    public String deleteEvent(@PathParam("eventId") String eventId)  {
+
+        Connection conn = null;
+        Response response;
+
+        try {
+
+            // connect to db
+            conn = (new DBConnection()).getConnection();
+
+            EventWriter eventWriter = new EventWriter(conn);
+            boolean success = eventWriter.delete(Integer.parseInt(eventId));
+
+            response = success ?
+                    new Response(true, "Event successfully deteled",null) :
+                    new Response(true, "Event deletion failed",null) ;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // rollback transaction
+            //oraDatabase.rollbackTransaction(conn);
+
+            response = new Response(false, "Error saving new event, " + e.getMessage(), null);
+
+        } finally {
+            try {
+                // close connection
+                conn.close();
+            } catch (SQLException exp) {
+                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
+            }
+        }
+
+        return response.toJSON();
     }
 
 }

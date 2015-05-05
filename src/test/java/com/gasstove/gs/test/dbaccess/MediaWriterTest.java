@@ -14,6 +14,7 @@ import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by gomes on 5/2/15.
@@ -40,7 +41,7 @@ public class MediaWriterTest {
 
             // remove it from the db
             MediaWriter mw = new MediaWriter(conn);
-            mw.delete(media);
+            mw.delete(media.getId());
 
         } catch (Exception e) {
             cleanup();
@@ -84,7 +85,7 @@ public class MediaWriterTest {
             assertEquals(m.getFileName(),"xx");
 
             // remove it
-            mw.delete(media);
+            assertTrue(mw.delete(media.getId()));
 
             // check it is not there
             m = mr.getMediaBasicInfo(media.getId());

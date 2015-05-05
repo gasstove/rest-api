@@ -9,8 +9,8 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
-import java.util.Date;
 
 import static org.junit.Assert.*;
 
@@ -37,7 +37,7 @@ public class EventWriterTest {
 
             // remove it from the db
             EventWriter ew = new EventWriter(conn);
-            ew.delete(event);
+            ew.delete(event.getId());
 
         } catch (Exception e) {
             cleanup();
@@ -81,7 +81,7 @@ public class EventWriterTest {
             assertEquals(e.getName(),"testMod");
 
             // remove it
-            ew.delete(event);
+            assertTrue( ew.delete(event.getId()) );
 
             // check it is not there
             e = er.getEventBasicInfo(event.getId());

@@ -35,7 +35,7 @@ public class MediaResource {
             returnJSON = gson.toJson(medias);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             mr.close();
         }
@@ -57,11 +57,10 @@ public class MediaResource {
         try {
             mr = new MediaReader();
             Media media = mr.getMediaBasicInfo(Integer.parseInt(mediaId));
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(media);
+            returnJSON = media.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             mr.close();
         }
@@ -82,7 +81,7 @@ public class MediaResource {
             returnJSON = gson.toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             mr.close();
         }
@@ -104,7 +103,7 @@ public class MediaResource {
             returnJSON = gson.toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             mr.close();
         }

@@ -1,26 +1,26 @@
 package com.gasstove.gs.models;
 
+import com.google.gson.Gson;
+
 /**
  * Created by smorris on 3/24/15.
  */
 public class User extends DBObject  {
 
     // user table
-    private int id = -1;
     private String first;
     private String last;
     private Boolean isSubscriber;
     private String contactMethod;
 
-    // refs
-//    private ArrayList<Event> events;
+    public User(){};
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public User(String json){
+        User x = (new Gson()).fromJson(json,User.class);
+        this.setFirst(x.getFirst());
+        this.setLast(x.getLast());
+        this.setIsSubscriber(x.isSubscriber());
+        this.setContactMethod(x.getContactMethod());
     }
 
     public String getFirst() {
@@ -55,12 +55,5 @@ public class User extends DBObject  {
         this.contactMethod = contactMethod;
     }
 
-//    public ArrayList<Event> getEventsBasicInfo() {
-//        return events;
-//    }
-//
-//    public void setEvents(ArrayList<Event> events) {
-//        this.events = events;
-//    }
 
 }

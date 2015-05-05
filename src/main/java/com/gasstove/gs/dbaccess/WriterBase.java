@@ -39,23 +39,23 @@ public abstract class WriterBase implements WriterInterface {
     }
 
 
-    public Long processTransAction(DBObject object,CrudFlag crudFlag) throws Exception {
-        Long retVal = 0L;
-        switch (crudFlag){
-            case CREATE:
-                insert(object) ;
-                break;
-            case UPDATE:
-                update(object);
-                break;
-            case DELETE:
-                delete(object);
-                break;
-            default:
-                throw new Exception("Invalid CRUD Flag");
-        }
-        return retVal ;
-    }
+//    public Long processTransAction(DBObject object,CrudFlag crudFlag) throws Exception {
+//        Long retVal = 0L;
+//        switch (crudFlag){
+//            case CREATE:
+//                insert(object) ;
+//                break;
+//            case UPDATE:
+//                update(object);
+//                break;
+//            case DELETE:
+//                delete(object.getId());
+//                break;
+//            default:
+//                throw new Exception("Invalid CRUD Flag");
+//        }
+//        return retVal ;
+//    }
 
 //    /**
 //     * Set Database schema to write out to value of dbSchema property,

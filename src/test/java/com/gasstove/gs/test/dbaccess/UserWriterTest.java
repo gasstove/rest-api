@@ -13,6 +13,7 @@ import java.sql.SQLException;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 public class UserWriterTest {
 
@@ -36,7 +37,7 @@ public class UserWriterTest {
 
             // remove it from the db
             UserWriter uw = new UserWriter(conn);
-            uw.delete(user);
+            uw.delete(user.getId());
 
         } catch (Exception e) {
             cleanup();
@@ -80,7 +81,7 @@ public class UserWriterTest {
             assertEquals(u.getFirst(), "xx");
 
             // remove it
-            uw.delete(user);
+            assertTrue(uw.delete(user.getId()));
 
             // check it is not there
             u = ur.getUserBasicInfo(user.getId());

@@ -26,6 +26,8 @@
 
 package com.gasstove.gs.resources;
 
+import com.google.gson.Gson;
+
 /**
  * Holds static methods to return JSON response object
  *
@@ -33,20 +35,17 @@ package com.gasstove.gs.resources;
  */
 public class Response {
 
-	/**
-	 * NOTE: This generates a response intended for a JSON parser. The new ui, Project Manager, uses
-     * this method. The old UI, Scenario Editor, uses an xml parser on the response. Everything will
-     * eventually use this method.
-     *
-     * Returns a standard JSON message for REST API requests.  All responses should be
-	 * generated here.
-	 *
-	 * @param success boolean whether message was successful or not
-	 * @param message String representation of success or error message of request
-	 * @param resource String representation of REST resource
-	 * @return JSON representing success, message and resource
-	 */
-	public static String JSONPMMessage(boolean success, String message, String resource) {
+    public boolean success;
+    public String message;
+    public String resource;
+
+    public Response(boolean success, String message, String resource) {
+        this.success = success;
+        this.message = message;
+        this.resource = resource;
+    }
+
+	public String toJSONP(boolean success, String message, String resource) {
 
 		// make sure to escape all quotes within message and resource strings
 		if (message != null) {
@@ -63,37 +62,28 @@ public class Response {
 		return returnJSON;
 	}
 
-    /**
- 	 * NOTE: Scenario Editor Method: We expect this to go away as we integrate the Project Manager into the workflow.
-     * You will notice the JSON response is in a format intended for an XML parser on the client side.Returns a standard JSON message for REST API requests.  All responses should be
-     * generated here. This is used by Scenario Editor
-     *
-     * @param success boolean whether message was successful or not
-     * @param message String representation of success or error message of request
-     * @param resource String representation of REST resource
-     * @return JSON representing success, message and resource
-     */
-    public static String JSONMessage(boolean success, String message, String resource) {
+    public String toJSON() {
 
-        // make sure to escape all quotes within message and resource strings
-        if (message != null) {
-            message = message.replace("\\", "\\\\");
-            message = message.replace("\"", "\\\"");
-        }
-        if (resource != null) {
-            resource = resource.replace("\\", "\\\\");
-            resource = resource.replace("\"", "\\\"");
-        }
+//        // make sure to escape all quotes within message and resource strings
+//        if (message != null) {
+//            message = message.replace("\\", "\\\\");
+//            message = message.replace("\"", "\\\"");
+//        }
+//        if (resource != null) {
+//            resource = resource.replace("\\", "\\\\");
+//            resource = resource.replace("\"", "\\\"");
+//        }
+//
+//        // Construct JSON string of success, message and resource
+//        String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
+//                + ", \"resource\":" + "\"" + resource + "\"" + "}";
+//
+//        // replace all newline characters for JSON since they prevent it from being parsed into an object
+//        returnJSON = returnJSON.replace("\n", "");
+//
+//        return returnJSON;
 
-        // Construct JSON string of success, message and resource
-        String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
-                + ", \"resource\":" + "\"" + resource + "\"" + "}";
-
-        // replace all newline characters for JSON since they prevent it from being parsed into an object
-        returnJSON = returnJSON.replace("\n", "");
-
-        return returnJSON;
+        return (new Gson()).toJson(this,Response.class);
     }
-
 
 }

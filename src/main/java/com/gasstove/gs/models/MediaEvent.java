@@ -1,11 +1,13 @@
 package com.gasstove.gs.models;
 
+import com.google.gson.Gson;
+
 import java.util.Date;
 
 /**
  * Media information in an event context
  */
-public class MediaEvent {
+public class MediaEvent extends DBObject {
 
     // media_mapping table
     private int mediaId;
@@ -21,6 +23,23 @@ public class MediaEvent {
     private String mediaFileName;
     private Integer userId;
     private Date mediaDateTaken;
+
+    public MediaEvent(){};
+
+    public MediaEvent(String json){
+        MediaEvent x = (new Gson()).fromJson(json,MediaEvent.class);
+        this.setMediaId(x.getMediaId());
+        this.setEventId(x.getEventId());
+        this.setNumDownloads(x.getNumDownloads());
+        this.setShared(x.isShared());
+        this.setComment(x.getComment());
+        this.setNumLikes(x.getNumLikes());
+        this.setNumDislikes(x.getNumDislikes());
+        this.setMediaType(x.getMediaType());
+        this.setMediaFileName(x.getMediaFileName());
+        this.setUserId(x.getUserId());
+        this.setMediaDateTaken(x.getMediaDateTaken());
+    }
 
     public Date getMediaDateTaken() {
         return mediaDateTaken;

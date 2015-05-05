@@ -55,11 +55,12 @@ public class UserWriter  extends WriterBase {
             throw new Exception("Update failed for user " + + user.getId());
     }
 
-    public void delete(DBObject object) throws Exception {
+    public boolean delete(int id) throws Exception {
         String sql = "DELETE from user WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
-        statement.setInt(1, ((User) object).getId());
-        statement.executeUpdate();
+        statement.setInt(1,id);
+        int r = statement.executeUpdate();
+        return r==1;
     }
 
 }

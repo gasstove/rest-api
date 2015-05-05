@@ -2,8 +2,7 @@ package com.gasstove.gs.models;
 
 import com.google.gson.Gson;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 
 /**
  * Complete information for a single event
@@ -11,13 +10,25 @@ import java.util.Date;
 public class Event extends DBObject {
 
     // events table
-    private int id = -1;
     private String name;
     private Date openDate;
     private Date closeDate;
     private Boolean joinInvitation;
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
+
+
+    public Event(){};
+
+    public Event(String json){
+        Event x = (new Gson()).fromJson(json,Event.class);
+        this.setName(x.getName());
+        this.setOpenDate(x.getOpenDate() );
+        this.setCloseDate(x.getCloseDate());
+        this.setJoinAllowByAccept(x.isJoinAllowByAccept());
+        this.setJoinInvitation(x.isJoinInvitation());
+        this.setJoinAllowAuto(x.isJoinAllowAuto());
+    }
 
     public Date getCloseDate() {
         return closeDate;
@@ -41,14 +52,6 @@ public class Event extends DBObject {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public boolean isJoinInvitation() {
@@ -75,19 +78,16 @@ public class Event extends DBObject {
         this.joinAllowAuto = joinAllowAuto;
     }
 
-//    public ArrayList<User> getUsersBasicInfo() {
-//        return users;
-//    }
-//
-//    public void setUsers(ArrayList<User> users) {
-//        this.users = users;
-//    }
-//
-//    public ArrayList<MediaEvent> getMediasBasicInfo() {
-//        return medias;
-//    }
-//
-//    public void setMedias(ArrayList<MediaEvent> medias) {
-//        this.medias = medias;
-//    }
+    @Override
+    public String toString() {
+        String str = "";
+        str += "event " + getId()+ "\n";
+        str += "\tname: " + name+ "\n";
+        str += "\topen date: " + openDate+ "\n";
+        str += "\tclose date: " + closeDate+ "\n";
+        str += "\tjoinInvitation: " + joinInvitation+ "\n";
+        str += "\tjoinAllowbyAccept: " + joinAllowByAccept+ "\n";
+        str += "\tjoinAllowAuto: " + joinAllowAuto;
+        return str;
+    }
 }

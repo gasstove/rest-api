@@ -37,7 +37,7 @@ public class UserResource {
             returnJSON = gson.toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             ur.close();
         }
@@ -59,11 +59,10 @@ public class UserResource {
         try {
             ur = new UserReader();
             User user = ur.getUserBasicInfo(Integer.parseInt(userId));
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(user);
+            returnJSON = user.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             ur.close();
         }
@@ -83,7 +82,7 @@ public class UserResource {
             returnJSON = gson.toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = Response.JSONMessage(false, exp.getMessage(), null);
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
             ur.close();
         }

@@ -63,11 +63,12 @@ public class EventWriter extends WriterBase {
             throw new Exception("Update failed for event " + + event.getId());
     }
 
-    public void delete(DBObject object) throws Exception {
+    public boolean delete(int id) throws Exception {
         String sql = "DELETE from event WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
-        statement.setInt(1, ((Event) object).getId());
-        statement.executeUpdate();
+        statement.setInt(1,id);
+        int r = statement.executeUpdate();
+        return r==1;
     }
 
 }
