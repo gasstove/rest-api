@@ -21,15 +21,17 @@ public class UserReaderTest {
 
     @Test
     public void testGetUsersBasicInfo() {
+        UserReader ur = new UserReader();
         try {
-            UserReader ar = new UserReader();
-            ArrayList<User> list = ar.getUsersBasicInfo();
+            ArrayList<User> list = ur.getUsersBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
 
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            ur.close();
         }
 
     }
@@ -37,9 +39,9 @@ public class UserReaderTest {
     @Test
     public void testGetUserFull() {
 
+        UserReader ur = new UserReader();
         try {
-            UserReader ar = new UserReader();
-            User a = ar.getUserBasicInfo(TestDefaults.user_id);
+            User a = ur.getUserBasicInfo(TestDefaults.user_id);
             assertTrue(a.getFirst().length() > 0);
             assertTrue(a.getId() == TestDefaults.user_id);
 //            assertNotNull(a.getEventsBasicInfo());
@@ -49,14 +51,16 @@ public class UserReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            ur.close();
         }
     }
 
     @Test
     public void testGetUsersForEvent() {
+        UserReader ur = new UserReader();
         try {
-            UserReader ar = new UserReader();
-            ArrayList<User> us = ar.getUsersForEvent(TestDefaults.event_id);
+            ArrayList<User> us = ur.getUsersForEvent(TestDefaults.event_id);
             assertNotNull(us);
             assertTrue(us.size()>0);
             User u = us.get(0);
@@ -65,6 +69,8 @@ public class UserReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            ur.close();
         }
     }
 }

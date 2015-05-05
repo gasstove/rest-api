@@ -1,8 +1,8 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 
-import java.sql.Date;
 
 /**
  * Complete information for a single event
@@ -11,8 +11,8 @@ public class Event extends DBObject {
 
     // events table
     private String name;
-    private Date openDate;
-    private Date closeDate;
+    private Time openDate;
+    private Time closeDate;
     private Boolean joinInvitation;
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
@@ -30,19 +30,19 @@ public class Event extends DBObject {
         this.setJoinAllowAuto(x.isJoinAllowAuto());
     }
 
-    public Date getCloseDate() {
+    public Time getCloseDate() {
         return closeDate;
     }
 
-    public void setCloseDate(Date closeDate) {
+    public void setCloseDate(Time closeDate) {
         this.closeDate = closeDate;
     }
 
-    public Date getOpenDate() {
+    public Time getOpenDate() {
         return openDate;
     }
 
-    public void setOpenDate(Date date) {
+    public void setOpenDate(Time date) {
         this.openDate = date;
     }
 

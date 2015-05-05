@@ -3,6 +3,7 @@ package com.gasstove.gs.dbaccess;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.DBConnection;
+import com.gasstove.gs.util.Time;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -51,7 +52,7 @@ public class MediaReader {
                 media.setType(rs.getString("type"));
                 media.setFileName(rs.getString("file_name"));
                 media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(rs.getDate("date_taken"));
+                media.setDateTaken(new Time(rs.getInt("date_taken")));
                 medias.add(media);
             }
         } catch (SQLException e) {
@@ -74,7 +75,7 @@ public class MediaReader {
                 media.setType(rs.getString("type"));
                 media.setFileName(rs.getString("file_name"));
                 media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(rs.getDate("date_taken"));
+                media.setDateTaken(new Time(rs.getInt("date_taken")));
             }
         } catch (SQLException sq) {
             sq.printStackTrace();
@@ -107,7 +108,7 @@ public class MediaReader {
                 me.setNumDislikes(rs.getInt("num_dislikes"));
                 me.setNumLikes(rs.getInt("num_likes"));
                 me.setMediaType(rs.getString("type"));
-                me.setMediaDateTaken(rs.getDate("date_taken"));
+                me.setMediaDateTaken(new Time(rs.getInt("date_taken")));
                 me.setMediaFileName(rs.getString("file_name"));
                 mediaevents.add(me);
             }
@@ -139,7 +140,7 @@ public class MediaReader {
                 me.setNumDislikes(rs.getInt("num_dislikes"));
                 me.setNumLikes(rs.getInt("num_likes"));
                 me.setMediaType(rs.getString("type"));
-                me.setMediaDateTaken(rs.getDate("date_taken"));
+                me.setMediaDateTaken(new Time(rs.getInt("date_taken")));
                 me.setMediaFileName(rs.getString("file_name"));
                 me.setUserId(rs.getInt("user_id"));
                 mediaevents.add(me);

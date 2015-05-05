@@ -1,8 +1,7 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
-
-import java.util.Date;
 
 /**
  * Media information in an event context
@@ -22,7 +21,7 @@ public class MediaEvent extends DBObject {
     private String mediaType;
     private String mediaFileName;
     private Integer userId;
-    private Date mediaDateTaken;
+    private Time mediaDateTaken;
 
     public MediaEvent(){};
 
@@ -41,11 +40,11 @@ public class MediaEvent extends DBObject {
         this.setMediaDateTaken(x.getMediaDateTaken());
     }
 
-    public Date getMediaDateTaken() {
+    public Time getMediaDateTaken() {
         return mediaDateTaken;
     }
 
-    public void setMediaDateTaken(Date mediaDateTaken) {
+    public void setMediaDateTaken(Time mediaDateTaken) {
         this.mediaDateTaken = mediaDateTaken;
     }
 

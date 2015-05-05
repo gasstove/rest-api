@@ -1,7 +1,8 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Time;
+
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Information for a given user in an event
@@ -12,7 +13,7 @@ public class UserEvent extends DBObject {
     private User user;
     private Role role;
     private Event event;
-    private Date joinDate;
+    private Time joinDate;
 
     // refs
     private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();

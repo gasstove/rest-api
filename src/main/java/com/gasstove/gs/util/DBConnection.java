@@ -7,7 +7,6 @@ import java.sql.*;
  */
 public class DBConnection {
 
-    String dbConnect = "jdbc:sqlite:src/main/resources/gasstove.db";
 
     Connection connection = null;
 
@@ -20,7 +19,7 @@ public class DBConnection {
         try
         {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection(dbConnect);
+            connection = DriverManager.getConnection(Configuration.dbConnect);
         }
         catch (ClassNotFoundException e)
         {

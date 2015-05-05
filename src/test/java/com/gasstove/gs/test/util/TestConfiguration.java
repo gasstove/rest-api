@@ -1,14 +1,13 @@
 package com.gasstove.gs.test.util;
 
+import com.gasstove.gs.util.Configuration;
+
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
 
 public class TestConfiguration {
-
-    public static final String SERVER_BASE_URI = "http://localhost:50000";
-    public static final String REST_API_PATH = "/gs-rest-api";
 
     public static HttpURLConnection sendRequest(String uri, String method, int number) {
         return sendRequest(uri,method,Integer.toString(number));
@@ -19,7 +18,7 @@ public class TestConfiguration {
         HttpURLConnection conn = null;
 
         try {
-            String url = SERVER_BASE_URI + REST_API_PATH + uri;
+            String url = Configuration.SERVER_BASE_URI + Configuration.REST_API_PATH + uri;
 
             // Construct Http Connection object
             URL requestUrl = new URL(url);

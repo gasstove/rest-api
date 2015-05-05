@@ -11,9 +11,7 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.SQLException;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 public class UserWriterTest {
 
@@ -41,6 +39,7 @@ public class UserWriterTest {
 
         } catch (Exception e) {
             cleanup();
+            fail();
             e.printStackTrace();
         }
     }
@@ -62,7 +61,8 @@ public class UserWriterTest {
 
             // create the event
             UserWriter uw = new UserWriter(conn);
-            uw.insert(user);
+            int userId = uw.insert(user);
+            user.setId(userId);
 
             // check it is there
             UserReader ur = new UserReader(conn);
@@ -77,8 +77,8 @@ public class UserWriterTest {
             uw.update(user);
 
             // check it worked
-            u = ur.getUserBasicInfo(user.getId());
-            assertEquals(u.getFirst(), "xx");
+            User u2 = ur.getUserBasicInfo(user.getId());
+            assertEquals(u2.getFirst(), "xx");
 
             // remove it
             assertTrue(uw.delete(user.getId()));
@@ -89,6 +89,7 @@ public class UserWriterTest {
 
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
 
     }

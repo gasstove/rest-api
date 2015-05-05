@@ -18,21 +18,23 @@ public class EventReaderTest {
 
     @Test
     public void testGetEventsBasicInfo() {
+        EventReader er = new EventReader();
         try {
-            EventReader er = new EventReader();
             ArrayList<Event> list = er.getEventsBasicInfo();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getName() != null);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            er.close();
         }
     }
 
     @Test
     public void testGetEventFull() {
+        EventReader er = new EventReader();
         try {
-            EventReader er = new EventReader();
             Event e = er.getEventBasicInfo(TestDefaults.event_id);
             assertTrue(e.getName().length() > 0);
             assertTrue(e.getId() == TestDefaults.event_id);
@@ -41,13 +43,15 @@ public class EventReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            er.close();
         }
     }
 
     @Test
     public void testGetEventsForUser() {
+        EventReader er = new EventReader();
         try {
-            EventReader er = new EventReader();
             ArrayList<Event> es = er.getEventsForUser(TestDefaults.user_id);
             assertNotNull(es);
             assertTrue(es.size()>0);
@@ -58,6 +62,8 @@ public class EventReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
+        } finally {
+            er.close();
         }
     }
 

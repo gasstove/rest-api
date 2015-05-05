@@ -1,7 +1,8 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.Event;
-import com.gasstove.gs.util.DBConnection;
+import com.gasstove.gs.util.*;
+import com.gasstove.gs.util.Time;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -50,8 +51,8 @@ public class EventReader {
                 Event e = new Event();
                 e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
-                e.setOpenDate(rs.getDate("open_date"));
-                e.setCloseDate(rs.getDate("close_date"));
+                e.setOpenDate(new Time(rs.getInt("open_date")));
+                e.setCloseDate(new Time(rs.getInt("close_date")));
                 e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
@@ -77,8 +78,8 @@ public class EventReader {
             if (rs.next()) {
                 e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
-                e.setOpenDate(rs.getDate("open_date"));
-                e.setCloseDate(rs.getDate("close_date"));
+                e.setOpenDate(new Time(rs.getInt("open_date")));
+                e.setCloseDate(new Time(rs.getInt("close_date")));
                 e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
@@ -105,8 +106,8 @@ public class EventReader {
                 Event e = new Event();
                 e.setId(rs.getInt("eid"));
                 e.setName(rs.getString("name"));
-                e.setOpenDate(rs.getDate("open_date"));
-                e.setCloseDate(rs.getDate("close_date"));
+                e.setOpenDate(new Time(rs.getInt("open_date")));
+                e.setCloseDate(new Time(rs.getInt("close_date")));
                 events.add(e);
             }
         } catch (SQLException e) {

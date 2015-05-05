@@ -1,6 +1,7 @@
 package com.gasstove.gs.test.util;
 
-import com.gasstove.gs.util.DBConnection;
+import com.gasstove.gs.util.*;
+import com.gasstove.gs.util.Time;
 
 import java.io.File;
 import java.sql.*;
@@ -106,15 +107,15 @@ public class TestData {
                 "'type'	varchar NOT NULL, " +
                 "'file_name'	varchar NOT NULL, " +
                 "'user_id'	INTEGER, " +
-                "'date_taken' datetime NOT NULL " +
+                "'date_taken' smalldatetime NOT NULL " +
                 ")";
         stmt.execute(sql);
 
         sql =   "CREATE TABLE \"event\" (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "name varchar NOT NULL, " +
-                "open_date datetime NOT NULL, " +
-                "close_date datetime NOT NULL, " +
+                "open_date smalldatetime NOT NULL, " +
+                "close_date smalldatetime NOT NULL, " +
                 "join_invitation boolean NOT NULL, " +
                 "join_allow_by_accept boolean NOT NULL, " +
                 "join_allow_auto boolean NOT NULL " +
@@ -126,7 +127,7 @@ public class TestData {
                 "event_id int NOT NULL, " +
                 "user_id int NOT NULL, " +
                 "role_id int NOT NULL, " +
-                "join_date datetime NOT NULL " +
+                "join_date smalldatetime NOT NULL " +
                 ")";
          stmt.execute(sql);
 
@@ -275,14 +276,14 @@ public class TestData {
         User owner;
         String mediaType;
         Integer filename_ext;
-        long date_taken;
+        Time date_taken;
 
         ArrayList<Event> events = new ArrayList<Event>();
 
         public Media(User owner){
             this.owner = owner;
-            this.mediaType = mediaTypes[randBetween(0,3)];
-            this.date_taken = randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR).getTime();
+            this.mediaType = mediaTypes[Util.randBetween(0,3)];
+            this.date_taken = Time.randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR);
         }
 
         public void set_fileext(Integer f){
@@ -304,7 +305,7 @@ public class TestData {
             statement.setString(1,mediaType);
             statement.setString(2, "media_" + filename_ext);
             statement.setString(3, owner.id.toString() );
-            statement.setDate(4, new java.sql.Date(this.date_taken)  );
+            statement.setDate(4, this.date_taken.toSqlDate() );
             statement.execute();
 
             // get media id
@@ -321,8 +322,8 @@ public class TestData {
                 statement = connection.prepareStatement(sql);
                 statement.setInt(1, this.id);
                 statement.setInt(2, event.id );
-                statement.setInt(3, randBetween(10, 10000));
-                statement.setInt(4, randBetween(0, 2));
+                statement.setInt(3, Util.randBetween(10, 10000));
+                statement.setInt(4, Util.randBetween(0, 2));
                 statement.execute();
             }
         }
@@ -333,20 +334,20 @@ public class TestData {
 
         Integer id;
         String name;
-        long open_date;
-        long close_date;
+        Time open_date;
+        Time close_date;
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<Media> medias = new ArrayList<Media>();
         HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
 
         public Event(String name){
             this.name = name;
-            this.open_date = randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR).getTime();
-            this.close_date = this.open_date + randBetween(MIN_EVENT_DURATION,MAX_EVENT_DURATION);
+            this.open_date = Time.randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR);
+            this.close_date = this.open_date.add_hours( Util.randBetween((double) MIN_EVENT_DURATION,(double) MAX_EVENT_DURATION) );
         }
 
         public void invite_from(HashSet<User> all_users){
-            int num_guests = randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
+            int num_guests = Util.randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
             this.users = sample_without_replacement(all_users,num_guests);
             // inform users
             for(User user : users)
@@ -367,8 +368,8 @@ public class TestData {
             String sql = "INSERT into event(name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,1,1,1)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, this.name);
-            statement.setDate(2, new java.sql.Date(this.open_date));
-            statement.setDate(3, new java.sql.Date(this.close_date));
+            statement.setDate(2, this.open_date.toSqlDate());
+            statement.setDate(3, this.close_date.toSqlDate());
             statement.execute();
 
             // get event ids
@@ -388,7 +389,7 @@ public class TestData {
                 statement.setInt(1, this.id);
                 statement.setInt(2, user.id);
                 statement.setInt(3, (int) (Math.random() * 2));
-                statement.setDate(4, new java.sql.Date(this.open_date));
+                statement.setDate(4, this.open_date.toSqlDate() );
                 statement.execute();
 
                 // extract user_event ids
@@ -446,7 +447,7 @@ public class TestData {
         public HashSet<Media> generate_media(){
             // pick the number of media I generate as num_events * avg_media_per_event / avg_event_per_media
             float num_events = (float) events.size();
-            float avg_media_per_event = (float) randBetween(MIN_MEDIA_PER_EVENTUSER,MAX_MEDIA_PER_EVENTUSER);
+            float avg_media_per_event = (float) Util.randBetween(MIN_MEDIA_PER_EVENTUSER,MAX_MEDIA_PER_EVENTUSER);
             int num_media = ALLOW_MULTIPLE_EVENTS_PER_MEDIA ?
                             Math.round( num_events * avg_media_per_event / AVG_EVENT_PER_MEDIA ) :
                             Math.round( num_events * avg_media_per_event );
@@ -459,7 +460,7 @@ public class TestData {
 
                 // how many events does it belong to?
                 long num_event_for_media = ALLOW_MULTIPLE_EVENTS_PER_MEDIA ?
-                                           Math.max(0,Math.round(AVG_EVENT_PER_MEDIA + randBetween(-0.5d,0.5d))) : // cheap binomial
+                                           Math.max(0,Math.round(AVG_EVENT_PER_MEDIA + Util.randBetween(-0.5d,0.5d))) : // cheap binomial
                                            1 ;
 
                 // sample that many events, add media to each event
@@ -474,20 +475,6 @@ public class TestData {
     /* .. PRIVATE STATICS ....................................................... */
 
     /**
-     * Generate a random date base on min_year and max_year
-     *
-     * @return java.util.Date
-     */
-    private java.util.Date randomDate(int min_year,int max_year){
-        GregorianCalendar gc = new GregorianCalendar();
-        int year = randBetween(min_year,max_year);
-        gc.set(gc.YEAR, year);
-        int dayOfYear = randBetween(1, gc.getActualMaximum(gc.DAY_OF_YEAR));
-        gc.set(gc.DAY_OF_YEAR, dayOfYear);
-        return gc.getTime();
-    }
-
-    /**
      *
      * Generate random number in range.
      *
@@ -496,13 +483,7 @@ public class TestData {
      *
      * @return random number between start(inclusive) and end(exclusive)
      */
-    private static int randBetween(int start, int end) {
-        return start + (int) ( Math.random() * (end - start));
-    }
 
-    private static double randBetween(double start, double end) {
-        return start + Math.random() * (end - start);
-    }
 
     /**
      *

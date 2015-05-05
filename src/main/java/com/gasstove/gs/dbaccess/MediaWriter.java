@@ -21,13 +21,12 @@ public class MediaWriter extends WriterBase {
 
         Media media = (Media) object;
 
-        String sql = "INSERT into media(id,type,file_name,user_id,date_taken) VALUES(?,?,?,?,?)";
+        String sql = "INSERT into media(type,file_name,user_id,date_taken) VALUES(?,?,?,?)";
         PreparedStatement statement = dbConn.prepareStatement(sql);
-        statement.setInt(1, media.getId());
-        statement.setString(2, media.getType());
-        statement.setString(3, media.getFileName());
-        statement.setInt(4, media.getUserId());
-        statement.setDate(5, new Date(media.getDateTaken().getTime()));
+        statement.setString(1, media.getType());
+        statement.setString(2, media.getFileName());
+        statement.setInt(3, media.getUserId());
+        statement.setDate(4,media.getDateTaken().toSqlDate());
         int r = statement.executeUpdate();
 
         if(r!=1)
@@ -51,7 +50,7 @@ public class MediaWriter extends WriterBase {
         statement.setString(1,media.getType());
         statement.setString(2,media.getFileName());
         statement.setInt(3,media.getUserId());
-        statement.setDate(4,new Date(media.getDateTaken().getTime()));
+        statement.setDate(4,media.getDateTaken().toSqlDate());
         statement.setInt(5,media.getId());
         int r = statement.executeUpdate();
 

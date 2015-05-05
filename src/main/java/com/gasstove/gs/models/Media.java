@@ -1,9 +1,7 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
-
-import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Complete information for a single media item
@@ -14,7 +12,7 @@ public class Media extends DBObject  {
     private String type;
     private String fileName;
     private int userId;
-    private Date dateTaken;
+    private Time dateTaken;
 
     public Media(){};
 
@@ -26,11 +24,11 @@ public class Media extends DBObject  {
         this.setDateTaken(x.getDateTaken());
     }
 
-    public Date getDateTaken() {
+    public Time getDateTaken() {
         return dateTaken;
     }
 
-    public void setDateTaken(Date dateTaken) {
+    public void setDateTaken(Time dateTaken) {
         this.dateTaken = dateTaken;
     }
 

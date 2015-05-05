@@ -3,12 +3,13 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.resources.Response;
 import com.gasstove.gs.test.util.TestConfiguration;
+import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
+import org.joda.time.DateTime;
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
-import java.sql.Date;
 
 import static org.junit.Assert.fail;
 
@@ -92,8 +93,8 @@ public class EventResourceTest {
             // create an event
             Event event = new Event();
             event.setName("test");
-            event.setOpenDate(new Date(0));
-            event.setCloseDate(new Date(1));
+            event.setOpenDate(new Time(0));
+            event.setCloseDate(new Time(1));
             event.setJoinAllowAuto(false);
             event.setJoinAllowByAccept(false);
             event.setJoinInvitation(false);

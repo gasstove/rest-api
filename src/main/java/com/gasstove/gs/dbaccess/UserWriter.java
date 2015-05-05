@@ -17,13 +17,12 @@ public class UserWriter  extends WriterBase {
 
         User user = (User) object;
 
-        String sql = "INSERT into user(id,first,last,is_subscriber,contact_method) VALUES(?,?,?,?,?)";
+        String sql = "INSERT into user(first,last,is_subscriber,contact_method) VALUES(?,?,?,?)";
         PreparedStatement statement = dbConn.prepareStatement(sql);
-        statement.setInt(1, user.getId());
-        statement.setString(2, user.getFirst());
-        statement.setString(3, user.getLast());
-        statement.setBoolean(4, user.isSubscriber());
-        statement.setString(5, user.getContactMethod());
+        statement.setString(1, user.getFirst());
+        statement.setString(2, user.getLast());
+        statement.setBoolean(3, user.isSubscriber());
+        statement.setString(4, user.getContactMethod());
         int r = statement.executeUpdate();
 
         if(r!=1)
