@@ -1,28 +1,21 @@
 package com.gasstove.gs.util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 /**
- * Created by seanmorris on 3/22/15.
+ * Establish connection to db
  */
 public class DBConnection {
 
-
     Connection connection = null;
 
-    /**
-     * Establish connection to db
-     *
-     * @return Connection database connection
-     */
     public Connection getConnection() throws SQLException {
-        try
-        {
+        try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection(Configuration.dbConnect);
-        }
-        catch (ClassNotFoundException e)
-        {
+        } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
         return connection;

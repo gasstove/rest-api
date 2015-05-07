@@ -1,15 +1,16 @@
 package com.gasstove.gs.util;
 
+import com.google.gson.*;
 import org.joda.time.DateTime;
 
-import java.util.GregorianCalendar;
-
 /**
- * Created by gomes on 5/5/15.
+ * Class for managing date/time quantities
  */
 public class Time {
 
-    DateTime jodatime;
+    public DateTime jodatime;
+
+    // CONSTRUCTORS .....................................................
 
     public Time(DateTime jodatime){
         this.jodatime = jodatime;
@@ -19,32 +20,42 @@ public class Time {
         this.jodatime = new DateTime(epochtime);
     }
 
+    public Time(String jsonstr){
+        this.jodatime = new DateTime(jsonstr);
+    }
+
     public Time add_hours(double hours){
         Time newtime = new Time(jodatime);
         newtime.jodatime.plusSeconds((int) (hours*3600d));
         return newtime;
     }
 
-//    public int hoursSinceEpoch(){
-//        return (int) ( ((double)jodatime.getMillis())/1000d/60d/60d );
-//    }
-//
-//    public int quarterHoursSinceEpoch(){
-//        return (int) ( ((double)jodatime.getMillis())/1000d/60d/15d );
-//    }
-//
-//    public int minutesSinceEpoch(){
-//        return (int) ( ((double)jodatime.getMillis())/1000/60d );
-//    }
-//
-//    public int secondsSinceEpoch(){
-//        return (int) ( ((double)jodatime.getMillis())/1000 );
-//    }
-
+    // CONVERTERS ........................................................
 
     public java.sql.Date toSqlDate(){
         return new java.sql.Date( jodatime.getMillis() );
     }
+
+    // SERIALIZER  ........................................................
+
+    public JsonElement toJson(){
+        return (new TimeSerializer()).serialize(this,null,null);
+    }
+
+    public Time fromJson(String jsonString){
+        TimeDeserializer td = new TimeDeserializer();
+        return td.deserialize(new JsonPrimitive(jsonString),null,null);
+    }
+
+    // OVERRIDES ..........................................................
+
+    @Override
+    public String toString() {
+        return jodatime.toString();
+    }
+
+
+    // STATICS ..........................................................
 
     /**
      * Generate a random date base on min_year and max_year

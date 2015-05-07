@@ -3,9 +3,6 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 
-/**
- * Complete information for a single media item
- */
 public class Media extends DBObject  {
 
     // medias table
@@ -13,6 +10,8 @@ public class Media extends DBObject  {
     private String fileName;
     private int userId;
     private Time dateTaken;
+
+    // CONSTRUCTION .......................................................
 
     public Media(){};
 
@@ -23,6 +22,8 @@ public class Media extends DBObject  {
         this.setFileName(x.getFileName());
         this.setDateTaken(x.getDateTaken());
     }
+
+    // GET/SET .......................................................
 
     public Time getDateTaken() {
         return dateTaken;

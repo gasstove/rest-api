@@ -3,9 +3,6 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 
-/**
- * Media information in an event context
- */
 public class MediaEvent extends DBObject {
 
     // media_mapping table
@@ -23,6 +20,8 @@ public class MediaEvent extends DBObject {
     private Integer userId;
     private Time mediaDateTaken;
 
+    // CONSTRUCTION .......................................................
+
     public MediaEvent(){};
 
     public MediaEvent(String json){
@@ -39,6 +38,8 @@ public class MediaEvent extends DBObject {
         this.setUserId(x.getUserId());
         this.setMediaDateTaken(x.getMediaDateTaken());
     }
+
+    // GET/SET .......................................................
 
     public Time getMediaDateTaken() {
         return mediaDateTaken;

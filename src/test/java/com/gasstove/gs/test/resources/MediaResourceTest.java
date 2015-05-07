@@ -52,8 +52,7 @@ public class MediaResourceTest {
 
         try {
             // Hit URL to get all networks and save response text
-            HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/medias/", "GET", "");
+            HttpURLConnection conn = TestConfiguration.sendRequest("/medias/","GET","");
 
             String responseStatus = conn.getResponseMessage();
             String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
@@ -74,8 +73,7 @@ public class MediaResourceTest {
 
         try {
             // Hit URL to get all networks and save response text
-            HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/medias/1", "GET", "");
+            HttpURLConnection conn = TestConfiguration.sendRequest("/medias/1", "GET", "");
 
             String responseStatus = conn.getResponseMessage();
             String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");

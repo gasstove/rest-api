@@ -4,10 +4,10 @@ package com.gasstove.gs.dbaccess;
 //import core.oraExecuteSP;
 //import core.oraSPParams;
 
-import com.gasstove.gs.models.DBObject;
+//import com.gasstove.gs.models.DBObject;
 
 /**
- * Created by gomes on 4/30/15.
+ * Base class for database writers
  */
 public abstract class WriterBase implements WriterInterface {
 
@@ -37,7 +37,6 @@ public abstract class WriterBase implements WriterInterface {
             System.err.print("Error Getting Username from connection object. " + exp.getMessage());
         }
     }
-
 
 //    public Long processTransAction(DBObject object,CrudFlag crudFlag) throws Exception {
 //        Long retVal = 0L;

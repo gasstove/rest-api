@@ -1,9 +1,24 @@
 package com.gasstove.gs.util;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 /**
- * Created by gomes on 5/5/15.
+ * Utility methods
  */
 public class Util {
+
+    // GSON ....................................................................
+    public static Gson getGson(){
+
+        // create builder to register serializer/deserializer
+        GsonBuilder gsonbuilder = new GsonBuilder();
+        gsonbuilder.registerTypeAdapter(Time.class, new TimeSerializer());
+
+        return gsonbuilder.create();
+    }
+
+    // RANDOM NUMBERS ...........................................................
 
     public static long randBetween(long start, long end) {
         return start + (long) ( Math.random() * (end - start));

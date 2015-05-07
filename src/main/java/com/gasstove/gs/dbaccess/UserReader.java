@@ -7,9 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * These are all the methods needed to get data for Users objects.
- *
- * Created by seanmorris on 3/22/15.
+ * Database reader for Users
  */
 public class UserReader {
 
@@ -23,10 +21,6 @@ public class UserReader {
         }
     }
 
-    /**
-     * Used if someone with a valid connection wants to use the UserReader
-     * @param conn
-     */
     public UserReader(Connection conn) {
         this.conn = conn;
     }

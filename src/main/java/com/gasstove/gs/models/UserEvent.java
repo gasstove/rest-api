@@ -4,12 +4,8 @@ import com.gasstove.gs.util.Time;
 
 import java.util.ArrayList;
 
-/**
- * Information for a given user in an event
- */
 public class UserEvent extends DBObject {
 
-    // user_event table
     private User user;
     private Role role;
     private Event event;
@@ -18,6 +14,11 @@ public class UserEvent extends DBObject {
     // refs
     private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();
     private ArrayList<MediaEvent> sharedMedia = new ArrayList<MediaEvent>();
+
+    // CONSTRUCTION .......................................................
+
+
+    // GET/SET .......................................................
 
     public User getUser() {
         return user;

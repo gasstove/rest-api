@@ -9,7 +9,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Created by gomes on 4/6/15.
+ * Database reader for Media
  */
 public class MediaReader {
 

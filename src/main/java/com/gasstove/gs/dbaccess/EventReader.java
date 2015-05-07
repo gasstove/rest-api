@@ -8,9 +8,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * This are all the methods needed to get data for Event objects.
- *
- * Created by seanmorris on 3/22/15.
+ * Database reader for Events
  */
 public class EventReader {
 

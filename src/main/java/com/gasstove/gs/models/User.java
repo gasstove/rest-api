@@ -2,16 +2,14 @@ package com.gasstove.gs.models;
 
 import com.google.gson.Gson;
 
-/**
- * Created by smorris on 3/24/15.
- */
 public class User extends DBObject  {
 
-    // user table
     private String first;
     private String last;
     private Boolean isSubscriber;
     private String contactMethod;
+
+    // CONSTRUCTION .......................................................
 
     public User(){};
 
@@ -22,6 +20,8 @@ public class User extends DBObject  {
         this.setIsSubscriber(x.isSubscriber());
         this.setContactMethod(x.getContactMethod());
     }
+
+    // GET/SET .......................................................
 
     public String getFirst() {
         return first;

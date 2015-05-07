@@ -3,13 +3,8 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 
-
-/**
- * Complete information for a single event
- */
 public class Event extends DBObject {
 
-    // events table
     private String name;
     private Time openDate;
     private Time closeDate;
@@ -17,6 +12,7 @@ public class Event extends DBObject {
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
 
+    // CONSTRUCTION .......................................................
 
     public Event(){};
 
@@ -29,6 +25,23 @@ public class Event extends DBObject {
         this.setJoinInvitation(x.isJoinInvitation());
         this.setJoinAllowAuto(x.isJoinAllowAuto());
     }
+
+    // OVERRIDES .......................................................
+
+    @Override
+    public String toString() {
+        String str = "";
+        str += "event " + getId()+ "\n";
+        str += "\tname: " + name+ "\n";
+        str += "\topen date: " + openDate+ "\n";
+        str += "\tclose date: " + closeDate+ "\n";
+        str += "\tjoinInvitation: " + joinInvitation+ "\n";
+        str += "\tjoinAllowbyAccept: " + joinAllowByAccept+ "\n";
+        str += "\tjoinAllowAuto: " + joinAllowAuto;
+        return str;
+    }
+
+    // GET/SET .......................................................
 
     public Time getCloseDate() {
         return closeDate;
@@ -78,16 +91,4 @@ public class Event extends DBObject {
         this.joinAllowAuto = joinAllowAuto;
     }
 
-    @Override
-    public String toString() {
-        String str = "";
-        str += "event " + getId()+ "\n";
-        str += "\tname: " + name+ "\n";
-        str += "\topen date: " + openDate+ "\n";
-        str += "\tclose date: " + closeDate+ "\n";
-        str += "\tjoinInvitation: " + joinInvitation+ "\n";
-        str += "\tjoinAllowbyAccept: " + joinAllowByAccept+ "\n";
-        str += "\tjoinAllowAuto: " + joinAllowAuto;
-        return str;
-    }
 }

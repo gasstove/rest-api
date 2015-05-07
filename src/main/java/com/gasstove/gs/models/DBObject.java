@@ -1,14 +1,22 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
+/**
+ * Base class for all models
+ */
 public class DBObject {
 
-    private int id = -1;
+    protected int id = -1;
+
+    // SERIALIZE .....................................................
 
     public String toJson(){
-        return (new Gson()).toJson(this);
+        return Util.getGson().toJson(this);
     }
+
+    // GET/SET .......................................................
 
     public int getId() {
         return id;
