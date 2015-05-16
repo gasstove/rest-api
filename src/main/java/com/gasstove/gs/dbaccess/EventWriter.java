@@ -37,7 +37,7 @@ public class EventWriter extends WriterBase {
         return rs.next() ? rs.getInt(1) : -1;
     }
 
-    public void update(DBObject object) throws Exception{
+    public int update(DBObject object) throws Exception{
         Event event = (Event) object;
 
         String sql = "UPDATE event SET " +
@@ -60,6 +60,8 @@ public class EventWriter extends WriterBase {
 
         if(r!=1)
             throw new Exception("Update failed for event " + + event.getId());
+
+        return event.getId();
     }
 
     public boolean delete(int id) throws Exception {

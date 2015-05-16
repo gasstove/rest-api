@@ -37,7 +37,7 @@ public class MediaWriter extends WriterBase {
         return rs.next() ? rs.getInt(1) : -1;
     }
 
-    public void update(DBObject object) throws Exception{
+    public int update(DBObject object) throws Exception{
         Media media = (Media) object;
 
         String sql = "UPDATE media SET " +
@@ -56,6 +56,8 @@ public class MediaWriter extends WriterBase {
 
         if(r!=1)
             throw new Exception("Update failed for media " + + media.getId());
+
+        return media.getId();
     }
 
     public boolean delete(int id) throws Exception {

@@ -33,7 +33,7 @@ public class UserWriter  extends WriterBase {
         return rs.next() ? rs.getInt(1) : -1;
     }
 
-    public void update(DBObject object) throws Exception{
+    public int update(DBObject object) throws Exception{
         User user = (User) object;
 
         String sql = "UPDATE user SET " +
@@ -52,6 +52,8 @@ public class UserWriter  extends WriterBase {
 
         if(r!=1)
             throw new Exception("Update failed for user " + + user.getId());
+
+        return user.getId();
     }
 
     public boolean delete(int id) throws Exception {
