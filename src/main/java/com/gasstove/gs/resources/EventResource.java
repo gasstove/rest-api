@@ -107,8 +107,10 @@ public class EventResource {
     @Path("/")
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
     public String insertEvent(String eventString)  {
 
+        Event get_event, return_event;
         Response response;
         Connection conn = null;
 
@@ -131,24 +133,25 @@ public class EventResource {
 
         try {
 
+            // generate an Event
+            get_event = new Event(eventString);
+
             // connect to db
             conn = (new DBConnection()).getConnection();
+            EventWriter writer = new EventWriter(conn);
 
-            // insert
-            int eventId = (new EventWriter(conn)).insert(new Event(eventString));
+            // insert or update
+            int eventId = get_event.getId()<0  ? writer.insert(get_event) : writer.update(get_event);
 
-            System.out.println("Created event id: " + eventId);
-            // check insert succeeded
+            // check success
             if(eventId<0)
-                throw new Exception("Insert returned id < 0");
+                throw new Exception("Insert|update failed");
 
-            // serialize it and send it back to client
-            Event event = (new EventReader(conn)).getEventBasicInfo(eventId);
+            // query and send it back
+            return_event = (new EventReader(conn)).getEventBasicInfo(eventId);
 
-            System.out.println("Found event");
-            System.out.println(event);
+            response = new Response(true, "New event successfully saved", return_event.toJson());
 
-            response = new Response(true, "New event successfully saved", event.toJson());
 
         } catch (Exception e) {
             e.printStackTrace();
