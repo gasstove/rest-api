@@ -1,7 +1,7 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Time;
-import com.google.gson.Gson;
+import com.gasstove.gs.util.Util;
 
 public class Media extends DBObject  {
 
@@ -16,7 +16,7 @@ public class Media extends DBObject  {
     public Media(){};
 
     public Media(String json){
-        Media x = (new Gson()).fromJson(json,Media.class);
+        Media x = Util.getGson().fromJson(json,Media.class);
         this.setType(x.getType());
         this.setUserId(x.getUserId());
         this.setFileName(x.getFileName());

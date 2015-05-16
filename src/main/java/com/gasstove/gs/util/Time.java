@@ -39,11 +39,11 @@ public class Time {
     // SERIALIZER  ........................................................
 
     public JsonElement toJson(){
-        return (new TimeSerializer()).serialize(this,null,null);
+        return (new SerializerTime()).serialize(this,null,null);
     }
 
     public Time fromJson(String jsonString){
-        TimeDeserializer td = new TimeDeserializer();
+        SerializerTime td = new SerializerTime();
         return td.deserialize(new JsonPrimitive(jsonString),null,null);
     }
 

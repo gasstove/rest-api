@@ -1,7 +1,7 @@
 package com.gasstove.gs.test.util;
 
+import com.gasstove.gs.util.SerializerTime;
 import com.gasstove.gs.util.Time;
-import com.gasstove.gs.util.TimeSerializer;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import org.junit.Test;
@@ -31,7 +31,7 @@ public class TestTime {
         times.add(new Time(1530972483L));
 
         GsonBuilder gsonbuilder = new GsonBuilder();
-        gsonbuilder.registerTypeAdapter(Time.class, new TimeSerializer());
+        gsonbuilder.registerTypeAdapter(Time.class, new SerializerTime());
         Gson gson = gsonbuilder.create();
         assertEquals("[\"1970-01-17T05:29:32.483-08:00\",\"1970-01-18T09:16:12.483-08:00\"]",gson.toJson(times));
     }

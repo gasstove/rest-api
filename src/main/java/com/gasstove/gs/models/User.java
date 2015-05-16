@@ -1,5 +1,6 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
 public class User extends DBObject  {
@@ -14,7 +15,7 @@ public class User extends DBObject  {
     public User(){};
 
     public User(String json){
-        User x = (new Gson()).fromJson(json,User.class);
+        User x = Util.getGson().fromJson(json, User.class);
         this.setFirst(x.getFirst());
         this.setLast(x.getLast());
         this.setIsSubscriber(x.isSubscriber());

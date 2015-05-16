@@ -1,7 +1,7 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Time;
-import com.google.gson.Gson;
+import com.gasstove.gs.util.Util;
 
 public class Event extends DBObject {
 
@@ -17,7 +17,10 @@ public class Event extends DBObject {
     public Event(){};
 
     public Event(String json){
-        Event x = (new Gson()).fromJson(json,Event.class);
+
+        Event x = Util.getGson().fromJson(json, Event.class);
+
+        this.setId(x.getId());
         this.setName(x.getName());
         this.setOpenDate(x.getOpenDate() );
         this.setCloseDate(x.getCloseDate());

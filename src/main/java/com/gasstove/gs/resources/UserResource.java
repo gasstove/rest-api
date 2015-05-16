@@ -2,6 +2,7 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.UserReader;
 import com.gasstove.gs.models.User;
+import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
 import javax.ws.rs.GET;
@@ -33,8 +34,7 @@ public class UserResource {
         try {
             ur = new UserReader();
             ArrayList<User> users = ur.getUsersBasicInfo();
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(users);
+            returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
@@ -78,8 +78,7 @@ public class UserResource {
         try {
             ur = new UserReader();
             ArrayList<User> users = ur.getUsersForEvent (Integer.parseInt(eventId));
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(users);
+            returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();

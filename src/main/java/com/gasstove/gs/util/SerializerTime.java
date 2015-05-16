@@ -16,5 +16,4 @@ public class SerializerTime implements JsonSerializer<Time>, JsonDeserializer<Ti
         return new Time(json.getAsJsonPrimitive().getAsString());
     }
 
-
 }

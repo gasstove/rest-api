@@ -1,6 +1,7 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Time;
+import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
 public class MediaEvent extends DBObject {
@@ -25,7 +26,7 @@ public class MediaEvent extends DBObject {
     public MediaEvent(){};
 
     public MediaEvent(String json){
-        MediaEvent x = (new Gson()).fromJson(json,MediaEvent.class);
+        MediaEvent x = Util.getGson().fromJson(json, MediaEvent.class);
         this.setMediaId(x.getMediaId());
         this.setEventId(x.getEventId());
         this.setNumDownloads(x.getNumDownloads());

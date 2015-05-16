@@ -10,11 +10,9 @@ public class Util {
 
     // GSON ....................................................................
     public static Gson getGson(){
-
-        // create builder to register serializer/deserializer
         GsonBuilder gsonbuilder = new GsonBuilder();
-        gsonbuilder.registerTypeAdapter(Time.class, new TimeSerializer());
-
+        gsonbuilder.registerTypeAdapter(Time.class, new SerializerTime());
+        gsonbuilder.registerTypeAdapter(Boolean.class, new SerializerBoolean());
         return gsonbuilder.create();
     }
 

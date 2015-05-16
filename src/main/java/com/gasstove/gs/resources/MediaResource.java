@@ -3,7 +3,7 @@ package com.gasstove.gs.resources;
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
-import com.google.gson.Gson;
+import com.gasstove.gs.util.Util;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -31,8 +31,7 @@ public class MediaResource {
         try {
             mr = new MediaReader();
             ArrayList<Media> medias = mr.getMediasBasicInfo();
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(medias);
+            returnJSON = Util.getGson().toJson(medias);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
@@ -77,8 +76,7 @@ public class MediaResource {
             mr = new MediaReader();
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getSharedMediaForEvent(eId);
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(mediaevents);
+            returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
@@ -99,8 +97,7 @@ public class MediaResource {
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getMediaForUserAndEvent(uId,eId);
-            Gson gson = new Gson();
-            returnJSON = gson.toJson(mediaevents);
+            returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
