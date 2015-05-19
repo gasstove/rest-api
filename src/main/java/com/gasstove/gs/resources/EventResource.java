@@ -48,8 +48,7 @@ public class EventResource {
         try {
             er = new EventReader();
             ArrayList<Event> events = er.getEventsBasicInfo();
-            Gson gson = Util.getGson();
-            returnJSON = gson.toJson(events);
+            returnJSON = Util.getGson().toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
@@ -136,6 +135,13 @@ public class EventResource {
             // generate an Event
             get_event = new Event(eventString);
 
+
+            System.out.println("GET STRING");
+            System.out.println(eventString);
+
+            System.out.println("GET EVENT");
+            System.out.println(get_event);
+
             // connect to db
             conn = (new DBConnection()).getConnection();
             EventWriter writer = new EventWriter(conn);
@@ -152,6 +158,8 @@ public class EventResource {
 
             response = new Response(true, "New event successfully saved", return_event.toJson());
 
+            System.out.println("RETURN EVENT");
+            System.out.println(return_event);
 
         } catch (Exception e) {
             e.printStackTrace();

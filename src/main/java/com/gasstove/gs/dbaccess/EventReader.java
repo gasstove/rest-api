@@ -82,11 +82,6 @@ public class EventReader {
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
-//            UserReader ar = new UserReader(conn);
-//            e.setUsers(ar.getUsersForEvent(eId));
-//
-//            MediaReader mr = new MediaReader(conn);
-//            e.setMedias(mr.getMediaForEvent(eId));
 
         } catch (SQLException sq) {
             sq.printStackTrace();

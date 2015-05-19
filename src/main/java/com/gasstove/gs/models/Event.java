@@ -34,7 +34,8 @@ public class Event extends DBObject {
     @Override
     public String toString() {
         String str = "";
-        str += "event " + getId()+ "\n";
+        str += "event\n";
+        str += "\tid: " + id+ "\n";
         str += "\tname: " + name+ "\n";
         str += "\topen date: " + openDate+ "\n";
         str += "\tclose date: " + closeDate+ "\n";
@@ -70,24 +71,24 @@ public class Event extends DBObject {
         this.name = name;
     }
 
-    public boolean isJoinInvitation() {
-        return joinInvitation;
+    public Boolean isJoinInvitation() {
+        return joinInvitation==null ? false : joinInvitation;
     }
 
     public void setJoinInvitation(boolean joinInvitation) {
         this.joinInvitation = joinInvitation;
     }
 
-    public boolean isJoinAllowByAccept() {
-        return joinAllowByAccept;
+    public Boolean isJoinAllowByAccept() {
+        return joinAllowByAccept==null ? false : joinAllowByAccept;
     }
 
     public void setJoinAllowByAccept(boolean joinAllowByAccept) {
         this.joinAllowByAccept = joinAllowByAccept;
     }
 
-    public boolean isJoinAllowAuto() {
-        return joinAllowAuto;
+    public Boolean isJoinAllowAuto() {
+        return joinAllowAuto==null ? false : joinAllowAuto;
     }
 
     public void setJoinAllowAuto(boolean joinAllowAuto) {

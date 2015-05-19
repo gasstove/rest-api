@@ -32,6 +32,7 @@ public class EventResourceTest {
     public void testGetEvents() {
         EventResource er = new EventResource();
         String response = er.getEventsBasicInfo();
+        System.out.println(response);
         assertTrue(response.length() > 0);
     }
 
