@@ -27,9 +27,9 @@ public class EventWriter extends WriterBase {
         statement.setString(1, event.getName());
         statement.setDate(2, event.getOpenDate().toSqlDate() );
         statement.setDate(3, event.getCloseDate().toSqlDate() );
-        statement.setBoolean(4, false);     // join_invitation
-        statement.setBoolean(5, false);     // join_allow_by_accept
-        statement.setBoolean(6, false);     // join_allow_auto
+        statement.setBoolean(4, event.isJoinInvitation());
+        statement.setBoolean(5, event.isJoinAllowByAccept());
+        statement.setBoolean(6, event.isJoinAllowAuto());
         int r = statement.executeUpdate();
 
         if(r!=1)
@@ -58,9 +58,9 @@ public class EventWriter extends WriterBase {
         statement.setString(1,event.getName());
         statement.setDate(2,event.getOpenDate().toSqlDate());
         statement.setDate(3,event.getCloseDate().toSqlDate());
-        statement.setBoolean(4,event.isJoinInvitation());     // join_invitation
-        statement.setBoolean(5,event.isJoinAllowByAccept());     // join_allow_by_accept
-        statement.setBoolean(6,event.isJoinAllowAuto());     // join_allow_auto
+        statement.setBoolean(4,event.isJoinInvitation());
+        statement.setBoolean(5,event.isJoinAllowByAccept());
+        statement.setBoolean(6,event.isJoinAllowAuto());
         statement.setInt(7,event.getId());
         int r = statement.executeUpdate();
 
