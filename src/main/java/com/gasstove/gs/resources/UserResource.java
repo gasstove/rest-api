@@ -1,15 +1,16 @@
 package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.UserReader;
+import com.gasstove.gs.dbaccess.UserWriter;
 import com.gasstove.gs.models.User;
+import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -77,7 +78,7 @@ public class UserResource {
         UserReader ur = null;
         try {
             ur = new UserReader();
-            ArrayList<User> users = ur.getUsersForEvent (Integer.parseInt(eventId));
+            ArrayList<User> users = ur.getUsersForEvent(Integer.parseInt(eventId));
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
@@ -86,6 +87,122 @@ public class UserResource {
             ur.close();
         }
         return returnJSON;
+    }
+
+    @Path("/")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public String insertUser(String userString)  {
+
+        User get_user, return_user;
+        Response response;
+        Connection conn = null;
+
+        /** check headers
+         List<String> authHeaders = this.headers.getRequestHeader("Authorization");
+         List<String> dbHeader = this.headers.getRequestHeader("DB");
+         if (authHeaders==null || dbHeader==null)
+         return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
+         */
+
+        /** authenticate
+         String encodedUserPass = authHeaders.get(0);
+         String dbName = dbHeader.get(0);
+         OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
+         */
+
+        /**
+         Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
+         */
+
+        try {
+
+            get_user = new User(userString);
+
+
+            System.out.println("GET STRING");
+            System.out.println(userString);
+
+            System.out.println("GET USER");
+            System.out.println(get_user);
+
+            // connect to db
+            conn = (new DBConnection()).getConnection();
+            UserWriter writer = new UserWriter(conn);
+
+            // insert or update
+            int userId = get_user.getId()<0  ? writer.insert(get_user) : writer.update(get_user);
+
+            // check success
+            if(userId<0)
+                throw new Exception("Insert|update failed");
+
+            // query and send it back
+            return_user = (new UserReader(conn)).getUserBasicInfo(userId);
+
+            response = new Response(true, "New user successfully saved", return_user.toJson());
+
+            System.out.println("RETURN USER");
+            System.out.println(return_user);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // rollback transaction
+            //oraDatabase.rollbackTransaction(conn);
+
+            response = new Response(false, "Error saving new user, " + e.getMessage(), null);
+
+        } finally {
+            try {
+                // close connection
+                conn.close();
+            } catch (SQLException exp) {
+                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
+            }
+        }
+
+        return response.toJSON();
+    }
+
+    @Path("/{userId: [0-9]+}")
+    @DELETE
+    public String deleteUser(@PathParam("eventId") String userId)  {
+
+        Connection conn = null;
+        Response response;
+
+        try {
+
+            // connect to db
+            conn = (new DBConnection()).getConnection();
+
+            UserWriter userWriter = new UserWriter(conn);
+            boolean success = userWriter.delete(Integer.parseInt(userId));
+
+            response = success ?
+                    new Response(true, "User successfully deteled",null) :
+                    new Response(true, "User deletion failed",null) ;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            // rollback transaction
+            //oraDatabase.rollbackTransaction(conn);
+
+            response = new Response(false, "Error saving new user, " + e.getMessage(), null);
+
+        } finally {
+            try {
+                // close connection
+                conn.close();
+            } catch (SQLException exp) {
+                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
+            }
+        }
+
+        return response.toJSON();
     }
 
 }

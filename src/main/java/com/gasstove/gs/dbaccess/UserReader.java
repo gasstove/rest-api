@@ -49,8 +49,8 @@ public class UserReader {
                 user.setId(rs.getInt("id"));
                 user.setFirst(rs.getString("first"));
                 user.setLast(rs.getString("last"));
-                user.setContactMethod(rs.getString("contact_method"));
-                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
+//                user.setContactMethod(rs.getString("contact_method"));
+//                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
                 users.add(user);
             }
         } catch (SQLException e) {
@@ -76,8 +76,8 @@ public class UserReader {
                 user.setId(rs.getInt("id"));
                 user.setFirst(rs.getString("first"));
                 user.setLast(rs.getString("last"));
-                user.setContactMethod(rs.getString("contact_method"));
-                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
+//                user.setContactMethod(rs.getString("contact_method"));
+//                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
             }
 
         } catch (SQLException sq) {

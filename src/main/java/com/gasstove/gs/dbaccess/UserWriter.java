@@ -17,12 +17,10 @@ public class UserWriter  extends WriterBase {
 
         User user = (User) object;
 
-        String sql = "INSERT into user(first,last,is_subscriber,contact_method) VALUES(?,?,?,?)";
+        String sql = "INSERT into user(first,last) VALUES(?,?)";
         PreparedStatement statement = dbConn.prepareStatement(sql);
         statement.setString(1, user.getFirst());
         statement.setString(2, user.getLast());
-        statement.setBoolean(3, user.isSubscriber());
-        statement.setString(4, user.getContactMethod());
         int r = statement.executeUpdate();
 
         if(r!=1)
@@ -38,16 +36,12 @@ public class UserWriter  extends WriterBase {
 
         String sql = "UPDATE user SET " +
                 "first=?," +
-                "last=?," +
-                "is_subscriber=?," +
-                "contact_method=? " +
+                "last=? " +
                 "WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
         statement.setString(1,user.getFirst());
         statement.setString(2,user.getLast());
-        statement.setBoolean(3,user.isSubscriber());
-        statement.setString(4,user.getContactMethod());
-        statement.setInt(5,user.getId());
+        statement.setInt(3,user.getId());
         int r = statement.executeUpdate();
 
         if(r!=1)

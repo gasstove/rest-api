@@ -17,6 +17,8 @@ public class Media extends DBObject  {
 
     public Media(String json){
         Media x = Util.getGson().fromJson(json,Media.class);
+
+        this.setId(x.getId());
         this.setType(x.getType());
         this.setUserId(x.getUserId());
         this.setFileName(x.getFileName());

@@ -34,7 +34,6 @@ public class Event extends DBObject {
     @Override
     public String toString() {
         String str = "";
-        str += "event\n";
         str += "\tid: " + id+ "\n";
         str += "\tname: " + name+ "\n";
         str += "\topen date: " + openDate+ "\n";

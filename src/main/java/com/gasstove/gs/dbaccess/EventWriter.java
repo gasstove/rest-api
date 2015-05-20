@@ -67,9 +67,6 @@ public class EventWriter extends WriterBase {
         if(r!=1)
             throw new Exception("Update failed for event " + + event.getId());
 
-
-        System.out.println("EVENT INSERT: return id " + event.getId());
-
         return event.getId();
     }
 

@@ -25,13 +25,11 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventResource {
 
-
 //    @Context
 //    Request req;
 
     @Context
     HttpHeaders headers;
-
 
 //    @Context
 //    private ServletContext context;

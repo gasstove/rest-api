@@ -7,8 +7,8 @@ public class User extends DBObject  {
 
     private String first;
     private String last;
-    private Boolean isSubscriber;
-    private String contactMethod;
+//    private Boolean isSubscriber;
+//    private String contactMethod;
 
     // CONSTRUCTION .......................................................
 
@@ -16,13 +16,26 @@ public class User extends DBObject  {
 
     public User(String json){
         User x = Util.getGson().fromJson(json, User.class);
+
+        this.setId(x.getId());
         this.setFirst(x.getFirst());
         this.setLast(x.getLast());
-        this.setIsSubscriber(x.isSubscriber());
-        this.setContactMethod(x.getContactMethod());
+//        this.setIsSubscriber(x.isSubscriber());
+//        this.setContactMethod(x.getContactMethod());
     }
 
-    // GET/SET .......................................................
+    // OVERRIDES .......................................................
+
+    @Override
+    public String toString() {
+        String str = "";
+        str += "\tid: " + id+ "\n";
+        str += "\tfirst: " + first+ "\n";
+        str += "\tlast: " + last;
+        return str;
+    }
+
+    // GET/SET ............................................................
 
     public String getFirst() {
         return first;
@@ -40,21 +53,20 @@ public class User extends DBObject  {
         this.last = last;
     }
 
-    public void setIsSubscriber(boolean isSubscriber) {
-        this.isSubscriber = isSubscriber;
-    }
-
-    public boolean isSubscriber() {
-        return isSubscriber;
-    }
-
-    public String getContactMethod() {
-        return contactMethod;
-    }
-
-    public void setContactMethod(String contactMethod) {
-        this.contactMethod = contactMethod;
-    }
-
+//    public void setIsSubscriber(boolean isSubscriber) {
+//        this.isSubscriber = isSubscriber;
+//    }
+//
+//    public Boolean isSubscriber() {
+//        return isSubscriber==null ? false : isSubscriber;
+//    }
+//
+//    public String getContactMethod() {
+//        return contactMethod;
+//    }
+//
+//    public void setContactMethod(String contactMethod) {
+//        this.contactMethod = contactMethod;
+//    }
 
 }

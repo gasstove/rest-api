@@ -27,6 +27,7 @@ public class MediaEvent extends DBObject {
 
     public MediaEvent(String json){
         MediaEvent x = Util.getGson().fromJson(json, MediaEvent.class);
+        this.setId(x.getId());
         this.setMediaId(x.getMediaId());
         this.setEventId(x.getEventId());
         this.setNumDownloads(x.getNumDownloads());

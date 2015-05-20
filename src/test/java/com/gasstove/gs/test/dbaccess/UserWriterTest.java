@@ -30,8 +30,8 @@ public class UserWriterTest {
             user.setId(-1);
             user.setFirst("x");
             user.setLast("x");
-            user.setContactMethod("x");
-            user.setIsSubscriber(true);
+//            user.setContactMethod("x");
+//            user.setIsSubscriber(true);
 
             // remove it from the db
             UserWriter uw = new UserWriter(conn);

@@ -134,9 +134,9 @@ public class TestData {
          sql =  "CREATE TABLE user( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "first varchar NOT NULL, " +
-                "last varchar NOT NULL, " +
-                "is_subscriber boolean NOT NULL, " +
-                "contact_method boolean NOT NULL " +
+                "last varchar NOT NULL " +
+//                "is_subscriber boolean NOT NULL, " +
+//                "contact_method boolean NOT NULL " +
                 ")";
          stmt.execute(sql);
          System.out.println("Database created");
@@ -407,7 +407,7 @@ public class TestData {
         Integer id;
         String first;
         String last;
-        boolean is_subscriber;
+//        boolean is_subscriber;
 
         HashSet<Event> events = new HashSet<Event>();
         HashSet<Media> medias = new HashSet<Media>();
@@ -415,7 +415,7 @@ public class TestData {
             String[] name = fullname.split(" ");
             this.first = name[0];
             this.last = name[1];
-            this.is_subscriber = Math.random() < 0.5;
+//            this.is_subscriber = Math.random() < 0.5;
         }
         public void add_event(Event event){
             events.add(event);
@@ -425,11 +425,11 @@ public class TestData {
 
             if(id!=null)
                 throw new SQLException("Repeat insertion of user " + id);
-            String sql = "INSERT into user(first,last,is_subscriber,contact_method) VALUES(?,?,1,?)";
+            String sql = "INSERT into user(first,last) VALUES(?,?)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, this.first);
             statement.setString(2, this.last);
-            statement.setInt(3, this.is_subscriber ? 1 : 0 );
+//            statement.setInt(3, this.is_subscriber ? 1 : 0 );
             statement.execute();
 
             // extract user id
