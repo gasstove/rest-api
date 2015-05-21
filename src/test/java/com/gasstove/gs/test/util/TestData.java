@@ -114,6 +114,7 @@ public class TestData {
         sql =   "CREATE TABLE \"event\" (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "name varchar NOT NULL, " +
+                "owner_id INTEGER NOT NULL, " +
                 "open_date smalldatetime NOT NULL, " +
                 "close_date smalldatetime NOT NULL, " +
                 "join_invitation boolean NOT NULL, " +
@@ -188,12 +189,17 @@ public class TestData {
             all_users.add(new User(userNames[i]));
 
         // create events
-        for (int i = 0; i < NUM_EVENTS; i++)
-            all_events.add(new Event(eventNames[i]));
+        for (int i = 0; i < NUM_EVENTS; i++) {
+            User owner = sample(all_users);
+            all_events.add(new Event(eventNames[i],owner));
+        }
 
         // invite random list of guests
-        for(Event event : all_events)
-            event.invite_from(all_users);
+        for(Event event : all_events) {
+            HashSet<User> not_owner = (HashSet<User>) all_users.clone();
+            not_owner.remove(event.owner);
+            event.invite_from(not_owner);
+        }
 
         // users take a bunch of photos
         for(User user : all_users )
@@ -336,12 +342,14 @@ public class TestData {
         String name;
         Time open_date;
         Time close_date;
+        User owner;
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<Media> medias = new ArrayList<Media>();
         HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
 
-        public Event(String name){
+        public Event(String name,User owner){
             this.name = name;
+            this.owner = owner;
             this.open_date = Time.randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR);
             this.close_date = this.open_date.add_hours( Util.randBetween((double) MIN_EVENT_DURATION,(double) MAX_EVENT_DURATION) );
         }
@@ -365,11 +373,12 @@ public class TestData {
         public void insert_db() throws SQLException{
             if(id!=null)
                 throw new SQLException("Repeat insertion of event " + id);
-            String sql = "INSERT into event(name,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,1,1,1)";
+            String sql = "INSERT into event(name,owner_id,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,?,1,1,1)";
             statement = connection.prepareStatement(sql);
             statement.setString(1, this.name);
-            statement.setDate(2, this.open_date.toSqlDate());
-            statement.setDate(3, this.close_date.toSqlDate());
+            statement.setInt(2, this.owner.id);
+            statement.setDate(3, this.open_date.toSqlDate());
+            statement.setDate(4, this.close_date.toSqlDate());
             statement.execute();
 
             // get event ids
@@ -487,9 +496,26 @@ public class TestData {
 
     /**
      *
+     * Sample from A.
+     *
+     * @param A Array of T
+     *
+     * @return Sampled array of integers
+     */
+    private static <T> T sample(final HashSet<T> A) {
+
+        // create new array
+        ArrayList<T> Acopy = new ArrayList(A);
+
+        // pick a random element
+        return Acopy.get(Util.randBetween(0,A.size()));
+    }
+
+    /**
+     *
      * Sample n values from A without replacement.
      *
-     * @param A Array of integers
+     * @param A Array of T
      * @param n number of samples to take from A
      *
      * @return Sampled array of integers
