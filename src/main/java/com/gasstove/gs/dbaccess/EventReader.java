@@ -36,7 +36,7 @@ public class EventReader extends BaseReader {
                 e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
-                e.setOwnerIds(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
+                e.setOwnerId(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
                 events.add(e);
             }
         } catch (SQLException e) {
@@ -66,7 +66,7 @@ public class EventReader extends BaseReader {
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
-            e.setOwnerIds(ur.getUserIdsForEventInRole(eId,Permissions.Role.OWNER));
+            e.setOwnerId(ur.getUserIdsForEventInRole(eId,Permissions.Role.OWNER));
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
@@ -87,7 +87,7 @@ public class EventReader extends BaseReader {
                 e.setName(rs.getString("name"));
                 e.setOpenDate(new Time(rs.getInt("open_date")));
                 e.setCloseDate(new Time(rs.getInt("close_date")));
-                e.setOwnerIds(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
+                e.setOwnerId(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
                 events.add(e);
             }
         } catch (SQLException e) {

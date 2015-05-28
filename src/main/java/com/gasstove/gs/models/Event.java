@@ -8,7 +8,7 @@ import java.util.ArrayList;
 public class Event extends DBObject {
 
     private String name;
-    private ArrayList<Integer> ownerIds;
+    private Integer ownerId;
     private Time openDate;
     private Time closeDate;
     private Boolean joinInvitation;
@@ -97,12 +97,13 @@ public class Event extends DBObject {
         this.joinAllowAuto = joinAllowAuto;
     }
 
-    public ArrayList<Integer> getOwnerIds() {
-        return ownerIds;
+    public Integer getOwnerId() {
+        return ownerId;
     }
 
-    public void setOwnerIds(ArrayList<Integer> ownerIds) {
-        this.ownerIds = ownerIds;
+    public void setOwnerId(ArrayList<Integer> ownerIds) {
+        // KEEP ONLY THE FIRST OWNER!!!
+        this.ownerId = ownerIds.isEmpty() ? null : ownerIds.get(0);
     }
 
 }
