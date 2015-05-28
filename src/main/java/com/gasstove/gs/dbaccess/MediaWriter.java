@@ -4,14 +4,13 @@ import com.gasstove.gs.models.DBObject;
 import com.gasstove.gs.models.Media;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
  * Created by gomes on 5/2/15.
  */
-public class MediaWriter extends WriterBase {
+public class MediaWriter extends BaseWriter {
 
     public MediaWriter(Connection dbConn) {
         super(dbConn);

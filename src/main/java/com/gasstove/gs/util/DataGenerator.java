@@ -1,39 +1,18 @@
-package com.gasstove.gs.test.util;
-
-import com.gasstove.gs.util.*;
-import com.gasstove.gs.util.Time;
+package com.gasstove.gs.util;
 
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 
 /**
  * This is the script to populate the test database
  */
-public class TestData {
+public class DataGenerator {
 
-    /**
-     * Main method to load test data
-     *
-     * @param args
-     */
-    public static void main(String[] args){
-        TestData t = new TestData();
-        DataContainer data = t.generate_data();
-
-        try {
-            t.dropTables();
-            t.getConnection();
-            t.createDB();
-            t.insert_db(data);
-        }
-        catch(Exception s){
-            s.printStackTrace();
-        }
-    }
+    // db file
+    private final String dbfile = "src/main/resources/gasstove.db";
 
     //set these values to manipulate test records
     private final int MIN_USER_PER_EVENT = 1;
@@ -61,6 +40,26 @@ public class TestData {
     private Statement stmt = null;
 
     /**
+     * Main method to load test data
+     *
+     * @param args
+     */
+    public static void main(String[] args){
+        DataGenerator t = new DataGenerator();
+        DataContainer data = t.generate_data();
+
+        try {
+            t.dropTables();
+            t.getConnection();
+            t.createDB();
+            t.insert_db(data);
+        }
+        catch(Exception s){
+            s.printStackTrace();
+        }
+    }
+
+    /**
      * Establish connection to db
      *
      * @return Connection database connection
@@ -72,7 +71,7 @@ public class TestData {
     public void dropTables(){
         try {
             System.out.println("Dropping tables...");
-            File f = new File("src/main/resources/gasstove.db");
+            File f = new File(this.dbfile);
             f.delete();
         }catch(Exception e){
             e.printStackTrace();
@@ -114,7 +113,6 @@ public class TestData {
         sql =   "CREATE TABLE \"event\" (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "name varchar NOT NULL, " +
-                "owner_id INTEGER NOT NULL, " +
                 "open_date smalldatetime NOT NULL, " +
                 "close_date smalldatetime NOT NULL, " +
                 "join_invitation boolean NOT NULL, " +
@@ -136,8 +134,6 @@ public class TestData {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "first varchar NOT NULL, " +
                 "last varchar NOT NULL " +
-//                "is_subscriber boolean NOT NULL, " +
-//                "contact_method boolean NOT NULL " +
                 ")";
          stmt.execute(sql);
          System.out.println("Database created");
@@ -190,18 +186,19 @@ public class TestData {
 
         // create events
         for (int i = 0; i < NUM_EVENTS; i++) {
-            User owner = sample(all_users);
-            all_events.add(new Event(eventNames[i],owner));
+            all_events.add(new Event(eventNames[i]));
         }
 
-        // invite random list of guests
+        // invite random list of users
         for(Event event : all_events) {
-            HashSet<User> not_owner = (HashSet<User>) all_users.clone();
-            not_owner.remove(event.owner);
-            event.invite_from(not_owner);
+
+            // guest pool is all users minus the event owner
+//            HashSet<User> guest_pool = (HashSet<User>) all_users.clone();
+//            guest_pool.remove(event.owner);
+            event.invite_from(all_users);
         }
 
-        // users take a bunch of photos
+        // event users and owners take a bunch of photos
         for(User user : all_users )
             all_medias.addAll( user.generate_media() );
 
@@ -220,18 +217,22 @@ public class TestData {
      */
     public void insert_db(DataContainer data) throws SQLException {
 
-          //add the roles you want defined
-          String sql = "INSERT into roles(id,type) VALUES(?,?)";
-          statement = connection.prepareStatement(sql);
-          statement.setInt(1, 1);
-          statement.setString(2, "owner");
-          statement.execute();
+        int i;
 
-          sql = "INSERT into roles(id,type) VALUES(?,?)";
-          statement = connection.prepareStatement(sql);
-          statement.setInt(1, 2);
-          statement.setString(2, "member");
-          statement.execute();
+        //add the roles you want defined
+        String sql = "INSERT into roles(id,type) VALUES(?,?)";
+        i=1;
+        statement = connection.prepareStatement(sql);
+        statement.setInt(i++, 1);
+        statement.setString(i++, "owner");
+        statement.execute();
+
+        sql = "INSERT into roles(id,type) VALUES(?,?)";
+        statement = connection.prepareStatement(sql);
+        i=1;
+        statement.setInt(i++, 2);
+        statement.setString(i++, "member");
+        statement.execute();
 
         // insert users into db
         System.out.println("Inserting "+data.all_users.size()+" users.");
@@ -250,7 +251,7 @@ public class TestData {
 
         // insert guest lists into user_event_mapping
         for(Event event : data.all_events) {
-            System.out.println("Inserting "+event.users.size()+" guests for event " + event.name +".");
+            System.out.println("Inserting "+event.users.size()+" users for event " + event.name +".");
             event.insert_guests_db();
         }
 
@@ -308,10 +309,11 @@ public class TestData {
             // insert the media
             String sql = "INSERT into media(type, file_name, user_id, date_taken) VALUES(?,?,?,?)";
             statement = connection.prepareStatement(sql);
-            statement.setString(1,mediaType);
-            statement.setString(2, "media_" + filename_ext);
-            statement.setString(3, owner.id.toString() );
-            statement.setDate(4, this.date_taken.toSqlDate() );
+            int i=1;
+            statement.setString(i++,mediaType);
+            statement.setString(i++, "media_" + filename_ext);
+            statement.setString(i++, owner.id.toString() );
+            statement.setDate(i++, this.date_taken.toSqlDate() );
             statement.execute();
 
             // get media id
@@ -326,10 +328,11 @@ public class TestData {
             for(Event event : events) {
                 String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
-                statement.setInt(1, this.id);
-                statement.setInt(2, event.id );
-                statement.setInt(3, Util.randBetween(10, 10000));
-                statement.setInt(4, Util.randBetween(0, 2));
+                int i=1;
+                statement.setInt(i++, this.id);
+                statement.setInt(i++, event.id );
+                statement.setInt(i++, Util.randBetween(10, 10000));
+                statement.setInt(i++, Util.randBetween(0, 2));
                 statement.execute();
             }
         }
@@ -342,21 +345,19 @@ public class TestData {
         String name;
         Time open_date;
         Time close_date;
-        User owner;
         ArrayList<User> users = new ArrayList<User>();
         ArrayList<Media> medias = new ArrayList<Media>();
         HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
 
-        public Event(String name,User owner){
+        public Event(String name){
             this.name = name;
-            this.owner = owner;
             this.open_date = Time.randomDate(MIN_EVENT_YEAR,MAX_EVENT_YEAR);
             this.close_date = this.open_date.add_hours( Util.randBetween((double) MIN_EVENT_DURATION,(double) MAX_EVENT_DURATION) );
         }
 
-        public void invite_from(HashSet<User> all_users){
+        public void invite_from(HashSet<User> user_pool){
             int num_guests = Util.randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
-            this.users = sample_without_replacement(all_users,num_guests);
+            this.users = sample_without_replacement(user_pool,num_guests);
             // inform users
             for(User user : users)
                 user.add_event(this);
@@ -373,12 +374,18 @@ public class TestData {
         public void insert_db() throws SQLException{
             if(id!=null)
                 throw new SQLException("Repeat insertion of event " + id);
-            String sql = "INSERT into event(name,owner_id,open_date,close_date,join_invitation,join_allow_by_accept,join_allow_auto) VALUES(?,?,?,?,1,1,1)";
+            String sql = "INSERT into event(name," +
+                                            "open_date," +
+                                            "close_date," +
+                                            "join_invitation," +
+                                            "join_allow_by_accept," +
+                                            "join_allow_auto) " +
+                                            "VALUES(?,?,?,1,1,1)";      // TODO: SET BOOLEANS!!!
             statement = connection.prepareStatement(sql);
-            statement.setString(1, this.name);
-            statement.setInt(2, this.owner.id);
-            statement.setDate(3, this.open_date.toSqlDate());
-            statement.setDate(4, this.close_date.toSqlDate());
+            int i=1;
+            statement.setString( i++, this.name);
+            statement.setDate(   i++, this.open_date.toSqlDate());
+            statement.setDate(   i++, this.close_date.toSqlDate());
             statement.execute();
 
             // get event ids
@@ -391,14 +398,15 @@ public class TestData {
 
         public void insert_guests_db() throws SQLException {
 
-            // add guests to this event
+            // add users to this event
             for(User user : this.users) {
                 String sql = "INSERT into user_event_mapping(event_id, user_id,role_id,join_date) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
-                statement.setInt(1, this.id);
-                statement.setInt(2, user.id);
-                statement.setInt(3, (int) (Math.random() * 2));
-                statement.setDate(4, this.open_date.toSqlDate() );
+                int i=1;
+                statement.setInt(   i++, this.id);
+                statement.setInt(   i++, user.id);
+                statement.setInt(   i++, (int) (Math.random() * 2));
+                statement.setDate(  i++, this.open_date.toSqlDate() );
                 statement.execute();
 
                 // extract user_event ids
@@ -416,7 +424,6 @@ public class TestData {
         Integer id;
         String first;
         String last;
-//        boolean is_subscriber;
 
         HashSet<Event> events = new HashSet<Event>();
         HashSet<Media> medias = new HashSet<Media>();
@@ -424,7 +431,6 @@ public class TestData {
             String[] name = fullname.split(" ");
             this.first = name[0];
             this.last = name[1];
-//            this.is_subscriber = Math.random() < 0.5;
         }
         public void add_event(Event event){
             events.add(event);
@@ -436,9 +442,9 @@ public class TestData {
                 throw new SQLException("Repeat insertion of user " + id);
             String sql = "INSERT into user(first,last) VALUES(?,?)";
             statement = connection.prepareStatement(sql);
-            statement.setString(1, this.first);
-            statement.setString(2, this.last);
-//            statement.setInt(3, this.is_subscriber ? 1 : 0 );
+            int i=1;
+            statement.setString(i++, this.first);
+            statement.setString(i++, this.last);
             statement.execute();
 
             // extract user id
@@ -482,17 +488,6 @@ public class TestData {
     }
 
     /* .. PRIVATE STATICS ....................................................... */
-
-    /**
-     *
-     * Generate random number in range.
-     *
-     * @param start beginning of range, inclusive
-     * @param end end of range, exclusive
-     *
-     * @return random number between start(inclusive) and end(exclusive)
-     */
-
 
     /**
      *

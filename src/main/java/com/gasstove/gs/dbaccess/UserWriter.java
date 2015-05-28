@@ -7,7 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
-public class UserWriter  extends WriterBase {
+public class UserWriter  extends BaseWriter {
 
     public UserWriter(Connection dbConn) {
         super(dbConn);

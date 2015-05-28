@@ -1,7 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.User;
-import com.gasstove.gs.util.DBConnection;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -9,29 +8,10 @@ import java.util.ArrayList;
 /**
  * Database reader for Users
  */
-public class UserReader {
+public class UserReader extends BaseReader {
 
-    private Connection conn;
-
-    public UserReader() {
-        try {
-            conn = (new DBConnection()).getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public UserReader(Connection conn) {
-        this.conn = conn;
-    }
-
-    public void close(){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public UserReader() { super(); }
+    public UserReader(Connection conn) { super(conn); }
 
     /**
      * Returns a list of all the users in the db.

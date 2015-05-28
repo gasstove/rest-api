@@ -133,13 +133,6 @@ public class EventResource {
             // generate an Event
             get_event = new Event(eventString);
 
-
-            System.out.println("GET STRING");
-            System.out.println(eventString);
-
-            System.out.println("GET EVENT");
-            System.out.println(get_event);
-
             // connect to db
             conn = (new DBConnection()).getConnection();
             EventWriter writer = new EventWriter(conn);
@@ -148,16 +141,12 @@ public class EventResource {
             int eventId = get_event.getId()<0  ? writer.insert(get_event) : writer.update(get_event);
 
             // check success
-            if(eventId<0)
-                throw new Exception("Insert|update failed");
+            if(eventId<0) throw new Exception("Insert|update failed");
 
             // query and send it back
             return_event = (new EventReader(conn)).getEventBasicInfo(eventId);
 
             response = new Response(true, "New event successfully saved", return_event.toJson());
-
-            System.out.println("RETURN EVENT");
-            System.out.println(return_event);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -191,12 +180,13 @@ public class EventResource {
             // connect to db
             conn = (new DBConnection()).getConnection();
 
-            EventWriter eventWriter = new EventWriter(conn);
-            boolean success = eventWriter.delete(Integer.parseInt(eventId));
+            // write
+            boolean success = (new EventWriter(conn)).delete(Integer.parseInt(eventId));
 
+            // check success
             response = success ?
-                    new Response(true, "Event successfully deteled",null) :
-                    new Response(true, "Event deletion failed",null) ;
+                       new Response(true, "Event successfully deleted",null) :
+                       new Response(true, "Event deletion failed",null) ;
 
         } catch (Exception e) {
             e.printStackTrace();

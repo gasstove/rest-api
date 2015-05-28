@@ -9,7 +9,7 @@ package com.gasstove.gs.dbaccess;
 /**
  * Base class for database writers
  */
-public abstract class WriterBase implements WriterInterface {
+public abstract class BaseWriter implements InterfaceWriter {
 
     public static enum CrudFlag {CREATE,UPDATE,DELETE};
 
@@ -26,7 +26,7 @@ public abstract class WriterBase implements WriterInterface {
 //    protected static final String timeFormat = "yyyy/MM/dd HH:mm:ss"; // FORMAT FOR DateTime string
 //    protected static final String dbTimeFormat = "YYYY/MM/DD HH24:MI:SS"; // FORMAT FOR ORACLE TO_TIMESTAMP
 
-    public WriterBase(java.sql.Connection dbConn) {
+    public BaseWriter(java.sql.Connection dbConn) {
 //        this.setDBSchema();
         this.dbConn = dbConn;
 

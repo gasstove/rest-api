@@ -1,7 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.Event;
-import com.gasstove.gs.util.*;
 import com.gasstove.gs.util.Time;
 
 import java.sql.*;
@@ -10,29 +9,10 @@ import java.util.ArrayList;
 /**
  * Database reader for Events
  */
-public class EventReader {
+public class EventReader extends BaseReader {
 
-    private Connection conn;
-
-    public EventReader() {
-        try {
-            conn = (new DBConnection()).getConnection();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public EventReader(Connection conn) {
-        this.conn = conn;
-    }
-
-    public void close(){
-        try {
-            conn.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    public EventReader() { super(); }
+    public EventReader(Connection conn) { super(conn); }
 
     /**
      * Returns a list of all the events in the db.
