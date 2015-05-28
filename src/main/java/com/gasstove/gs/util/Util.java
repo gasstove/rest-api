@@ -3,6 +3,8 @@ package com.gasstove.gs.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.Collection;
+
 /**
  * Utility methods
  */
@@ -28,6 +30,18 @@ public class Util {
 
     public static double randBetween(double start, double end) {
         return start + Math.random() * (end - start);
+    }
+
+    // STRINGS ................................................................
+
+    public static String joinToString(Collection<?> collection, CharSequence separator) {
+        if (collection.isEmpty())
+            return "";
+        StringBuilder sepValueBuilder = new StringBuilder();
+        for (Object obj : collection)
+            sepValueBuilder.append(obj).append(separator);
+        sepValueBuilder.setLength(sepValueBuilder.length() - separator.length());
+        return sepValueBuilder.toString();
     }
 
 }

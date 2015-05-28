@@ -12,7 +12,9 @@ public class Permissions {
     public static enum Role { OWNER , GUEST };
 
     public static enum Type {
-        MODIFY_EVENT_CONFIG ,
+        MODIFY_EVENT_NAME ,
+        MODIFY_EVENT_DATE ,
+        DELETE_EVENT ,
         ADD_GUEST
     }
 
@@ -24,7 +26,9 @@ public class Permissions {
 
         // define the OWNER role
         ArrayList<Type> owner_permissions = new ArrayList<Type>();
-        owner_permissions.add( Type.MODIFY_EVENT_CONFIG );
+        owner_permissions.add( Type.MODIFY_EVENT_NAME );
+        owner_permissions.add( Type.MODIFY_EVENT_DATE );
+        owner_permissions.add( Type.DELETE_EVENT );
         owner_permissions.add( Type.ADD_GUEST );
         PermissionList.put( Role.OWNER , owner_permissions );
 

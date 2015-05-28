@@ -5,6 +5,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
  * This is the script to populate the test database
@@ -83,34 +84,38 @@ public class DataGenerator {
         System.out.println("Creating database and tables");
 
         stmt = connection.createStatement();
-        String sql = "";
-        sql =   "CREATE TABLE roles (" +
-                "id int PRIMARY KEY NOT NULL, " +
-                "type varchar NOT NULL)";
+        String sql = "CREATE TABLE roles (" +
+                "name varchar PRIMARY KEY NOT NULL, " +
+                "modify_event_name boolean NOT NULL, " +
+                "modify_event_date boolean NOT NULL, " +
+                "delete_event boolean NOT NULL, " +
+                "add_guest boolean NOT NULL " +
+                ")";
+
         stmt.execute(sql);
 
-        sql = "CREATE TABLE \"media_mapping\" (" +
-                "\'id\'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "\'media_id\' int NOT NULL, " +
-                "\'event_id'	int NOT NULL, " +
-                "\'num_downloads'	int NOT NULL, " +
-                "\'shared'	boolean NOT NULL, " +
-                "\'comment'	varchar, " +
-                "\'num_likes'	int, " +
-                "\'num_dislikes'	int " +
+        sql = "CREATE TABLE media_mapping (" +
+                "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "media_id int NOT NULL, " +
+                "event_id int NOT NULL, " +
+                "num_downloads int NOT NULL, " +
+                "shared boolean NOT NULL, " +
+                "comment varchar, " +
+                "num_likes int, " +
+                "num_dislikes int " +
                 ")";
         stmt.execute(sql);
 
-        sql =   "CREATE TABLE \"media\" ( " +
-                "'id'	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
-                "'type'	varchar NOT NULL, " +
-                "'file_name'	varchar NOT NULL, " +
-                "'user_id'	INTEGER, " +
-                "'date_taken' smalldatetime NOT NULL " +
+        sql =   "CREATE TABLE media ( " +
+                "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
+                "type varchar NOT NULL, " +
+                "file_name	varchar NOT NULL, " +
+                "user_id INTEGER, " +
+                "date_taken smalldatetime NOT NULL " +
                 ")";
         stmt.execute(sql);
 
-        sql =   "CREATE TABLE \"event\" (" +
+        sql =   "CREATE TABLE event (" +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "name varchar NOT NULL, " +
                 "open_date smalldatetime NOT NULL, " +
@@ -219,32 +224,45 @@ public class DataGenerator {
 
         int i;
 
-        //add the roles you want defined
-        String sql = "INSERT into roles(id,type) VALUES(?,?)";
-        i=1;
-        statement = connection.prepareStatement(sql);
-        statement.setInt(i++, 1);
-        statement.setString(i++, "owner");
-        statement.execute();
+        // Roles and permissions .....................................
+        // check whether the role has each of the permissions
+        ArrayList<String> permStrings = new ArrayList<String>();
+        ArrayList<String> qmStrings = new ArrayList<String>();
+        for(Permissions.Type permission : Permissions.Type.values()){
+            permStrings.add( permission.toString().toLowerCase() );
+            qmStrings.add("?");
+        }
+        String insertStr = "INSERT into roles(name," + Util.joinToString(permStrings,",") + ") " +
+                "VALUES(?," + Util.joinToString(qmStrings,",") + ")";
 
-        sql = "INSERT into roles(id,type) VALUES(?,?)";
-        statement = connection.prepareStatement(sql);
-        i=1;
-        statement.setInt(i++, 2);
-        statement.setString(i++, "member");
-        statement.execute();
+        // iterate through roles defined in PermissionList
+        for (Map.Entry<Permissions.Role,ArrayList<Permissions.Type>> entry : Permissions.PermissionList.entrySet())
+        {
+            i=1;
+            statement = connection.prepareStatement(insertStr);
+            Permissions.Role role = entry.getKey();
+            ArrayList<Permissions.Type> my_permissions = entry.getValue();
 
-        // insert users into db
+            // add name
+            statement.setString(i++,role.toString().toLowerCase());
+
+            // check each of the permissions
+            for(Permissions.Type permission : Permissions.Type.values())
+                statement.setBoolean(i++,my_permissions.contains(permission));
+            statement.execute();
+        }
+
+        // insert users into db  .....................................
         System.out.println("Inserting "+data.all_users.size()+" users.");
         for(User user : data.all_users)
             user.insert_db();
 
-        // insert events into db
+        // insert events into db  .....................................
         System.out.println("Inserting "+data.all_events.size()+" events.");
         for(Event event : data.all_events)
             event.insert_db();
 
-        // insert media into db
+        // insert media into db .....................................
         System.out.println("Inserting "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
             media.insert_db();
