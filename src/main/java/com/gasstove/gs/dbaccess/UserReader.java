@@ -1,6 +1,7 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.User;
+import com.gasstove.gs.util.Permissions;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -83,6 +84,24 @@ public class UserReader extends BaseReader {
             e.printStackTrace();
         }
         return users;
+    }
+
+    public ArrayList<Integer> getUserIdsForEventInRole(int eId, Permissions.Role role){
+        ArrayList<Integer> ids = new ArrayList<Integer>();
+        try {
+            PreparedStatement stmt = conn.prepareStatement(
+                    "SELECT uem.user_id as id " +
+                    "FROM event , user_event_mapping as uem " +
+                    "WHERE event.id=? and uem.role=? and uem.event_id=event.id");
+            stmt.setInt(1, eId);
+            stmt.setString(2,role.toString().toLowerCase());
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next())
+                ids.add(rs.getInt("id"));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ids;
     }
 
 }

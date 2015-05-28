@@ -3,9 +3,12 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Time;
 import com.gasstove.gs.util.Util;
 
+import java.util.ArrayList;
+
 public class Event extends DBObject {
 
     private String name;
+    private ArrayList<Integer> ownerIds;
     private Time openDate;
     private Time closeDate;
     private Boolean joinInvitation;
@@ -92,6 +95,14 @@ public class Event extends DBObject {
 
     public void setJoinAllowAuto(boolean joinAllowAuto) {
         this.joinAllowAuto = joinAllowAuto;
+    }
+
+    public ArrayList<Integer> getOwnerIds() {
+        return ownerIds;
+    }
+
+    public void setOwnerIds(ArrayList<Integer> ownerIds) {
+        this.ownerIds = ownerIds;
     }
 
 }

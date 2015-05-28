@@ -9,6 +9,7 @@ import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
 import org.apache.commons.io.IOUtils;
 import org.joda.time.DateTime;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -90,6 +91,7 @@ public class EventResourceTest {
 
     //  post tests .........................................................
 
+    @Ignore
     @Test
     public void testInsertDeleteEvent(){
         try {

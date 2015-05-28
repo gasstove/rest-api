@@ -1,6 +1,7 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
 
 import java.sql.*;
@@ -22,6 +23,7 @@ public class EventReader extends BaseReader {
      */
     public ArrayList<Event> getEventsBasicInfo() {
         ArrayList<Event> events = new ArrayList<Event>();
+        UserReader ur = new UserReader(conn);
         try {
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM event");
@@ -34,6 +36,7 @@ public class EventReader extends BaseReader {
                 e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
+                e.setOwnerIds(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
                 events.add(e);
             }
         } catch (SQLException e) {
@@ -49,6 +52,7 @@ public class EventReader extends BaseReader {
      */
     public Event getEventBasicInfo(int eId) {
         Event e = new Event();
+        UserReader ur = new UserReader(conn);
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT * FROM event WHERE id = ?");
             stmt.setInt(1, eId);
@@ -62,15 +66,17 @@ public class EventReader extends BaseReader {
                 e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
                 e.setJoinInvitation(rs.getBoolean("join_invitation"));
             }
-
+            e.setOwnerIds(ur.getUserIdsForEventInRole(eId,Permissions.Role.OWNER));
         } catch (SQLException sq) {
             sq.printStackTrace();
         }
         return e;
     }
 
+
     public ArrayList<Event> getEventsForUser(int uId) {
         ArrayList<Event> events = new ArrayList<Event>();
+        UserReader ur = new UserReader(conn);
         try {
             PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, user_event_mapping aem WHERE aem.user_id=? AND aem.event_id = event.id");
             stmt.setInt(1, uId);
@@ -81,6 +87,7 @@ public class EventReader extends BaseReader {
                 e.setName(rs.getString("name"));
                 e.setOpenDate(new Time(rs.getInt("open_date")));
                 e.setCloseDate(new Time(rs.getInt("close_date")));
+                e.setOwnerIds(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
                 events.add(e);
             }
         } catch (SQLException e) {

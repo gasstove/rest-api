@@ -7,8 +7,6 @@ public class User extends DBObject  {
 
     private String first;
     private String last;
-//    private Boolean isSubscriber;
-//    private String contactMethod;
 
     // CONSTRUCTION .......................................................
 
@@ -20,8 +18,6 @@ public class User extends DBObject  {
         this.setId(x.getId());
         this.setFirst(x.getFirst());
         this.setLast(x.getLast());
-//        this.setIsSubscriber(x.isSubscriber());
-//        this.setContactMethod(x.getContactMethod());
     }
 
     // OVERRIDES .......................................................
@@ -52,21 +48,5 @@ public class User extends DBObject  {
     public void setLast(String last) {
         this.last = last;
     }
-
-//    public void setIsSubscriber(boolean isSubscriber) {
-//        this.isSubscriber = isSubscriber;
-//    }
-//
-//    public Boolean isSubscriber() {
-//        return isSubscriber==null ? false : isSubscriber;
-//    }
-//
-//    public String getContactMethod() {
-//        return contactMethod;
-//    }
-//
-//    public void setContactMethod(String contactMethod) {
-//        this.contactMethod = contactMethod;
-//    }
 
 }
