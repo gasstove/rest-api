@@ -130,7 +130,7 @@ public class DataGenerator {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "event_id int NOT NULL, " +
                 "user_id int NOT NULL, " +
-                "role_id int NOT NULL, " +
+                "role varchar NOT NULL, " +
                 "join_date smalldatetime NOT NULL " +
                 ")";
          stmt.execute(sql);
@@ -191,7 +191,17 @@ public class DataGenerator {
 
         // create events
         for (int i = 0; i < NUM_EVENTS; i++) {
-            all_events.add(new Event(eventNames[i]));
+
+            // choose an owner
+            User owner = Util.sample(all_users);
+
+            // create the event
+            Event event = new Event(eventNames[i]);
+
+            // add to owner and events list
+            owner.add_event(event);
+            all_events.add(event);
+            event.add_owner(owner);
         }
 
         // invite random list of users
@@ -209,7 +219,7 @@ public class DataGenerator {
 
         // assign unique file extensions to medias
         int n = all_medias.size();
-        ArrayList<Integer> fileext = sample_without_replacement(intset(1000,1000+n),n);
+        ArrayList<Integer> fileext = Util.sample_without_replacement(Util.intset(1000, 1000 + n), n);
         int c = 0;
         for(Media media : all_medias)
             media.set_fileext(fileext.get(c++));
@@ -269,7 +279,7 @@ public class DataGenerator {
 
         // insert guest lists into user_event_mapping
         for(Event event : data.all_events) {
-            System.out.println("Inserting "+event.users.size()+" users for event " + event.name +".");
+            System.out.println("Inserting "+event.userroles.size()+" users for event " + event.name +".");
             event.insert_guests_db();
         }
 
@@ -363,9 +373,9 @@ public class DataGenerator {
         String name;
         Time open_date;
         Time close_date;
-        ArrayList<User> users = new ArrayList<User>();
+        ArrayList<UserRole> userroles = new ArrayList<UserRole>();
         ArrayList<Media> medias = new ArrayList<Media>();
-        HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
+//        HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
 
         public Event(String name){
             this.name = name;
@@ -375,18 +385,28 @@ public class DataGenerator {
 
         public void invite_from(HashSet<User> user_pool){
             int num_guests = Util.randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
-            this.users = sample_without_replacement(user_pool,num_guests);
+            ArrayList<User> guests = Util.sample_without_replacement(user_pool, num_guests);
+            this.add_guests(guests);
             // inform users
-            for(User user : users)
+            for(User user : guests)
                 user.add_event(this);
         }
 
-        public Integer get_usereventid_for_user(User user){
-            return userEventId_for_user.get(user);
-        }
+//        public Integer get_usereventid_for_user(User user){
+//            return userEventId_for_user.get(user);
+//        }
 
         public void add_media(Media media){
             this.medias.add(media);
+        }
+
+        public void add_guests( ArrayList<User> users ){
+            for(User user : users)
+                this.userroles.add(new UserRole(user, Permissions.Role.GUEST));
+        }
+
+        public void add_owner( User user ){
+            this.userroles.add(new UserRole(user, Permissions.Role.OWNER));
         }
 
         public void insert_db() throws SQLException{
@@ -417,22 +437,22 @@ public class DataGenerator {
         public void insert_guests_db() throws SQLException {
 
             // add users to this event
-            for(User user : this.users) {
-                String sql = "INSERT into user_event_mapping(event_id, user_id,role_id,join_date) VALUES(?,?,?,?)";
+            for(UserRole userrole : this.userroles) {
+                String sql = "INSERT into user_event_mapping(event_id, user_id,role,join_date) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 int i=1;
-                statement.setInt(   i++, this.id);
-                statement.setInt(   i++, user.id);
-                statement.setInt(   i++, (int) (Math.random() * 2));
-                statement.setDate(  i++, this.open_date.toSqlDate() );
+                statement.setInt( i++, this.id);
+                statement.setInt( i++, userrole.user.id);
+                statement.setString(i++, userrole.role.toString().toLowerCase() );
+                statement.setDate( i++, this.open_date.toSqlDate() );
                 statement.execute();
 
-                // extract user_event ids
-                sql = "SELECT Max(id) from user_event_mapping";
-                stmt = connection.createStatement();
-                ResultSet r = stmt.executeQuery(sql);
-                if (r.next())
-                    userEventId_for_user.put(user, r.getInt(1));
+//                // extract user_event ids
+//                sql = "SELECT Max(id) from user_event_mapping";
+//                stmt = connection.createStatement();
+//                ResultSet r = stmt.executeQuery(sql);
+//                if (r.next())
+//                    userEventId_for_user.put(user, r.getInt(1));
             }
         }
 
@@ -450,6 +470,7 @@ public class DataGenerator {
             this.first = name[0];
             this.last = name[1];
         }
+
         public void add_event(Event event){
             events.add(event);
         }
@@ -497,7 +518,7 @@ public class DataGenerator {
                                            1 ;
 
                 // sample that many events, add media to each event
-                ArrayList<Event> events_for_media = sample_without_replacement(this.events,(int) num_event_for_media);
+                ArrayList<Event> events_for_media = Util.sample_without_replacement(this.events, (int) num_event_for_media);
                 for(Event event : events_for_media)
                     media.add_to_event(event);
             }
@@ -505,60 +526,15 @@ public class DataGenerator {
         }
     }
 
-    /* .. PRIVATE STATICS ....................................................... */
-
-    /**
-     *
-     * Sample from A.
-     *
-     * @param A Array of T
-     *
-     * @return Sampled array of integers
-     */
-    private static <T> T sample(final HashSet<T> A) {
-
-        // create new array
-        ArrayList<T> Acopy = new ArrayList(A);
-
-        // pick a random element
-        return Acopy.get(Util.randBetween(0,A.size()));
+    private class UserRole {
+        User user;
+        Permissions.Role role;
+        public UserRole(User user, Permissions.Role role){
+            this.user = user;
+            this.role = role;
+        }
     }
-
-    /**
-     *
-     * Sample n values from A without replacement.
-     *
-     * @param A Array of T
-     * @param n number of samples to take from A
-     *
-     * @return Sampled array of integers
-     */
-    private static <T> ArrayList<T> sample_without_replacement(final HashSet<T> A, int n) {
-        if(n<0)
-            return null;
-
-        // create new array
-        ArrayList<T> Acopy = new ArrayList(A);
-
-        // shuffle it
-        java.util.Collections.shuffle(Acopy);
-
-        // pick out first n elements
-        return new ArrayList(Acopy.subList(0,Math.min(n,A.size())));
-    }
-
-    /** Generate undordered list integers between a and b inclusive
-     *
-     * @param a
-     * @param b
-     * @return
-     */
-    private HashSet<Integer> intset(int a,int b){
-        HashSet<Integer> A = new HashSet<Integer>();
-        for(int x=a;x<=b;x++)
-            A.add(x);
-        return A;
-    }
+    /* .. STATICS ....................................................... */
 
     static String[] userNames = {
         "Leila Longstreet",

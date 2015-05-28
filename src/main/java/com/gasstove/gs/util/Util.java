@@ -3,7 +3,9 @@ package com.gasstove.gs.util;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 /**
  * Utility methods
@@ -32,7 +34,47 @@ public class Util {
         return start + Math.random() * (end - start);
     }
 
-    // STRINGS ................................................................
+    /**
+     *
+     * Sample from A.
+     *
+     * @param A Array of T
+     *
+     * @return Sampled array of integers
+     */
+    public static <T> T sample(final HashSet<T> A) {
+
+        // create new array
+        ArrayList<T> Acopy = new ArrayList(A);
+
+        // pick a random element
+        return Acopy.get(Util.randBetween(0,A.size()));
+    }
+
+    /**
+     *
+     * Sample n values from A without replacement.
+     *
+     * @param A Array of T
+     * @param n number of samples to take from A
+     *
+     * @return Sampled array of integers
+     */
+    public static <T> ArrayList<T> sample_without_replacement(final HashSet<T> A, int n) {
+        if(n<0)
+            return null;
+
+        // create new array
+        ArrayList<T> Acopy = new ArrayList(A);
+
+        // shuffle it
+        java.util.Collections.shuffle(Acopy);
+
+        // pick out first n elements
+        return new ArrayList(Acopy.subList(0,Math.min(n,A.size())));
+    }
+
+    // MISC ................................................................
 
     public static String joinToString(Collection<?> collection, CharSequence separator) {
         if (collection.isEmpty())
@@ -44,4 +86,16 @@ public class Util {
         return sepValueBuilder.toString();
     }
 
+    /** Generate undordered list integers between a and b inclusive
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public static HashSet<Integer> intset(int a,int b){
+        HashSet<Integer> A = new HashSet<Integer>();
+        for(int x=a;x<=b;x++)
+            A.add(x);
+        return A;
+    }
 }
