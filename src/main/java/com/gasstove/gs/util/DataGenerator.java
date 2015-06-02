@@ -3,7 +3,6 @@ package com.gasstove.gs.util;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -130,8 +129,7 @@ public class DataGenerator {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "event_id int NOT NULL, " +
                 "user_id int NOT NULL, " +
-                "role varchar NOT NULL, " +
-                "join_date smalldatetime NOT NULL " +
+                "role varchar NOT NULL" +
                 ")";
          stmt.execute(sql);
 
@@ -438,13 +436,12 @@ public class DataGenerator {
 
             // add users to this event
             for(UserRole userrole : this.userroles) {
-                String sql = "INSERT into user_event_mapping(event_id, user_id,role,join_date) VALUES(?,?,?,?)";
+                String sql = "INSERT into user_event_mapping(event_id, user_id,role) VALUES(?,?,?)";
                 statement = connection.prepareStatement(sql);
                 int i=1;
                 statement.setInt( i++, this.id);
                 statement.setInt( i++, userrole.user.id);
                 statement.setString(i++, userrole.role.toString().toLowerCase() );
-                statement.setDate( i++, this.open_date.toSqlDate() );
                 statement.execute();
 
 //                // extract user_event ids

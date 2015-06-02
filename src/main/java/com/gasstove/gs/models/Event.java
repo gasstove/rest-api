@@ -20,9 +20,7 @@ public class Event extends DBObject {
     public Event(){};
 
     public Event(String json){
-
         Event x = Util.getGson().fromJson(json, Event.class);
-
         this.setId(x.getId());
         this.setName(x.getName());
         this.setOpenDate(x.getOpenDate() );
@@ -30,6 +28,7 @@ public class Event extends DBObject {
         this.setJoinAllowByAccept(x.isJoinAllowByAccept());
         this.setJoinInvitation(x.isJoinInvitation());
         this.setJoinAllowAuto(x.isJoinAllowAuto());
+        this.setOwnerId(x.getOwnerId());
     }
 
     // OVERRIDES .......................................................
@@ -43,7 +42,8 @@ public class Event extends DBObject {
         str += "\tclose date: " + closeDate+ "\n";
         str += "\tjoinInvitation: " + joinInvitation+ "\n";
         str += "\tjoinAllowbyAccept: " + joinAllowByAccept+ "\n";
-        str += "\tjoinAllowAuto: " + joinAllowAuto;
+        str += "\tjoinAllowAuto: " + joinAllowAuto+ "\n";
+        str += "\townerId: " + ownerId;
         return str;
     }
 
@@ -99,6 +99,10 @@ public class Event extends DBObject {
 
     public Integer getOwnerId() {
         return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 
     public void setOwnerId(ArrayList<Integer> ownerIds) {

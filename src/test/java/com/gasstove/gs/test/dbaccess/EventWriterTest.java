@@ -35,13 +35,7 @@ public class EventWriterTest {
             event.setJoinAllowAuto(false);
             event.setJoinAllowByAccept(false);
             event.setJoinInvitation(false);
-
-//            // remove it from the db, ignore exception
-//            try {
-//                EventWriter ew = new EventWriter(conn);
-//                ew.delete(event.getId());
-//            } catch (Exception e){
-//            }
+            event.setOwnerId(1);
 
         } catch (Exception e) {
             cleanup();

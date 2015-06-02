@@ -2,6 +2,7 @@ package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.DBObject;
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.util.Permissions;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -16,10 +17,6 @@ public class EventWriter extends BaseWriter {
     public int insert(DBObject object) throws Exception {
 
         Event event = (Event) object;
-
-        System.out.println("EVENT INSERT");
-        System.out.println(event);
-
         String sql = "INSERT into event( name , " +
                                         "open_date," +
                                         "close_date," +
@@ -29,20 +26,39 @@ public class EventWriter extends BaseWriter {
                                         "VALUES(?,?,?,?,?,?)";
         PreparedStatement statement = dbConn.prepareStatement(sql);
         int i=1;
-        statement.setString(    i++ , event.getName());
-        statement.setDate(      i++ , event.getOpenDate().toSqlDate() );
-        statement.setDate(      i++ , event.getCloseDate().toSqlDate() );
-        statement.setBoolean(   i++ , event.isJoinInvitation());
-        statement.setBoolean(   i++ , event.isJoinAllowByAccept());
-        statement.setBoolean(   i++ , event.isJoinAllowAuto());
+        statement.setString(  i++ , event.getName());
+        statement.setDate(    i++ , event.getOpenDate().toSqlDate() );
+        statement.setDate(    i++ , event.getCloseDate().toSqlDate() );
+        statement.setBoolean( i++ , event.isJoinInvitation());
+        statement.setBoolean( i++ , event.isJoinAllowByAccept());
+        statement.setBoolean( i++ , event.isJoinAllowAuto());
         int r = statement.executeUpdate();
 
         if(r!=1)
-            throw new Exception("Insert failed for event " + + event.getId());
+            throw new Exception("Insert failed for event " + event.getId());
 
-        // return new id (IS THIS CORRECT?)
+        // read new event id
         ResultSet rs = dbConn.createStatement().executeQuery("SELECT Max(id) from event");
-        return rs.next() ? rs.getInt(1) : -1;
+        event.setId( rs.next() ? rs.getInt(1) : -1 );
+
+        // insert owner into user_event_mapping
+        sql = "INSERT into user_event_mapping(" +
+                "event_id," +
+                "user_id," +
+                "role) " +
+                "VALUES(?,?,?)";
+        statement = dbConn.prepareStatement(sql);
+        i=1;
+        statement.setInt(i++, event.getId());
+        statement.setInt(i++, event.getOwnerId());
+        statement.setString(i++, Permissions.Role.OWNER.toString().toLowerCase() );
+        r = statement.executeUpdate();
+
+        if(r!=1)
+            throw new Exception("Insert failed for event_user_mapping in event " + event.getId());
+
+        return event.getId();
+
     }
 
     public int update(DBObject object) throws Exception{

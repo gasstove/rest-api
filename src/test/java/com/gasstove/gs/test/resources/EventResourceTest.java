@@ -33,7 +33,6 @@ public class EventResourceTest {
     public void testGetEvents() {
         EventResource er = new EventResource();
         String response = er.getEventsBasicInfo();
-        System.out.println(response);
         assertTrue(response.length() > 0);
     }
 
@@ -95,50 +94,30 @@ public class EventResourceTest {
     @Test
     public void testInsertDeleteEvent(){
         try {
+
             // create an event
-//            String eventstr = "name=dahlgrendf&openDate=Wed%20Dec%2010%201969%2009%3A05%3A32%20GMT-0800%20(PST)&closeDate=Wed%20Dec%2010%201969%2009%3A05%3A32%20GMT-0800%20(PST)&doGuestList=0&doRequestAccept=0&doOpenToPublic=0";
-
-            String eventstr = "name=dahlgrendfg&openDate=Wed%20Dec%2010%201969%2009%3A05%3A32%20GMT-0800%20(PST)&closeDate=Wed%20Dec%2010%201969%2009%3A05%3A32%20GMT-0800%20(PST)&joinInvitation=0&joinAllowByAccept=0&joinAllowAuto=0";
-
-//            String eventstr = "{\"openDate\":\"1969-12-31T16:00:00.000-08:00\",\"closeDate\":\"1969-12-31T16:00:00.001-08:00\",\"joinInvitation\":false,\"joinAllowByAccept\":false,\"joinAllowAuto\":false,\"id\":-1}";
-
-
-            Event event = new Event(eventstr);
-
-//            Event event = new Event();
-//            event.setName("test");
-//            event.setOpenDate(new Time(0));
-//            event.setCloseDate(new Time(1));
-//            event.setJoinAllowAuto(false);
-//            event.setJoinAllowByAccept(false);
-//            event.setJoinInvitation(false);
-
-            System.out.println(event.toJson());
-
-
+            Event event = new Event();
+            event.setName("testevent");
+            event.setOpenDate(new Time(0));
+            event.setCloseDate(new Time(0));
+            event.setJoinAllowAuto(false);
+            event.setJoinAllowByAccept(false);
+            event.setJoinInvitation(false);
+            event.setOwnerId(1);
 
             // insert it
-//            EventResource er = new EventResource();
-//            er.insertEvent(event.toJson());
-//
-//
-//            HttpURLConnection conn = TestConfiguration.sendRequest("/events/", "POST", event.toJson());
-//            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
-//
-//            Response response = (new Gson()).fromJson(responseJSON,Response.class);
-//
-//            System.out.println("after insert: " + response.resource);
-//
-//            // delete the inserted event
-//            Event insertevent = new Event(response.resource);
-//
-//            System.out.println("insertevent");
-//            System.out.println(insertevent);
+            EventResource er = new EventResource();
+            String responseStr = er.insertEvent(event.toJson());
 
-//            conn = TestConfiguration.sendRequest("/events/" + insertevent.getId(), "DELETE", "");
-//            responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+            // get it
+            Response response = (new Gson()).fromJson(responseStr,Response.class);
 
-//            System.out.println("after delete: " + responseJSON);
+            Event return_event = new Event(response.resource);
+
+            // delete the inserted event
+            responseStr = er.deleteEvent(String.format("%d",return_event.getId()));
+
+            assertTrue(responseStr.contains("Event successfully deleted"));
 
 
         } catch (Exception exp) {

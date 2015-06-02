@@ -120,13 +120,6 @@ public class UserResource {
 
             get_user = new User(userString);
 
-
-            System.out.println("GET STRING");
-            System.out.println(userString);
-
-            System.out.println("GET USER");
-            System.out.println(get_user);
-
             // connect to db
             conn = (new DBConnection()).getConnection();
             UserWriter writer = new UserWriter(conn);
@@ -142,9 +135,6 @@ public class UserResource {
             return_user = (new UserReader(conn)).getUserBasicInfo(userId);
 
             response = new Response(true, "New user successfully saved", return_user.toJson());
-
-            System.out.println("RETURN USER");
-            System.out.println(return_user);
 
         } catch (Exception e) {
             e.printStackTrace();
