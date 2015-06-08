@@ -12,8 +12,11 @@ import java.util.ArrayList;
  */
 public class MediaReader extends BaseReader {
 
-    public MediaReader() { super(); }
+//    public MediaReader() { super(); }
     public MediaReader(Connection conn) { super(conn); }
+    public MediaReader(String dbfile){
+        super(dbfile);
+    }
 
     /**
      * Returns a list of all the medias in the db.

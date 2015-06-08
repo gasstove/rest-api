@@ -3,16 +3,11 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.resources.EventResource;
 import com.gasstove.gs.resources.Response;
-import com.gasstove.gs.test.util.TestConfiguration;
-import com.gasstove.gs.test.util.TestDefaults;
+import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.Time;
 import com.google.gson.Gson;
-import org.apache.commons.io.IOUtils;
-import org.joda.time.DateTime;
 import org.junit.Ignore;
 import org.junit.Test;
-
-import java.net.HttpURLConnection;
 
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
@@ -31,15 +26,15 @@ public class EventResourceTest {
 
     @Test
     public void test_getEventsBasicInfo() {
-        EventResource er = new EventResource();
+        EventResource er = new EventResource(TestConfiguration.db);
         String response = er.getEventsBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
     public void test_getEventBasicInfo() {
-        EventResource er = new EventResource();
-        String response = er.getEventBasicInfo(TestDefaults.event_id.toString());
+        EventResource er = new EventResource(TestConfiguration.db);
+        String response = er.getEventBasicInfo(TestConfiguration.event_id.toString());
         assertTrue(response.length() > 0);
     }
 
@@ -63,7 +58,7 @@ public class EventResourceTest {
             event.setOwnerId(1);
 
             // insert it
-            EventResource er = new EventResource();
+            EventResource er = new EventResource(TestConfiguration.db);
             String responseStr = er.insertEvent(event.toJson());
 
             // get it

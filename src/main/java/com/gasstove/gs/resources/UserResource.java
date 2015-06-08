@@ -3,6 +3,7 @@ package com.gasstove.gs.resources;
 import com.gasstove.gs.dbaccess.UserReader;
 import com.gasstove.gs.dbaccess.UserWriter;
 import com.gasstove.gs.models.User;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Util;
 
@@ -22,6 +23,12 @@ import java.util.ArrayList;
 @Path("/users")
 public class UserResource {
 
+    private String db = Configuration.dbConnect;     // used to distinguish test and dev
+
+    public UserResource(String db){
+        this.db = db;
+    }
+
     ////////////////////////////////////////////////////////////
     // '/'
     ////////////////////////////////////////////////////////////
@@ -36,7 +43,7 @@ public class UserResource {
         String returnJSON = "";
         UserReader ur = null;
         try {
-            ur = new UserReader();
+            ur = new UserReader(db);
             ArrayList<User> users = ur.getUsersBasicInfo();
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
@@ -132,7 +139,7 @@ public class UserResource {
         String returnJSON = "";
         UserReader ur = null;
         try {
-            ur = new UserReader();
+            ur = new UserReader(db);
             User user = ur.getUserBasicInfo(Integer.parseInt(userId));
             returnJSON = user.toJson();
         } catch (Exception exp) {
@@ -194,7 +201,7 @@ public class UserResource {
         String returnJSON = "";
         UserReader ur = null;
         try {
-            ur = new UserReader();
+            ur = new UserReader(db);
             ArrayList<User> users = ur.getUsersForEvent(Integer.parseInt(eventId));
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {

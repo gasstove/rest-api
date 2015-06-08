@@ -1,8 +1,7 @@
 package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.resources.UserResource;
-import com.gasstove.gs.test.util.TestConfiguration;
-import com.gasstove.gs.test.util.TestDefaults;
+import com.gasstove.gs.test.TestConfiguration;
 import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -25,15 +24,15 @@ public class UserResourceTest {
 
     @Test
     public void test_getUsersBasicInfo() {
-        UserResource ur = new UserResource();
+        UserResource ur = new UserResource(TestConfiguration.db);
         String response = ur.getUsersBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
     public void test_getUserBasicInfo() {
-        UserResource ur = new UserResource();
-        String response = ur.getUserBasicInfo(TestDefaults.user_id.toString());
+        UserResource ur = new UserResource(TestConfiguration.db);
+        String response = ur.getUserBasicInfo(TestConfiguration.user_id.toString());
         assertTrue(response.length() > 0);
     }
 

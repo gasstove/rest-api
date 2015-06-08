@@ -12,7 +12,7 @@ import java.util.Map;
 public class DataGenerator {
 
     // db file
-    private static final String default_dbfile = "src/main/resources/gasstove.db";
+    private static final String dbfile = "src/main/resources/gasstoveDev.db";
 
     //set these values to manipulate test records
     private static final int MIN_USER_PER_EVENT = 1;
@@ -46,14 +46,19 @@ public class DataGenerator {
      */
     public static void main(String[] args){
 
-        String dbfile = args.length>0 ? args[0] : default_dbfile;
+        // args[0]=="test" => generate test data
+        // args[0]=="dev" => generate dev data
+        String dbfile = "";
+        if(args[0].compareTo("test")==0)
+            dbfile = Configuration.testDB;
+        else if(args[0].compareTo("dev")==0)
+            dbfile = Configuration.devDB;
 
         DataGenerator t = new DataGenerator();
         DataContainer data = t.generate_data();
-
         try {
             t.dropTables(dbfile);
-            t.getConnection(dbfile);
+            t.getConnection("jdbc:sqlite:"+dbfile);
             t.createDB();
             t.insert_db(data);
         }

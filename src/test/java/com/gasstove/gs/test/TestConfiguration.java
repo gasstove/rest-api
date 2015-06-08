@@ -1,4 +1,4 @@
-package com.gasstove.gs.test.util;
+package com.gasstove.gs.test;
 
 import com.gasstove.gs.util.Configuration;
 
@@ -8,6 +8,16 @@ import java.net.URL;
 
 
 public class TestConfiguration {
+
+    public static final String db = "jdbc:sqlite:" + Configuration.testDB;
+
+    public static Integer user_id = 36;
+    public static Integer event_id = 1;
+    public static Integer media_id = 15;
+
+    // standard response values per test
+//    public static String expectedResponseStatus = "OK";
+//    public static int expectedResponseCode = 200;
 
     public static HttpURLConnection sendRequest(String uri, String method, int number) {
         return sendRequest(uri,method,Integer.toString(number));

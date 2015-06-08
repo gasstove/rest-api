@@ -15,10 +15,10 @@ public class DBConnection {
         return this.getConnection(Configuration.dbConnect);
     }
 
-    public Connection getConnection(String dbfile) throws SQLException {
+    public Connection getConnection(String db) throws SQLException {
         try {
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + dbfile);
+            connection = DriverManager.getConnection(db);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }

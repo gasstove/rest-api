@@ -12,8 +12,11 @@ import java.util.ArrayList;
  */
 public class EventReader extends BaseReader {
 
-    public EventReader() { super(); }
+//    public EventReader() { super(); }
     public EventReader(Connection conn) { super(conn); }
+    public EventReader(String dbfile){
+        super(dbfile);
+    }
 
     /**
      * Returns a list of all the events in the db.

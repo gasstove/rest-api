@@ -11,8 +11,12 @@ import java.util.ArrayList;
  */
 public class UserReader extends BaseReader {
 
-    public UserReader() { super(); }
+//    public UserReader() { super(); }
     public UserReader(Connection conn) { super(conn); }
+
+    public UserReader(String dbfile){
+        super(dbfile);
+    }
 
     /**
      * Returns a list of all the users in the db.

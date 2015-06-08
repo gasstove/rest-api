@@ -1,7 +1,7 @@
 package com.gasstove.gs.test.resources;
 
 import com.gasstove.gs.resources.MediaResource;
-import com.gasstove.gs.test.util.TestDefaults;
+import com.gasstove.gs.test.TestConfiguration;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -21,15 +21,15 @@ public class MediaResourceTest {
 
     @Test
     public void test_getMediasBasicInfo() {
-        MediaResource mr = new MediaResource();
+        MediaResource mr = new MediaResource(TestConfiguration.db);
         String responseJSON = mr.getMediasBasicInfo();
         assertTrue(responseJSON.length() > 0);
     }
 
     @Test
     public void test_getMediaBasicInfo() {
-        MediaResource mr = new MediaResource();
-        String responseJSON = mr.getMediaBasicInfo(TestDefaults.media_id.toString());
+        MediaResource mr = new MediaResource(TestConfiguration.db);
+        String responseJSON = mr.getMediaBasicInfo(TestConfiguration.media_id.toString());
         assertTrue(responseJSON.length() > 0);
     }
 

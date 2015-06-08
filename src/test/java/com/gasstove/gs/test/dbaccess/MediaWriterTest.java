@@ -3,6 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.dbaccess.MediaWriter;
 import com.gasstove.gs.models.Media;
+import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Time;
 import org.junit.After;
@@ -28,7 +29,7 @@ public class MediaWriterTest {
         try {
 
             // open db
-            conn = new DBConnection().getConnection();
+            conn = new DBConnection().getConnection(TestConfiguration.db);
 
             // create a media
             media = new Media();

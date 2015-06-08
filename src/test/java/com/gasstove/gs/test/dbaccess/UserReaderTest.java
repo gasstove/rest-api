@@ -2,7 +2,7 @@ package com.gasstove.gs.test.dbaccess;
 
 import com.gasstove.gs.dbaccess.UserReader;
 import com.gasstove.gs.models.User;
-import com.gasstove.gs.test.util.TestDefaults;
+import com.gasstove.gs.test.TestConfiguration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -21,7 +21,7 @@ public class UserReaderTest {
 
     @Test
     public void testGetUsersBasicInfo() {
-        UserReader ur = new UserReader();
+        UserReader ur = new UserReader(TestConfiguration.db);
         try {
             ArrayList<User> list = ur.getUsersBasicInfo();
             assertTrue(list.size() > 0);
@@ -39,11 +39,11 @@ public class UserReaderTest {
     @Test
     public void testGetUserFull() {
 
-        UserReader ur = new UserReader();
+        UserReader ur = new UserReader(TestConfiguration.db);
         try {
-            User a = ur.getUserBasicInfo(TestDefaults.user_id);
+            User a = ur.getUserBasicInfo(TestConfiguration.user_id);
             assertTrue(a.getFirst().length() > 0);
-            assertTrue(a.getId() == TestDefaults.user_id);
+            assertTrue(a.getId() == TestConfiguration.user_id);
 //            assertNotNull(a.getEventsBasicInfo());
             assertNotNull(a.getLast());
 //            assertNotNull(a.getContactMethod());
@@ -58,9 +58,9 @@ public class UserReaderTest {
 
     @Test
     public void testGetUsersForEvent() {
-        UserReader ur = new UserReader();
+        UserReader ur = new UserReader(TestConfiguration.db);
         try {
-            ArrayList<User> us = ur.getUsersForEvent(TestDefaults.event_id);
+            ArrayList<User> us = ur.getUsersForEvent(TestConfiguration.event_id);
             assertNotNull(us);
             assertTrue(us.size()>0);
             User u = us.get(0);

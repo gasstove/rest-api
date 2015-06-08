@@ -1,5 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
 
 import java.sql.Connection;
@@ -12,12 +13,16 @@ public class BaseReader {
 
     protected Connection conn;
 
-    public BaseReader() {
+    public BaseReader(String dbfile){
         try {
-            conn = (new DBConnection()).getConnection();
+            conn = (new DBConnection()).getConnection(dbfile);
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public BaseReader() {
+        this(Configuration.dbConnect);
     }
 
     public BaseReader(Connection conn) {

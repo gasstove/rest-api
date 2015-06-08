@@ -3,6 +3,7 @@ package com.gasstove.gs.resources;
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Util;
 
 import javax.ws.rs.*;
@@ -19,6 +20,12 @@ import java.util.ArrayList;
 @Path("/medias")
 public class MediaResource {
 
+    private String db = Configuration.dbConnect;     // used to distinguish test and dev
+
+    public MediaResource(String db){
+        this.db = db;
+    }
+
     ////////////////////////////////////////////////////////////
     // '/'
     ////////////////////////////////////////////////////////////
@@ -33,7 +40,7 @@ public class MediaResource {
         String returnJSON = "";
         MediaReader mr = null;
         try {
-            mr = new MediaReader();
+            mr = new MediaReader(db);
             ArrayList<Media> medias = mr.getMediasBasicInfo();
             returnJSON = Util.getGson().toJson(medias);
         } catch (Exception exp) {
@@ -62,7 +69,7 @@ public class MediaResource {
         String returnJSON;
         MediaReader mr = null;
         try {
-            mr = new MediaReader();
+            mr = new MediaReader(db);
             Media media = mr.getMediaBasicInfo(Integer.parseInt(mediaId));
             returnJSON = media.toJson();
         } catch (Exception exp) {
@@ -85,7 +92,7 @@ public class MediaResource {
         String returnJSON;
         MediaReader mr = null;
         try {
-            mr = new MediaReader();
+            mr = new MediaReader(db);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getSharedMediaForEvent(eId);
             returnJSON = Util.getGson().toJson(mediaevents);
@@ -109,7 +116,7 @@ public class MediaResource {
         String returnJSON;
         MediaReader mr = null;
         try {
-            mr = new MediaReader();
+            mr = new MediaReader(db);
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mr.getMediaForUserAndEvent(uId,eId);

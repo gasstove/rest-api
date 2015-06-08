@@ -3,6 +3,7 @@ package com.gasstove.gs.resources;
 import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.dbaccess.EventWriter;
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
@@ -24,6 +25,12 @@ import java.util.ArrayList;
 
 @Path("/events")
 public class EventResource {
+
+    private String db = Configuration.dbConnect;     // used to distinguish test and dev
+
+    public EventResource(String db){
+        this.db = db;
+    }
 
 //    @Context
 //    Request req;
@@ -48,7 +55,7 @@ public class EventResource {
         String returnJSON;
         EventReader er = null;
         try {
-            er = new EventReader();
+            er = new EventReader(db);
             ArrayList<Event> events = er.getEventsBasicInfo();
             returnJSON = Util.getGson().toJson(events);
         } catch (Exception exp) {
@@ -144,7 +151,7 @@ public class EventResource {
         String returnJSON;
         EventReader er = null;
         try {
-            er = new EventReader();
+            er = new EventReader(db);
             Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
             returnJSON = event.toJson();
         } catch (Exception exp) {
@@ -207,7 +214,7 @@ public class EventResource {
         String returnJSON = "";
         EventReader er = null;
         try {
-            er = new EventReader();
+            er = new EventReader(db);
             ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
             Gson gson = Util.getGson();
             returnJSON = gson.toJson(events);

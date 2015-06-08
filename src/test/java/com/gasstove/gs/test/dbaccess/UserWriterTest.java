@@ -3,6 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.UserReader;
 import com.gasstove.gs.dbaccess.UserWriter;
 import com.gasstove.gs.models.User;
+import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
 import org.junit.After;
 import org.junit.Before;
@@ -23,7 +24,7 @@ public class UserWriterTest {
         try {
 
             // open db
-            conn = new DBConnection().getConnection();
+            conn = new DBConnection().getConnection(TestConfiguration.db);
 
             // create a user
             user = new User();

@@ -2,13 +2,11 @@ package com.gasstove.gs.test.dbaccess;
 
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.models.Media;
-import com.gasstove.gs.models.MediaEvent;
-import com.gasstove.gs.test.util.TestDefaults;
+import com.gasstove.gs.test.TestConfiguration;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -19,7 +17,7 @@ public class MediaReaderTest {
 
     @Test
     public void testGetMediasBasicInfo() {
-        MediaReader mr = new MediaReader();
+        MediaReader mr = new MediaReader(TestConfiguration.db);
         try {
             ArrayList<Media> list = mr.getMediasBasicInfo();
             assertTrue(list.size() > 0);
@@ -34,10 +32,10 @@ public class MediaReaderTest {
 
     @Test
     public void testGetMedia() {
-        MediaReader mr = new MediaReader();
+        MediaReader mr = new MediaReader(TestConfiguration.db);
         try {
-            Media m = mr.getMediaBasicInfo(TestDefaults.media_id);
-            assertTrue(m.getId() == TestDefaults.media_id);
+            Media m = mr.getMediaBasicInfo(TestConfiguration.media_id);
+            assertTrue(m.getId() == TestConfiguration.media_id);
             assertTrue(m.getFileName().length()>0);
             assertTrue(m.getType().length()>0);
         } catch (Exception exp) {
