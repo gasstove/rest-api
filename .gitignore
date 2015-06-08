@@ -52,4 +52,5 @@ build.log
 #SHITTY output not in target directory
 build.log
 
-*.db
+src/main/resources/gasstoveDev.db
+
