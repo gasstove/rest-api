@@ -34,6 +34,10 @@ public class EventResource {
 //    @Context
 //    private ServletContext context;
 
+    ////////////////////////////////////////////////////////////
+    // '/'
+    ////////////////////////////////////////////////////////////
+
     /** Returns ids and names of all events.
      *
      */
@@ -56,51 +60,6 @@ public class EventResource {
         return returnJSON;
     }
 
-    /**
-     * Restful method to return event object
-     *
-     * @param eventId   The id of the event to be loaded
-     * @return JSON representation of Event object
-     */
-    @Path("/{eventId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getEventBasicInfo(@PathParam("eventId") String eventId) {
-        String returnJSON;
-        EventReader er = null;
-        try {
-            er = new EventReader();
-            Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
-            returnJSON = event.toJson();
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            er.close();
-        }
-        return returnJSON;
-    }
-
-    @Path("/user/{userId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getEventsForUser(@PathParam("userId") String userId) {
-        String returnJSON = "";
-        EventReader er = null;
-        try {
-            er = new EventReader();
-            ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
-            Gson gson = Util.getGson();
-            returnJSON = gson.toJson(events);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            er.close();
-        }
-        return returnJSON;
-    }
-
     @Path("/")
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
@@ -112,17 +71,17 @@ public class EventResource {
         Connection conn = null;
 
         /** check headers
-        List<String> authHeaders = this.headers.getRequestHeader("Authorization");
-        List<String> dbHeader = this.headers.getRequestHeader("DB");
-        if (authHeaders==null || dbHeader==null)
-            return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
-        */
+         List<String> authHeaders = this.headers.getRequestHeader("Authorization");
+         List<String> dbHeader = this.headers.getRequestHeader("DB");
+         if (authHeaders==null || dbHeader==null)
+         return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
+         */
 
         /** authenticate
-        String encodedUserPass = authHeaders.get(0);
-        String dbName = dbHeader.get(0);
-        OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
-        */
+         String encodedUserPass = authHeaders.get(0);
+         String dbName = dbHeader.get(0);
+         OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
+         */
 
         /**
          Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
@@ -168,6 +127,35 @@ public class EventResource {
         return response.toJSON();
     }
 
+    ////////////////////////////////////////////////////////////
+    // '/#'
+    ////////////////////////////////////////////////////////////
+
+    /**
+     * Restful method to return event object
+     *
+     * @param eventId   The id of the event to be loaded
+     * @return JSON representation of Event object
+     */
+    @Path("/{eventId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEventBasicInfo(@PathParam("eventId") String eventId) {
+        String returnJSON;
+        EventReader er = null;
+        try {
+            er = new EventReader();
+            Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
+            returnJSON = event.toJson();
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+        } finally {
+            er.close();
+        }
+        return returnJSON;
+    }
+
     @Path("/{eventId: [0-9]+}")
     @DELETE
     public String deleteEvent(@PathParam("eventId") String eventId)  {
@@ -185,8 +173,8 @@ public class EventResource {
 
             // check success
             response = success ?
-                       new Response(true, "Event successfully deleted",null) :
-                       new Response(true, "Event deletion failed",null) ;
+                    new Response(true, "Event successfully deleted",null) :
+                    new Response(true, "Event deletion failed",null) ;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -206,6 +194,30 @@ public class EventResource {
         }
 
         return response.toJSON();
+    }
+
+    ////////////////////////////////////////////////////////////
+    // '/user/#'
+    ////////////////////////////////////////////////////////////
+
+    @Path("/user/{userId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getEventsForUser(@PathParam("userId") String userId) {
+        String returnJSON = "";
+        EventReader er = null;
+        try {
+            er = new EventReader();
+            ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
+            Gson gson = Util.getGson();
+            returnJSON = gson.toJson(events);
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+        } finally {
+            er.close();
+        }
+        return returnJSON;
     }
 
 }

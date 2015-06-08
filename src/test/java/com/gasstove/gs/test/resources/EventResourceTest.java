@@ -30,17 +30,54 @@ public class EventResourceTest {
     //  Tests for java classes ....................................................................
 
     @Test
-    public void testGetEvents() {
+    public void test_getEventsBasicInfo() {
         EventResource er = new EventResource();
         String response = er.getEventsBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
-    public void testGetEvent() {
+    public void test_getEventBasicInfo() {
         EventResource er = new EventResource();
         String response = er.getEventBasicInfo(TestDefaults.event_id.toString());
         assertTrue(response.length() > 0);
+    }
+
+    @Ignore
+    @Test
+    public void test_getEventsForUser() {
+    }
+
+    @Test
+    public void test_insertdeleteEvent(){
+        try {
+
+            // create an event
+            Event event = new Event();
+            event.setName("testevent");
+            event.setOpenDate(new Time(0));
+            event.setCloseDate(new Time(0));
+            event.setJoinAllowAuto(false);
+            event.setJoinAllowByAccept(false);
+            event.setJoinInvitation(false);
+            event.setOwnerId(1);
+
+            // insert it
+            EventResource er = new EventResource();
+            String responseStr = er.insertEvent(event.toJson());
+
+            // get it
+            Response response = (new Gson()).fromJson(responseStr,Response.class);
+            Event return_event = new Event(response.resource);
+
+            // delete the inserted event
+            responseStr = er.deleteEvent(String.format("%d",return_event.getId()));
+            assertTrue(responseStr.contains("Event successfully deleted"));
+
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
     }
 
 //    //  Tests that use the http service .........................................................
@@ -88,44 +125,5 @@ public class EventResourceTest {
 //
 //    }
 
-    //  post tests .........................................................
-
-    @Ignore
-    @Test
-    public void testInsertDeleteEvent(){
-        try {
-
-            // create an event
-            Event event = new Event();
-            event.setName("testevent");
-            event.setOpenDate(new Time(0));
-            event.setCloseDate(new Time(0));
-            event.setJoinAllowAuto(false);
-            event.setJoinAllowByAccept(false);
-            event.setJoinInvitation(false);
-            event.setOwnerId(1);
-
-            // insert it
-            EventResource er = new EventResource();
-            String responseStr = er.insertEvent(event.toJson());
-
-            // get it
-            Response response = (new Gson()).fromJson(responseStr,Response.class);
-
-            Event return_event = new Event(response.resource);
-
-            // delete the inserted event
-            responseStr = er.deleteEvent(String.format("%d",return_event.getId()));
-
-            assertTrue(responseStr.contains("Event successfully deleted"));
-
-
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
-
-
-    }
 
 }

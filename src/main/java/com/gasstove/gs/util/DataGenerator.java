@@ -12,28 +12,28 @@ import java.util.Map;
 public class DataGenerator {
 
     // db file
-    private final String dbfile = "src/main/resources/gasstove.db";
+    private static final String default_dbfile = "src/main/resources/gasstove.db";
 
     //set these values to manipulate test records
-    private final int MIN_USER_PER_EVENT = 1;
-    private final int MAX_USER_PER_EVENT = 30;
+    private static final int MIN_USER_PER_EVENT = 1;
+    private static final int MAX_USER_PER_EVENT = 30;
 
-    private final int MIN_MEDIA_PER_EVENTUSER = 0;
-    private final int MAX_MEDIA_PER_EVENTUSER = 10;
+    private static final int MIN_MEDIA_PER_EVENTUSER = 0;
+    private static final int MAX_MEDIA_PER_EVENTUSER = 10;
 
     // true if a media item can belong to more than one event, false otherwise
-    private final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = true;
+    private static final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = true;
 
     // if above is true, average number of events a media item belongs to (can be 1.5)
-    private final float AVG_EVENT_PER_MEDIA = 2f;
+    private static final float AVG_EVENT_PER_MEDIA = 2f;
 
-    private final int MIN_EVENT_YEAR = 2014;
-    private final int MAX_EVENT_YEAR = 2016;
-    private final int MIN_EVENT_DURATION = 5;   // hours
-    private final int MAX_EVENT_DURATION = 10;  // hours
+    private static final int MIN_EVENT_YEAR = 2014;
+    private static final int MAX_EVENT_YEAR = 2016;
+    private static final int MIN_EVENT_DURATION = 5;   // hours
+    private static final int MAX_EVENT_DURATION = 10;  // hours
 
-    private final int NUM_USERS = 50;
-    private final int NUM_EVENTS = 10;
+    private static final int NUM_USERS = 50;
+    private static final int NUM_EVENTS = 10;
 
     private Connection connection = null;
     private PreparedStatement  statement = null;
@@ -45,12 +45,15 @@ public class DataGenerator {
      * @param args
      */
     public static void main(String[] args){
+
+        String dbfile = args.length>0 ? args[0] : default_dbfile;
+
         DataGenerator t = new DataGenerator();
         DataContainer data = t.generate_data();
 
         try {
-            t.dropTables();
-            t.getConnection();
+            t.dropTables(dbfile);
+            t.getConnection(dbfile);
             t.createDB();
             t.insert_db(data);
         }
@@ -64,14 +67,14 @@ public class DataGenerator {
      *
      * @return Connection database connection
      */
-    public void getConnection() throws SQLException {
-        connection = new DBConnection().getConnection();
+    public void getConnection(String dbfile) throws SQLException {
+        connection = new DBConnection().getConnection(dbfile);
     }
 
-    public void dropTables(){
+    public void dropTables(String dbfile){
         try {
             System.out.println("Dropping tables...");
-            File f = new File(this.dbfile);
+            File f = new File(dbfile);
             f.delete();
         }catch(Exception e){
             e.printStackTrace();

@@ -4,6 +4,7 @@ import com.gasstove.gs.resources.UserResource;
 import com.gasstove.gs.test.util.TestConfiguration;
 import com.gasstove.gs.test.util.TestDefaults;
 import org.apache.commons.io.IOUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.net.HttpURLConnection;
@@ -23,63 +24,103 @@ public class UserResourceTest {
     //  Tests for java classes ....................................................................
 
     @Test
-    public void testGetUsers() {
+    public void test_getUsersBasicInfo() {
         UserResource ur = new UserResource();
         String response = ur.getUsersBasicInfo();
         assertTrue(response.length() > 0);
     }
 
     @Test
-    public void testGetUser() {
+    public void test_getUserBasicInfo() {
         UserResource ur = new UserResource();
         String response = ur.getUserBasicInfo(TestDefaults.user_id.toString());
         assertTrue(response.length() > 0);
     }
 
+    @Ignore
+    @Test
+    public void test_insertUser() {
+    }
+
+    @Ignore
+    @Test
+    public void test_deleteUser() {
+    }
+
+    @Ignore
+    @Test
+    public void test_getUsersForEvent() {
+    }
+
+    @Ignore
+    @Test
+    public void test_addUsersToEvent() {
+
+        try {
+
+            // Hit URL to get all networks and save response text
+            HttpURLConnection conn =
+                    TestConfiguration.sendRequest("/users/event/5", "POST", "BLABLA");
+
+            String responseStatus = conn.getResponseMessage();
+            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+
+            // check to ensure we get ok message for response and that it contains a network name and description
+//            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+//            assertTrue(responseJSON.length() > 0);
+
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            fail();
+        }
+
+
+    }
+
     //  Tests that use the http service .........................................................
 
-    @Test
-    public void testGetUsersHttp() {
-
-        try {
-            // Hit URL to get all networks and save response text
-            HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/users/", "GET", "");
-
-            String responseStatus = conn.getResponseMessage();
-            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
-
-            // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
-            assertTrue(responseJSON.length() > 0);
-
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
-
-    }
-
-    @Test
-    public void testGetUserHttp() {
-
-        try {
-            // Hit URL to get all networks and save response text
-            HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/users/"+ TestDefaults.user_id, "GET", "");
-
-            String responseStatus = conn.getResponseMessage();
-            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
-
-            // check to ensure we get ok message for response and that it contains a network name and description
-            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
-            assertTrue(responseJSON.length() > 0);
-
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
-
-    }
+//    @Test
+//    public void testGetUsersHttp() {
+//
+//        try {
+//            // Hit URL to get all networks and save response text
+//            HttpURLConnection conn =
+//                    TestConfiguration.sendRequest("/users/", "GET", "");
+//
+//            String responseStatus = conn.getResponseMessage();
+//            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+//
+//            // check to ensure we get ok message for response and that it contains a network name and description
+//            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+//            assertTrue(responseJSON.length() > 0);
+//
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            fail();
+//        }
+//
+//    }
+//
+//    @Test
+//    public void testGetUserHttp() {
+//
+//        try {
+//            // Hit URL to get all networks and save response text
+//            HttpURLConnection conn =
+//                    TestConfiguration.sendRequest("/users/"+ TestDefaults.user_id, "GET", "");
+//
+//            String responseStatus = conn.getResponseMessage();
+//            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+//
+//            // check to ensure we get ok message for response and that it contains a network name and description
+//            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
+//            assertTrue(responseJSON.length() > 0);
+//
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            fail();
+//        }
+//
+//    }
 
 }

@@ -19,6 +19,10 @@ import java.util.ArrayList;
 @Path("/medias")
 public class MediaResource {
 
+    ////////////////////////////////////////////////////////////
+    // '/'
+    ////////////////////////////////////////////////////////////
+
     /**
      *  This is the root resource for medias. It returns all medias
      */
@@ -40,6 +44,10 @@ public class MediaResource {
         }
         return returnJSON;
     }
+
+    ////////////////////////////////////////////////////////////
+    // '/#'
+    ////////////////////////////////////////////////////////////
 
     /**
      * Restful method to return media object by id
@@ -66,6 +74,10 @@ public class MediaResource {
         return returnJSON;
     }
 
+    ////////////////////////////////////////////////////////////
+    // '/event/#'
+    ////////////////////////////////////////////////////////////
+
     @Path("/event/{eventId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -85,6 +97,10 @@ public class MediaResource {
         }
         return returnJSON;
     }
+
+    ////////////////////////////////////////////////////////////
+    // '/event/#/user/#'
+    ////////////////////////////////////////////////////////////
 
     @Path("/event/{eventId: [0-9]+}/user/{userId: [0-9]+}")
     @GET
