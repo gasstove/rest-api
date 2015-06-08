@@ -9,6 +9,7 @@ import com.google.gson.Gson;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -22,20 +23,22 @@ import static org.junit.Assert.fail;
  */
 public class EventResourceTest {
 
+    EventResource er = new EventResource(TestConfiguration.db);
+
     //  Tests for java classes ....................................................................
 
     @Test
     public void test_getEventsBasicInfo() {
-        EventResource er = new EventResource(TestConfiguration.db);
         String response = er.getEventsBasicInfo();
-        assertTrue(response.length() > 0);
+        String expected = "[{\"name\":\"donalda\",\"ownerId\":23,\"openDate\":\"1970-01-01T04:58:28.270-08:00\",\"closeDate\":\"1970-01-01T04:58:28.270-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":1},{\"name\":\"heteropteran\",\"ownerId\":14,\"openDate\":\"1969-12-27T20:11:17.521-08:00\",\"closeDate\":\"1969-12-27T20:11:17.521-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":2},{\"name\":\"holt\",\"ownerId\":35,\"openDate\":\"1969-12-12T18:59:56.544-08:00\",\"closeDate\":\"1969-12-12T18:59:56.544-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":3},{\"name\":\"dubiety\",\"ownerId\":25,\"openDate\":\"1970-01-13T02:34:07.290-08:00\",\"closeDate\":\"1970-01-13T02:34:07.290-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":4},{\"name\":\"herolike\",\"ownerId\":43,\"openDate\":\"1969-12-13T05:23:31.467-08:00\",\"closeDate\":\"1969-12-13T05:23:31.467-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":5},{\"name\":\"redisbursement\",\"ownerId\":32,\"openDate\":\"1969-12-21T08:04:02.941-08:00\",\"closeDate\":\"1969-12-21T08:04:02.941-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":6},{\"name\":\"dahlgren\",\"ownerId\":35,\"openDate\":\"1969-12-19T04:33:18.348-08:00\",\"closeDate\":\"1969-12-19T04:33:18.348-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":7},{\"name\":\"theistic\",\"ownerId\":43,\"openDate\":\"1970-01-25T05:45:31.359-08:00\",\"closeDate\":\"1970-01-25T05:45:31.359-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":8},{\"name\":\"obedientiary\",\"ownerId\":20,\"openDate\":\"1969-12-29T05:26:32.998-08:00\",\"closeDate\":\"1969-12-29T05:26:32.998-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":9},{\"name\":\"leakier\",\"ownerId\":15,\"openDate\":\"1970-01-06T12:30:28.380-08:00\",\"closeDate\":\"1970-01-06T12:30:28.380-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":10}]";
+        assertTrue(response.equals(expected));
     }
 
     @Test
     public void test_getEventBasicInfo() {
-        EventResource er = new EventResource(TestConfiguration.db);
         String response = er.getEventBasicInfo(TestConfiguration.event_id.toString());
-        assertTrue(response.length() > 0);
+        String expected = "{\"name\":\"donalda\",\"ownerId\":23,\"openDate\":\"1970-01-01T04:58:28.270-08:00\",\"closeDate\":\"1970-01-01T04:58:28.270-08:00\",\"joinInvitation\":true,\"joinAllowByAccept\":true,\"joinAllowAuto\":true,\"id\":1}";
+        assertTrue(response.equals(expected));
     }
 
     @Ignore
@@ -58,7 +61,6 @@ public class EventResourceTest {
             event.setOwnerId(1);
 
             // insert it
-            EventResource er = new EventResource(TestConfiguration.db);
             String responseStr = er.insertEvent(event.toJson());
 
             // get it

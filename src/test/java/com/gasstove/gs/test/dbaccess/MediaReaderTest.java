@@ -3,6 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.MediaReader;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.test.TestConfiguration;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,9 +16,10 @@ import static org.junit.Assert.fail;
  */
 public class MediaReaderTest {
 
+    MediaReader mr = new MediaReader(TestConfiguration.db);
+
     @Test
     public void testGetMediasBasicInfo() {
-        MediaReader mr = new MediaReader(TestConfiguration.db);
         try {
             ArrayList<Media> list = mr.getMediasBasicInfo();
             assertTrue(list.size() > 0);
@@ -25,14 +27,11 @@ public class MediaReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            mr.close();
         }
     }
 
     @Test
     public void testGetMedia() {
-        MediaReader mr = new MediaReader(TestConfiguration.db);
         try {
             Media m = mr.getMediaBasicInfo(TestConfiguration.media_id);
             assertTrue(m.getId() == TestConfiguration.media_id);
@@ -41,14 +40,11 @@ public class MediaReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            mr.close();
         }
     }
 
 //    @Test
 //    public void testGetMediaForEvent() {
-//            MediaReader mr = new MediaReader();
 //        try {
 //            ArrayList<MediaEvent> m = mr.getMediaForEvent(TestDefaults.event_id);
 //            assertNotNull(m);
@@ -56,9 +52,13 @@ public class MediaReaderTest {
 //        } catch (Exception exp) {
 //            exp.printStackTrace();
 //            fail();
-//        } finally {
-//    mr.close();
-//}
+//        }
 //    }
+
+
+    @After
+    public void close(){
+        mr.close();
+    }
 
 }

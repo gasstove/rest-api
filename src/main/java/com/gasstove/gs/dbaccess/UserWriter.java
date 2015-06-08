@@ -6,8 +6,13 @@ import com.gasstove.gs.models.User;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class UserWriter  extends BaseWriter {
+
+    public UserWriter(String db) throws SQLException {
+        super(db);
+    }
 
     public UserWriter(Connection dbConn) {
         super(dbConn);

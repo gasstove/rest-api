@@ -6,11 +6,16 @@ import com.gasstove.gs.models.Media;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 /**
  * Created by gomes on 5/2/15.
  */
 public class MediaWriter extends BaseWriter {
+
+    public MediaWriter(String db) throws SQLException {
+        super(db);
+    }
 
     public MediaWriter(Connection dbConn) {
         super(dbConn);

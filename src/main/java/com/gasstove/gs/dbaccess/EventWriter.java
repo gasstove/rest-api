@@ -7,8 +7,13 @@ import com.gasstove.gs.util.Permissions;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class EventWriter extends BaseWriter {
+
+    public EventWriter(String db) throws SQLException {
+        super(db);
+    }
 
     public EventWriter(Connection dbConn) {
         super(dbConn);

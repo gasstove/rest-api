@@ -3,6 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.UserReader;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.TestConfiguration;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -15,13 +16,10 @@ import static org.junit.Assert.*;
  */
 public class UserReaderTest {
 
-    public UserReaderTest() throws Exception {
-
-    }
+    UserReader ur = new UserReader(TestConfiguration.db);
 
     @Test
     public void testGetUsersBasicInfo() {
-        UserReader ur = new UserReader(TestConfiguration.db);
         try {
             ArrayList<User> list = ur.getUsersBasicInfo();
             assertTrue(list.size() > 0);
@@ -30,16 +28,11 @@ public class UserReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            ur.close();
         }
-
     }
 
     @Test
     public void testGetUserFull() {
-
-        UserReader ur = new UserReader(TestConfiguration.db);
         try {
             User a = ur.getUserBasicInfo(TestConfiguration.user_id);
             assertTrue(a.getFirst().length() > 0);
@@ -51,14 +44,11 @@ public class UserReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            ur.close();
         }
     }
 
     @Test
     public void testGetUsersForEvent() {
-        UserReader ur = new UserReader(TestConfiguration.db);
         try {
             ArrayList<User> us = ur.getUsersForEvent(TestConfiguration.event_id);
             assertNotNull(us);
@@ -69,9 +59,13 @@ public class UserReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            ur.close();
         }
     }
+
+    @After
+    public void close(){
+        ur.close();
+    }
+
 }
 

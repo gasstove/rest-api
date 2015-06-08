@@ -75,7 +75,7 @@ public class EventResource {
 
         Event get_event, return_event;
         Response response;
-        Connection conn = null;
+        Connection dbConn = null;
 
         /** check headers
          List<String> authHeaders = this.headers.getRequestHeader("Authorization");
@@ -100,8 +100,10 @@ public class EventResource {
             get_event = new Event(eventString);
 
             // connect to db
-            conn = (new DBConnection()).getConnection();
-            EventWriter writer = new EventWriter(conn);
+            dbConn = (new DBConnection()).getConnection(db);
+
+            // create writer
+            EventWriter writer = new EventWriter(dbConn);
 
             // insert or update
             int eventId = get_event.getId()<0  ? writer.insert(get_event) : writer.update(get_event);
@@ -110,7 +112,7 @@ public class EventResource {
             if(eventId<0) throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_event = (new EventReader(conn)).getEventBasicInfo(eventId);
+            return_event = (new EventReader(dbConn)).getEventBasicInfo(eventId);
 
             response = new Response(true, "New event successfully saved", return_event.toJson());
 
@@ -125,7 +127,7 @@ public class EventResource {
         } finally {
             try {
                 // close connection
-                conn.close();
+                dbConn.close();
             } catch (SQLException exp) {
                 response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
             }
@@ -167,16 +169,12 @@ public class EventResource {
     @DELETE
     public String deleteEvent(@PathParam("eventId") String eventId)  {
 
-        Connection conn = null;
         Response response;
 
         try {
 
-            // connect to db
-            conn = (new DBConnection()).getConnection();
-
             // write
-            boolean success = (new EventWriter(conn)).delete(Integer.parseInt(eventId));
+            boolean success = (new EventWriter(db)).delete(Integer.parseInt(eventId));
 
             // check success
             response = success ?
@@ -191,13 +189,6 @@ public class EventResource {
 
             response = new Response(false, "Error saving new event, " + e.getMessage(), null);
 
-        } finally {
-            try {
-                // close connection
-                conn.close();
-            } catch (SQLException exp) {
-                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
-            }
         }
 
         return response.toJSON();

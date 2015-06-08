@@ -6,10 +6,19 @@ package com.gasstove.gs.dbaccess;
 
 //import com.gasstove.gs.models.DBObject;
 
+import com.gasstove.gs.util.DBConnection;
+
+import java.sql.SQLException;
+
 /**
  * Base class for database writers
  */
 public abstract class BaseWriter implements InterfaceWriter {
+
+
+    public BaseWriter(String db) throws SQLException {
+        dbConn = (new DBConnection()).getConnection(db);
+    }
 
     public static enum CrudFlag {CREATE,UPDATE,DELETE};
 

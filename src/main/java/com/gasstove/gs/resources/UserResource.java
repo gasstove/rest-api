@@ -63,7 +63,7 @@ public class UserResource {
 
         User get_user, return_user;
         Response response;
-        Connection conn = null;
+        Connection dbConn = null;
 
         /** check headers
          List<String> authHeaders = this.headers.getRequestHeader("Authorization");
@@ -87,8 +87,9 @@ public class UserResource {
             get_user = new User(userString);
 
             // connect to db
-            conn = (new DBConnection()).getConnection();
-            UserWriter writer = new UserWriter(conn);
+            dbConn = (new DBConnection()).getConnection(db);
+
+            UserWriter writer = new UserWriter(dbConn);
 
             // insert or update
             int userId = get_user.getId()<0  ? writer.insert(get_user) : writer.update(get_user);
@@ -98,7 +99,7 @@ public class UserResource {
                 throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_user = (new UserReader(conn)).getUserBasicInfo(userId);
+            return_user = (new UserReader(dbConn)).getUserBasicInfo(userId);
 
             response = new Response(true, "New user successfully saved", return_user.toJson());
 
@@ -113,7 +114,7 @@ public class UserResource {
         } finally {
             try {
                 // close connection
-                conn.close();
+                dbConn.close();
             } catch (SQLException exp) {
                 response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
             }
@@ -155,15 +156,11 @@ public class UserResource {
     @DELETE
     public String deleteUser(@PathParam("eventId") String userId)  {
 
-        Connection conn = null;
         Response response;
 
         try {
 
-            // connect to db
-            conn = (new DBConnection()).getConnection();
-
-            UserWriter userWriter = new UserWriter(conn);
+            UserWriter userWriter = new UserWriter(db);
             boolean success = userWriter.delete(Integer.parseInt(userId));
 
             response = success ?
@@ -178,13 +175,6 @@ public class UserResource {
 
             response = new Response(false, "Error saving new user, " + e.getMessage(), null);
 
-        } finally {
-            try {
-                // close connection
-                conn.close();
-            } catch (SQLException exp) {
-                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
-            }
         }
 
         return response.toJSON();

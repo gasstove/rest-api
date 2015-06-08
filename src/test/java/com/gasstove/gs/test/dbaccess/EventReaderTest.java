@@ -4,6 +4,7 @@ import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.models.Event;
 
 import com.gasstove.gs.test.TestConfiguration;
+import org.junit.After;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -16,9 +17,10 @@ import static org.junit.Assert.*;
  */
 public class EventReaderTest {
 
+    EventReader er = new EventReader(TestConfiguration.db);
+
     @Test
     public void testGetEventsBasicInfo() {
-        EventReader er = new EventReader(TestConfiguration.db);
         try {
             ArrayList<Event> list = er.getEventsBasicInfo();
             assertTrue(list.size() > 0);
@@ -26,14 +28,11 @@ public class EventReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            er.close();
         }
     }
 
     @Test
     public void testGetEventFull() {
-        EventReader er = new EventReader(TestConfiguration.db);
         try {
             Event e = er.getEventBasicInfo(TestConfiguration.event_id);
             assertTrue(e.getName().length() > 0);
@@ -43,14 +42,11 @@ public class EventReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            er.close();
         }
     }
 
     @Test
     public void testGetEventsForUser() {
-        EventReader er = new EventReader(TestConfiguration.db);
         try {
             ArrayList<Event> es = er.getEventsForUser(TestConfiguration.user_id);
             assertNotNull(es);
@@ -62,9 +58,12 @@ public class EventReaderTest {
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
-        } finally {
-            er.close();
         }
+    }
+
+    @After
+    public void close(){
+        er.close();
     }
 
 }
