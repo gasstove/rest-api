@@ -101,7 +101,7 @@ public class DataGenerator {
 
         stmt.execute(sql);
 
-        sql = "CREATE TABLE media_mapping (" +
+        sql = "CREATE TABLE media_event_mapping (" +
                 "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "media_id int NOT NULL, " +
                 "event_id int NOT NULL, " +
@@ -176,7 +176,7 @@ public class DataGenerator {
         stmt = connection.createStatement();
         stmt.execute(sql);
 
-        sql = "DELETE FROM media_mapping";
+        sql = "DELETE FROM media_event_mapping";
         stmt = connection.createStatement();
         stmt.execute(sql);
 
@@ -289,8 +289,8 @@ public class DataGenerator {
             event.insert_guests_db();
         }
 
-        // insert media info into media_mapping
-        System.out.println("Inserting media mapping for "+data.all_medias.size()+" media items.");
+        // insert media info into media_event_mapping
+        System.out.println("Inserting media event mapping for "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
             media.insert_event_mapping_db();
 
@@ -360,7 +360,7 @@ public class DataGenerator {
 
         public void insert_event_mapping_db() throws SQLException {
             for(Event event : events) {
-                String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
+                String sql = "INSERT into media_event_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 int i=1;
                 statement.setInt(i++, this.id);

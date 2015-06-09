@@ -76,7 +76,6 @@ public class EventReader extends BaseReader {
         return e;
     }
 
-
     public ArrayList<Event> getEventsForUser(int uId) {
         ArrayList<Event> events = new ArrayList<Event>();
         UserReader ur = new UserReader(conn);

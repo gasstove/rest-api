@@ -43,9 +43,8 @@ public class UserResourceTest {
         assertTrue(response.equals(expected));
     }
 
-    @Ignore
     @Test
-    public void test_insertUser() {
+    public void test_insertdeleteUser() {
 
         try {
 
@@ -72,37 +71,33 @@ public class UserResourceTest {
 
     }
 
-    @Ignore
-    @Test
-    public void test_deleteUser() {
-    }
-
-    @Ignore
     @Test
     public void test_getUsersForEvent() {
+        String response = ur.getUsersForEvent(TestConfiguration.event_id.toString());
+        String expected = "[{\"first\":\"Hildegarde\",\"last\":\"Hellman\",\"id\":23},{\"first\":\"Mason\",\"last\":\"Michalak\",\"id\":20},{\"first\":\"Emery\",\"last\":\"Ebron\",\"id\":40},{\"first\":\"Creola\",\"last\":\"Cropp\",\"id\":4},{\"first\":\"Dorcas\",\"last\":\"Desch\",\"id\":26},{\"first\":\"Kate\",\"last\":\"Knerr\",\"id\":17},{\"first\":\"Catrice\",\"last\":\"Chapple\",\"id\":49},{\"first\":\"Karyn\",\"last\":\"Kluth\",\"id\":36},{\"first\":\"Kareem\",\"last\":\"Kai\",\"id\":16},{\"first\":\"Sung\",\"last\":\"Sebesta\",\"id\":41},{\"first\":\"Cedrick\",\"last\":\"Cacho\",\"id\":44},{\"first\":\"Launa\",\"last\":\"Loud\",\"id\":24},{\"first\":\"Shantay\",\"last\":\"Schaaf\",\"id\":3},{\"first\":\"Hildegarde\",\"last\":\"Hellman\",\"id\":23},{\"first\":\"Genia\",\"last\":\"Gast\",\"id\":37}]";
+        assertTrue(response.equals(expected));
     }
 
     @Ignore
     @Test
     public void test_addUsersToEvent() {
 
-        try {
+        // create new event
 
-            // Hit URL to get all networks and save response text
-            HttpURLConnection conn =
-                    TestConfiguration.sendRequest("/users/event/5", "POST", "BLABLA");
 
-            String responseStatus = conn.getResponseMessage();
-            String responseJSON = IOUtils.toString(conn.getInputStream(), "UTF-8");
+        // add users
 
-            // check to ensure we get ok message for response and that it contains a network name and description
-//            assertEquals(TestDefaults.expectedResponseStatus,responseStatus);
-//            assertTrue(responseJSON.length() > 0);
 
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
+        // delete event
+
+
+
+        String userarray = "";
+
+
+
+        ur.addUsersToEvent(TestConfiguration.event_id.toString(),userarray);
+
 
 
     }

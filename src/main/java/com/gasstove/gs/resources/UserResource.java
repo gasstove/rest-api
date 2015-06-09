@@ -164,7 +164,7 @@ public class UserResource {
             boolean success = userWriter.delete(Integer.parseInt(userId));
 
             response = success ?
-                    new Response(true, "User successfully deteled",null) :
+                    new Response(true, "User successfully deleted",null) :
                     new Response(true, "User deletion failed",null) ;
 
         } catch (Exception e) {

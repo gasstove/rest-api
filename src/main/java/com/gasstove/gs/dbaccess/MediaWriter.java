@@ -21,6 +21,9 @@ public class MediaWriter extends BaseWriter {
         super(dbConn);
     }
 
+    /** insert row in media table
+     *
+     */
     public int insert(DBObject object) throws Exception {
 
         Media media = (Media) object;
@@ -41,6 +44,8 @@ public class MediaWriter extends BaseWriter {
         return rs.next() ? rs.getInt(1) : -1;
     }
 
+    /** update row in media table
+     */
     public int update(DBObject object) throws Exception{
         Media media = (Media) object;
 
@@ -64,12 +69,28 @@ public class MediaWriter extends BaseWriter {
         return media.getId();
     }
 
+    /** delete media
+     *      + delete row from media table
+     *      + delete row from media_event_mapping
+     */
     public boolean delete(int id) throws Exception {
+
+        boolean success = true;
+
+        // delete row from media table
         String sql = "DELETE from media WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
         statement.setInt(1,id);
-        int r = statement.executeUpdate();
-        return r==1;
+        success &= statement.executeUpdate()==1;
+
+        // delete row from media_event_mapping
+        sql = "DELETE from media_event_mapping WHERE media_id=?";
+        statement = dbConn.prepareStatement(sql);
+        statement.setInt(1,id);
+        success &= statement.executeUpdate()==1;
+
+        return success;
+
     }
 
 }

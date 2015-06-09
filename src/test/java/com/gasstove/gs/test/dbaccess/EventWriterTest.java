@@ -2,7 +2,11 @@ package com.gasstove.gs.test.dbaccess;
 
 import com.gasstove.gs.dbaccess.EventReader;
 import com.gasstove.gs.dbaccess.EventWriter;
+import com.gasstove.gs.dbaccess.UserReader;
+import com.gasstove.gs.dbaccess.UserWriter;
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.models.Media;
+import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Time;
@@ -71,6 +75,24 @@ public class EventWriterTest {
             Event e = er.getEventBasicInfo(event.getId());
             assertNotNull(e);
             assertEquals("test",e.getName());
+
+//            // add a user
+//            User user = new User();
+//            user.setFirst("AAA");
+//            user.setLast("BBB");
+//            int userId = (new UserWriter(conn)).insert(user);
+
+            // Extract a user
+            User user = (new UserReader(conn)).getUserBasicInfo(TestConfiguration.user_id);
+
+            // create media for this user
+            Media media = new Media();
+            media.setUserId(TestConfiguration.user_id);
+
+
+
+
+
 
             // modify the event
             event.setName("testMod");

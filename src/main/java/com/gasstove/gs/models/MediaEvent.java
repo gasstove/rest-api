@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 public class MediaEvent extends DBObject {
 
-    // media_mapping table
+    // media_event_mapping table
     private int mediaId;
     private int eventId;
     private int numDownloads;

@@ -41,9 +41,11 @@ public class EventResourceTest {
         assertTrue(response.equals(expected));
     }
 
-    @Ignore
     @Test
     public void test_getEventsForUser() {
+        String response = er.getEventsForUser(TestConfiguration.user_id.toString());
+        String expected = "[{\"name\":\"donalda\",\"ownerId\":23,\"openDate\":\"1970-01-01T04:58:28.270-08:00\",\"closeDate\":\"1970-01-01T04:58:28.270-08:00\",\"id\":1}]";
+        assertTrue(response.equals(expected));
     }
 
     @Test

@@ -69,10 +69,10 @@ public class MediaReader extends BaseReader {
     public ArrayList<MediaEvent> getMediaForUserAndEvent(int uId,int eId){
         ArrayList<MediaEvent> mediaevents = new ArrayList<MediaEvent>();
         try {
-            // query media_mapping table
+            // query media_event_mapping table
             String sql = "SELECT mm.media_id, mm.num_downloads, mm.shared, mm.comment, mm.num_likes, " +
                     "mm.num_dislikes, media.type, media.file_name, media.user_id, media.date_taken " +
-                    "FROM media_mapping as mm, media " +
+                    "FROM media_event_mapping as mm, media " +
                     "WHERE mm.event_id =? " +
                     "AND media.id = mm.media_id " +
                     "AND media.user_id=? ";
@@ -106,7 +106,7 @@ public class MediaReader extends BaseReader {
         try {
             String sql = "SELECT mm.media_id, mm.num_downloads, mm.comment, mm.num_likes, mm.num_dislikes, " +
                     "media.type, media.file_name, media.user_id, media.date_taken " +
-                    "FROM media_mapping as mm, media " +
+                    "FROM media_event_mapping as mm, media " +
                     "WHERE mm.event_id = ? " +
                     "AND mm.shared = 1 " +
                     "AND media.id = mm.media_id ";

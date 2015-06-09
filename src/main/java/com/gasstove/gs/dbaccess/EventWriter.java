@@ -2,7 +2,9 @@ package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.DBObject;
 import com.gasstove.gs.models.Event;
+import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Permissions;
+import com.gasstove.gs.util.Time;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +21,10 @@ public class EventWriter extends BaseWriter {
         super(dbConn);
     }
 
+    /** insert event object
+     *      + insert row in event table
+     *      + insert row in user_event_mapping table
+     */
     public int insert(DBObject object) throws Exception {
 
         Event event = (Event) object;
@@ -66,6 +72,7 @@ public class EventWriter extends BaseWriter {
 
     }
 
+    /** update row in event table */
     public int update(DBObject object) throws Exception{
         Event event = (Event) object;
 
@@ -86,6 +93,7 @@ public class EventWriter extends BaseWriter {
         statement.setBoolean(   i++ , event.isJoinAllowByAccept());
         statement.setBoolean(   i++ , event.isJoinAllowAuto());
         statement.setInt(       i++ , event.getId());
+
         int r = statement.executeUpdate();
 
         if(r!=1)
@@ -94,12 +102,48 @@ public class EventWriter extends BaseWriter {
         return event.getId();
     }
 
+    /** delete event
+     *      + delete row in event table
+     *      + delete from user_event_mapping
+     *      + TODO delete media that is uniquely related to this event
+     *  **/
     public boolean delete(int id) throws Exception {
-        String sql = "DELETE from event WHERE id=?";
-        PreparedStatement statement = dbConn.prepareStatement(sql);
+
+        String sql;
+        PreparedStatement statement;
+
+        boolean success = true;
+
+//        // delete row in event table
+//        sql = "DELETE from event WHERE id=?";
+//        statement = dbConn.prepareStatement(sql);
+//        statement.setInt(1,id);
+//        success &= statement.executeUpdate()==1;
+//
+//        // delete from user_event_mapping
+//        sql = "DELETE from user_event_mapping WHERE event_id=?";
+//        statement = dbConn.prepareStatement(sql);
+//        statement.setInt(1,id);
+//        success &= statement.executeUpdate()==1;
+
+        // get all media_event_mapping rows corresponding to media in this event
+        sql = "SELECT * FROM media_event_mapping " +
+              "WHERE media_id in (SELECT media_id from media_event_mapping WHERE event_id=?) " +
+              "ORDER by media_id";
+        statement = dbConn.prepareStatement(sql);
         statement.setInt(1,id);
-        int r = statement.executeUpdate();
-        return r==1;
+        ResultSet rs = statement.executeQuery();
+
+        // we want to delete the medias with a single entry in rs
+        while(rs.next()) {
+            System.out.println(rs);
+
+        }
+
+
+
+        return success;
     }
+
 
 }

@@ -18,6 +18,8 @@ public class UserWriter  extends BaseWriter {
         super(dbConn);
     }
 
+    /** insert row in user table
+     */
     public int insert(DBObject object) throws Exception {
 
         User user = (User) object;
@@ -36,6 +38,8 @@ public class UserWriter  extends BaseWriter {
         return rs.next() ? rs.getInt(1) : -1;
     }
 
+    /** update row in user table
+     */
     public int update(DBObject object) throws Exception{
         User user = (User) object;
 
@@ -55,6 +59,11 @@ public class UserWriter  extends BaseWriter {
         return user.getId();
     }
 
+    /** delete user
+     *      + delete row from user table
+     *      + TODO delete rows from user_event_mapping
+     *      + TODO delete unshared media
+     */
     public boolean delete(int id) throws Exception {
         String sql = "DELETE from user WHERE id=?";
         PreparedStatement statement = dbConn.prepareStatement(sql);
