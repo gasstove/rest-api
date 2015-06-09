@@ -7,6 +7,7 @@ import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.sql.Connection;
@@ -55,6 +56,7 @@ public class UserWriterTest {
         }
     }
 
+    @Ignore
     @Test
     public void testCrud(){
 

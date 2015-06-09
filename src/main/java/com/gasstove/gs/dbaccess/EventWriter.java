@@ -140,8 +140,6 @@ public class EventWriter extends BaseWriter {
 
         }
 
-
-
         return success;
     }
 
