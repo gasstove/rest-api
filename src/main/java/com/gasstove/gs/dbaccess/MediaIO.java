@@ -1,5 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
+import com.gasstove.gs.models.DBObject;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Time;
@@ -8,63 +9,62 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**
- * Database reader for Media
+ * Created by gomes on 6/9/15.
  */
-public class MediaReader extends BaseReader {
+public class MediaIO extends BaseIO <Media> {
 
-//    public MediaReader() { super(); }
-    public MediaReader(Connection conn) { super(conn); }
-    public MediaReader(String dbfile){
-        super(dbfile);
-    }
+    public MediaIO(String db) { super(db); }
+    public MediaIO(Connection conn){ super(conn); }
 
-    /**
-     * Returns a list of all the medias in the db.
-     * Provides for each media: id, type, file_name
-     *
-     * @return ArrayList<Media> a list of media objects
-     */
-    public ArrayList<Media> getMediasBasicInfo() {
-        ArrayList<Media> medias = new ArrayList<Media>();
+    ////////////////////////////////////////////
+    // Configuration
+    ////////////////////////////////////////////
+
+    @Override
+    protected Media generate_from_result_set(ResultSet rs){
+        Media x = new Media();
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("Select * FROM media");
-            while (rs.next()) {
-                Media media = new Media();
-                media.setId(rs.getInt("id"));
-                media.setType(rs.getString("type"));
-                media.setFileName(rs.getString("file_name"));
-                media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(new Time(rs.getInt("date_taken")));
-                medias.add(media);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            x.setId(rs.getInt("id"));
+            x.setType(rs.getString("type"));
+            x.setFileName(rs.getString("file_name"));
+            x.setUserId(rs.getInt("user_id"));
+            x.setDateTaken(new Time(rs.getInt("date_taken")));
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+            return null;
         }
-        return medias;
+        return x;
     }
 
-    public Media getMediaBasicInfo(int mId){
-
-        Media media = new Media();
-        try {
-
-            // query media table
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM media WHERE id = ?");
-            stmt.setInt(1,mId);
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                media.setId(rs.getInt("id"));
-                media.setType(rs.getString("type"));
-                media.setFileName(rs.getString("file_name"));
-                media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(new Time(rs.getInt("date_taken")));
-            }
-        } catch (SQLException sq) {
-            sq.printStackTrace();
-        }
-        return media;
+    @Override
+    protected String get_table_name(){
+        return "media";
     }
+
+    @Override
+    protected ArrayList<String> get_fields(){
+        ArrayList<String> x = new ArrayList<String>();
+        x.add("type");
+        x.add("file_name");
+        x.add("user_id");
+        x.add("date_taken");
+        return x;
+    }
+
+    @Override
+    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+        Media media = (Media) obj;
+        int i=1;
+        ps.setString(i++, media.getType());
+        ps.setString(i++, media.getFileName());
+        ps.setInt(i++, media.getUserId());
+        ps.setDate(i++,media.getDateTaken().toSqlDate());
+        return i;
+    }
+
+    ////////////////////////////////////////////
+    // additional readers
+    ////////////////////////////////////////////
 
     public ArrayList<MediaEvent> getMediaForUserAndEvent(int uId,int eId){
         ArrayList<MediaEvent> mediaevents = new ArrayList<MediaEvent>();
@@ -133,5 +133,6 @@ public class MediaReader extends BaseReader {
         }
         return mediaevents;
     }
+
 
 }

@@ -9,9 +9,7 @@ import com.google.gson.Gson;
 import org.junit.Ignore;
 import org.junit.Test;
 
-import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
+import static org.junit.Assert.*;
 
 /**
  * Tests methods for Network Resource (reading and hopefully writing) to/from a database.
@@ -34,7 +32,8 @@ public class EventResourceTest {
 //        System.out.println("test_getEventsBasicInfo");
 //        System.out.println(response);
 
-        assertTrue(response.equals(expected));
+        assertEquals(response, expected);
+//        assertTrue(response.equals(expected));
     }
 
     @Test

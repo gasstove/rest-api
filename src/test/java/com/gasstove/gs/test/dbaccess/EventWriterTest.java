@@ -1,9 +1,7 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.EventReader;
-import com.gasstove.gs.dbaccess.EventWriter;
-import com.gasstove.gs.dbaccess.UserReader;
-import com.gasstove.gs.dbaccess.UserWriter;
+import com.gasstove.gs.dbaccess.EventIO;
+import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.User;
@@ -68,13 +66,12 @@ public class EventWriterTest {
         try {
 
             // create the event
-            EventWriter ew = new EventWriter(conn);
-            int eventId = ew.insert(event);
+            EventIO eventIO = new EventIO(conn);
+            int eventId = eventIO.insert(event);
             event.setId(eventId);
 
             // check it is there
-            EventReader er = new EventReader(conn);
-            Event e = er.getEventBasicInfo(event.getId());
+            Event e = eventIO.getWithId(event.getId());
             assertNotNull(e);
             assertEquals("test",e.getName());
 
@@ -85,7 +82,7 @@ public class EventWriterTest {
 //            int userId = (new UserWriter(conn)).insert(user);
 
             // Extract a user
-            User user = (new UserReader(conn)).getUserBasicInfo(TestConfiguration.user_id);
+            User user = (new UserIO(conn)).getUserBasicInfo(TestConfiguration.user_id);
 
             // create media for this user
             Media media = new Media();
@@ -100,17 +97,17 @@ public class EventWriterTest {
             event.setName("testMod");
 
             // update
-            ew.update(event);
+            eventIO.update(event);
 
             // check it worked
-            Event e2 = er.getEventBasicInfo(event.getId());
+            Event e2 = eventIO.getWithId(event.getId());
             assertEquals("testMod",e2.getName());
 
             // remove it
-            assertTrue( ew.delete(event.getId()) );
+            assertTrue( eventIO.delete(event.getId()) );
 
             // check it is not there
-            e = er.getEventBasicInfo(event.getId());
+            e = eventIO.getWithId(event.getId());
             assertEquals(-1,e.getId());     // ie a non-existent event
 
         } catch (Exception e) {

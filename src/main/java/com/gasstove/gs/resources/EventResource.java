@@ -1,7 +1,6 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.EventReader;
-import com.gasstove.gs.dbaccess.EventWriter;
+import com.gasstove.gs.dbaccess.EventIO;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
@@ -15,13 +14,6 @@ import javax.ws.rs.core.MediaType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-/**
- * Restful Jersey based servlet for Image Resource
- * <p/>
- * Reference:
- * http://docs.oracle.com/cd/E19226-01/820-7627/giepu/index.html
- */
 
 @Path("/events")
 public class EventResource {
@@ -53,16 +45,16 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsBasicInfo() {
         String returnJSON;
-        EventReader er = null;
+        EventIO eventIo = null;
         try {
-            er = new EventReader(db);
-            ArrayList<Event> events = er.getEventsBasicInfo();
+            eventIo = new EventIO(db);
+            ArrayList<Event> events = eventIo.getAll();
             returnJSON = Util.getGson().toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            er.close();
+            eventIo.close();
         }
         return returnJSON;
     }
@@ -103,16 +95,16 @@ public class EventResource {
             dbConn = (new DBConnection()).getConnection(db);
 
             // create writer
-            EventWriter writer = new EventWriter(dbConn);
+            EventIO eventIo = new EventIO(dbConn);
 
             // insert or update
-            int eventId = get_event.getId()<0  ? writer.insert(get_event) : writer.update(get_event);
+            int eventId = get_event.getId()<0  ? eventIo.insert(get_event) : eventIo.update(get_event);
 
             // check success
             if(eventId<0) throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_event = (new EventReader(dbConn)).getEventBasicInfo(eventId);
+            return_event = eventIo.getWithId(eventId);
 
             response = new Response(true, "New event successfully saved", return_event.toJson());
 
@@ -151,16 +143,16 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventBasicInfo(@PathParam("eventId") String eventId) {
         String returnJSON;
-        EventReader er = null;
+        EventIO eventIO = null;
         try {
-            er = new EventReader(db);
-            Event event = er.getEventBasicInfo(Integer.parseInt(eventId));
+            eventIO = new EventIO(db);
+            Event event = eventIO.getWithId(Integer.parseInt(eventId));
             returnJSON = event.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            er.close();
+            eventIO.close();
         }
         return returnJSON;
     }
@@ -174,7 +166,7 @@ public class EventResource {
         try {
 
             // write
-            boolean success = (new EventWriter(db)).delete(Integer.parseInt(eventId));
+            boolean success = (new EventIO(db)).delete(Integer.parseInt(eventId));
 
             // check success
             response = success ?
@@ -203,17 +195,17 @@ public class EventResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsForUser(@PathParam("userId") String userId) {
         String returnJSON = "";
-        EventReader er = null;
+        EventIO eventIO = null;
         try {
-            er = new EventReader(db);
-            ArrayList<Event> events = er.getEventsForUser(Integer.parseInt(userId));
+            eventIO = new EventIO(db);
+            ArrayList<Event> events = eventIO.getEventsForUser(Integer.parseInt(userId));
             Gson gson = Util.getGson();
             returnJSON = gson.toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            er.close();
+            eventIO.close();
         }
         return returnJSON;
     }

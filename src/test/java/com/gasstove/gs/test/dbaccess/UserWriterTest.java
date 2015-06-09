@@ -1,7 +1,6 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.UserReader;
-import com.gasstove.gs.dbaccess.UserWriter;
+import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
@@ -36,8 +35,8 @@ public class UserWriterTest {
 //            user.setIsSubscriber(true);
 
             // remove it from the db
-            UserWriter uw = new UserWriter(conn);
-            uw.delete(user.getId());
+            UserIO userIO = new UserIO(conn);
+            userIO.delete(user.getId());
 
         } catch (Exception e) {
             cleanup();
@@ -63,13 +62,12 @@ public class UserWriterTest {
         try {
 
             // create the event
-            UserWriter uw = new UserWriter(conn);
-            int userId = uw.insert(user);
+            UserIO userIO = new UserIO(conn);
+            int userId = userIO.insert(user);
             user.setId(userId);
 
             // check it is there
-            UserReader ur = new UserReader(conn);
-            User u = ur.getUserBasicInfo(user.getId());
+            User u = userIO.getUserBasicInfo(user.getId());
             assertNotNull(u);
             assertEquals(u.getFirst(),"x");
 
@@ -77,17 +75,17 @@ public class UserWriterTest {
             user.setFirst("xx");
 
             // update
-            uw.update(user);
+            userIO.update(user);
 
             // check it worked
-            User u2 = ur.getUserBasicInfo(user.getId());
+            User u2 = userIO.getUserBasicInfo(user.getId());
             assertEquals(u2.getFirst(), "xx");
 
             // remove it
-            assertTrue(uw.delete(user.getId()));
+            assertTrue(userIO.delete(user.getId()));
 
             // check it is not there
-            u = ur.getUserBasicInfo(user.getId());
+            u = userIO.getUserBasicInfo(user.getId());
             assertEquals(u.getId(), -1);     // ie a non-existent event
 
         } catch (Exception e) {

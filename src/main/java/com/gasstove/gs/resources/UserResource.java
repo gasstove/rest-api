@@ -1,7 +1,6 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.UserReader;
-import com.gasstove.gs.dbaccess.UserWriter;
+import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
@@ -12,13 +11,6 @@ import javax.ws.rs.core.MediaType;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-
-/**
- * Restful Jersey based servlet for Image Resource
- * <p/>
- * Reference:
- * http://docs.oracle.com/cd/E19226-01/820-7627/giepu/index.html
- */
 
 @Path("/users")
 public class UserResource {
@@ -41,16 +33,16 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getUsersBasicInfo() {
         String returnJSON = "";
-        UserReader ur = null;
+        UserIO userIO = null;
         try {
-            ur = new UserReader(db);
-            ArrayList<User> users = ur.getUsersBasicInfo();
+            userIO = new UserIO(db);
+            ArrayList<User> users = userIO.getAll();
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            ur.close();
+            userIO.close();
         }
         return returnJSON;
     }
@@ -89,17 +81,17 @@ public class UserResource {
             // connect to db
             dbConn = (new DBConnection()).getConnection(db);
 
-            UserWriter writer = new UserWriter(dbConn);
+            UserIO userIO = new UserIO(dbConn);
 
             // insert or update
-            int userId = get_user.getId()<0  ? writer.insert(get_user) : writer.update(get_user);
+            int userId = get_user.getId()<0  ? userIO.insert(get_user) : userIO.update(get_user);
 
             // check success
             if(userId<0)
                 throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_user = (new UserReader(dbConn)).getUserBasicInfo(userId);
+            return_user = userIO.getUserBasicInfo(userId);
 
             response = new Response(true, "New user successfully saved", return_user.toJson());
 
@@ -138,16 +130,16 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getUserBasicInfo(@PathParam("userId") String userId) {
         String returnJSON = "";
-        UserReader ur = null;
+        UserIO userIO = null;
         try {
-            ur = new UserReader(db);
-            User user = ur.getUserBasicInfo(Integer.parseInt(userId));
+            userIO = new UserIO(db);
+            User user = userIO.getUserBasicInfo(Integer.parseInt(userId));
             returnJSON = user.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            ur.close();
+            userIO.close();
         }
         return returnJSON;
     }
@@ -160,7 +152,7 @@ public class UserResource {
 
         try {
 
-            UserWriter userWriter = new UserWriter(db);
+            UserIO userWriter = new UserIO(db);
             boolean success = userWriter.delete(Integer.parseInt(userId));
 
             response = success ?
@@ -189,16 +181,16 @@ public class UserResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getUsersForEvent(@PathParam("eventId") String eventId) {
         String returnJSON = "";
-        UserReader ur = null;
+        UserIO userIO = null;
         try {
-            ur = new UserReader(db);
-            ArrayList<User> users = ur.getUsersForEvent(Integer.parseInt(eventId));
+            userIO = new UserIO(db);
+            ArrayList<User> users = userIO.getUsersForEvent(Integer.parseInt(eventId));
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            ur.close();
+            userIO.close();
         }
         return returnJSON;
     }

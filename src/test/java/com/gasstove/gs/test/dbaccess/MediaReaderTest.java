@@ -1,6 +1,6 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.MediaReader;
+import com.gasstove.gs.dbaccess.MediaIO;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.test.TestConfiguration;
 import org.junit.After;
@@ -16,12 +16,12 @@ import static org.junit.Assert.fail;
  */
 public class MediaReaderTest {
 
-    MediaReader mr = new MediaReader(TestConfiguration.db);
+    MediaIO mediaIO = new MediaIO(TestConfiguration.db);
 
     @Test
     public void testGetMediasBasicInfo() {
         try {
-            ArrayList<Media> list = mr.getMediasBasicInfo();
+            ArrayList<Media> list = mediaIO.getAll();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFileName() != null);
         } catch (Exception exp) {
@@ -33,7 +33,7 @@ public class MediaReaderTest {
     @Test
     public void testGetMedia() {
         try {
-            Media m = mr.getMediaBasicInfo(TestConfiguration.media_id);
+            Media m = mediaIO.getWithId(TestConfiguration.media_id);
             assertTrue(m.getId() == TestConfiguration.media_id);
             assertTrue(m.getFileName().length()>0);
             assertTrue(m.getType().length()>0);
@@ -58,7 +58,7 @@ public class MediaReaderTest {
 
     @After
     public void close(){
-        mr.close();
+        mediaIO.close();
     }
 
 }

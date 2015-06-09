@@ -3,6 +3,8 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
+import java.sql.ResultSet;
+
 /**
  * Base class for all models
  */

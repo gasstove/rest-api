@@ -1,6 +1,6 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.UserReader;
+import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.TestConfiguration;
 import org.junit.After;
@@ -16,15 +16,14 @@ import static org.junit.Assert.*;
  */
 public class UserReaderTest {
 
-    UserReader ur = new UserReader(TestConfiguration.db);
+    UserIO userIO = new UserIO(TestConfiguration.db);
 
     @Test
     public void testGetUsersBasicInfo() {
         try {
-            ArrayList<User> list = ur.getUsersBasicInfo();
+            ArrayList<User> list = userIO.getAll();
             assertTrue(list.size() > 0);
             assertTrue(list.get(0).getFirst() != null);
-
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
@@ -34,7 +33,7 @@ public class UserReaderTest {
     @Test
     public void testGetUserFull() {
         try {
-            User a = ur.getUserBasicInfo(TestConfiguration.user_id);
+            User a = userIO.getUserBasicInfo(TestConfiguration.user_id);
             assertTrue(a.getFirst().length() > 0);
             assertTrue(a.getId() == TestConfiguration.user_id);
 //            assertNotNull(a.getEventsBasicInfo());
@@ -50,7 +49,7 @@ public class UserReaderTest {
     @Test
     public void testGetUsersForEvent() {
         try {
-            ArrayList<User> us = ur.getUsersForEvent(TestConfiguration.event_id);
+            ArrayList<User> us = userIO.getUsersForEvent(TestConfiguration.event_id);
             assertNotNull(us);
             assertTrue(us.size()>0);
             User u = us.get(0);
@@ -64,7 +63,7 @@ public class UserReaderTest {
 
     @After
     public void close(){
-        ur.close();
+        userIO.close();
     }
 
 }

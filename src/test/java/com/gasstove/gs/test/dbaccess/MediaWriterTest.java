@@ -1,7 +1,6 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.MediaReader;
-import com.gasstove.gs.dbaccess.MediaWriter;
+import com.gasstove.gs.dbaccess.MediaIO;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.test.TestConfiguration;
 import com.gasstove.gs.util.DBConnection;
@@ -41,8 +40,8 @@ public class MediaWriterTest {
             media.setUserId(-1);
 
             // remove it from the db
-            MediaWriter mw = new MediaWriter(conn);
-            mw.delete(media.getId());
+            MediaIO mediaIO = new MediaIO(conn);
+            mediaIO.delete(media.getId());
 
         } catch (Exception e) {
             cleanup();
@@ -69,13 +68,12 @@ public class MediaWriterTest {
         try {
 
             // create the MediaWriter
-            MediaWriter mw = new MediaWriter(conn);
-            int mediaId = mw.insert(media);
+            MediaIO mediaIO = new MediaIO(conn);
+            int mediaId = mediaIO.insert(media);
             media.setId(mediaId);
 
             // check it is there
-            MediaReader mr = new MediaReader(conn);
-            Media m = mr.getMediaBasicInfo(media.getId());
+            Media m = mediaIO.getWithId(media.getId());
             assertNotNull(m);
             assertEquals("x",m.getFileName());
 
@@ -83,17 +81,17 @@ public class MediaWriterTest {
             media.setFileName("xx");
 
             // update
-            mw.update(media);
+            mediaIO.update(media);
 
             // check it worked
-            Media m2 = mr.getMediaBasicInfo(media.getId());
+            Media m2 = mediaIO.getWithId(media.getId());
             assertEquals("xx",m2.getFileName());
 
             // remove it
-            assertTrue(mw.delete(media.getId()));
+            assertTrue(mediaIO.delete(media.getId()));
 
             // check it is not there
-            m = mr.getMediaBasicInfo(media.getId());
+            m = mediaIO.getWithId(media.getId());
             assertEquals(-1,m.getId());     // ie a non-existent event
 
         } catch (Exception e) {

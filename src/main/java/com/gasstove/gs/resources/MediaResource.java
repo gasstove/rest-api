@@ -1,6 +1,6 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.MediaReader;
+import com.gasstove.gs.dbaccess.MediaIO;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Configuration;
@@ -38,16 +38,16 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediasBasicInfo() {
         String returnJSON = "";
-        MediaReader mr = null;
+        MediaIO mediaIO = null;
         try {
-            mr = new MediaReader(db);
-            ArrayList<Media> medias = mr.getMediasBasicInfo();
+            mediaIO = new MediaIO(db);
+            ArrayList<Media> medias = mediaIO.getAll();
             returnJSON = Util.getGson().toJson(medias);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            mr.close();
+            mediaIO.close();
         }
         return returnJSON;
     }
@@ -67,16 +67,15 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaBasicInfo(@PathParam("mediaId") String mediaId) {
         String returnJSON;
-        MediaReader mr = null;
+        MediaIO mediaIO = new MediaIO(db);
         try {
-            mr = new MediaReader(db);
-            Media media = mr.getMediaBasicInfo(Integer.parseInt(mediaId));
+            Media media = mediaIO.getWithId(Integer.parseInt(mediaId));
             returnJSON = media.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            mr.close();
+            mediaIO.close();
         }
         return returnJSON;
     }
@@ -90,17 +89,17 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
         String returnJSON;
-        MediaReader mr = null;
+        MediaIO mediaIO = null;
         try {
-            mr = new MediaReader(db);
+            mediaIO = new MediaIO(db);
             int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = mr.getSharedMediaForEvent(eId);
+            ArrayList<MediaEvent> mediaevents = mediaIO.getSharedMediaForEvent(eId);
             returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            mr.close();
+            mediaIO.close();
         }
         return returnJSON;
     }
@@ -114,18 +113,18 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId) {
         String returnJSON;
-        MediaReader mr = null;
+        MediaIO mediaIO = null;
         try {
-            mr = new MediaReader(db);
+            mediaIO = new MediaIO(db);
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = mr.getMediaForUserAndEvent(uId,eId);
+            ArrayList<MediaEvent> mediaevents = mediaIO.getMediaForUserAndEvent(uId,eId);
             returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            mr.close();
+            mediaIO.close();
         }
         return returnJSON;
     }

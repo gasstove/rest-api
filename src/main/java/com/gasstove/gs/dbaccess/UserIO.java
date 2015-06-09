@@ -1,48 +1,66 @@
 package com.gasstove.gs.dbaccess;
 
+import com.gasstove.gs.models.DBObject;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.util.Permissions;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Database reader for Users
+ * Created by gomes on 6/9/15.
  */
-public class UserReader extends BaseReader {
+public class UserIO extends BaseIO <User> {
 
-//    public UserReader() { super(); }
-    public UserReader(Connection conn) { super(conn); }
+    public UserIO(String db) { super(db); }
+    public UserIO(Connection conn){ super(conn); }
 
-    public UserReader(String dbfile){
-        super(dbfile);
-    }
+    ////////////////////////////////////////////
+    // Configuration
+    ////////////////////////////////////////////
 
-    /**
-     * Returns a list of all the users in the db.
-     * Provides for each user: id, first, last
-     *
-     * @return ArrayList<Users> a list of user objects
-     */
-    public ArrayList<User> getUsersBasicInfo() {
-        ArrayList<User> users = new ArrayList<User>();
+    @Override
+    protected User generate_from_result_set(ResultSet rs){
+        User x = new User();
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM user");
-            while (rs.next()) {
-                User user = new User();
-                user.setId(rs.getInt("id"));
-                user.setFirst(rs.getString("first"));
-                user.setLast(rs.getString("last"));
-//                user.setContactMethod(rs.getString("contact_method"));
-//                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
-                users.add(user);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            x.setId(rs.getInt("id"));
+            x.setFirst(rs.getString("first"));
+            x.setLast(rs.getString("last"));
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+            return null;
         }
-        return users;
+        return x;
     }
+
+    @Override
+    protected String get_table_name(){
+        return "user";
+    }
+
+    @Override
+    protected ArrayList<String> get_fields(){
+        ArrayList<String> x = new ArrayList<String>();
+        x.add("first");
+        x.add("last");
+        return x;
+    }
+
+    @Override
+    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+        User user = (User) obj;
+        int i=1;
+        ps.setString(i++, user.getFirst());
+        ps.setString(i++, user.getLast());
+        return i;
+    }
+
+    ////////////////////////////////////////////
+    // additional readers
+    ////////////////////////////////////////////
 
     /**
      *
@@ -95,8 +113,8 @@ public class UserReader extends BaseReader {
         try {
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT uem.user_id as id " +
-                    "FROM event , user_event_mapping as uem " +
-                    "WHERE event.id=? and uem.role=? and uem.event_id=event.id");
+                            "FROM event , user_event_mapping as uem " +
+                            "WHERE event.id=? and uem.role=? and uem.event_id=event.id");
             stmt.setInt(1, eId);
             stmt.setString(2,role.toString().toLowerCase());
             ResultSet rs = stmt.executeQuery();
