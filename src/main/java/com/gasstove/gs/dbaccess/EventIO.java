@@ -76,9 +76,11 @@ public class EventIO extends BaseIO<Event> {
     public Event getWithId(int id) {
         Event e = super.getWithId(id);
 
-        // add owner id
-        UserIO userIO = new UserIO(conn);
-        e.setOwnerId( userIO.getUserIdsForEventInRole( e.getId(), Permissions.Role.OWNER));
+        if(e!=null) {
+            // add owner id
+            UserIO userIO = new UserIO(conn);
+            e.setOwnerId(userIO.getUserIdsForEventInRole(e.getId(), Permissions.Role.OWNER));
+        }
 
         return e;
     }

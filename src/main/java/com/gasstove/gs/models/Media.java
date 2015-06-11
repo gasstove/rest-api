@@ -5,11 +5,13 @@ import com.gasstove.gs.util.Util;
 
 public class Media extends DBObject  {
 
-    // medias table
+    // table fields
     private String type;
     private String fileName;
     private int userId;
     private Time dateTaken;
+
+    // cross table fields
 
     // CONSTRUCTION .......................................................
 
@@ -58,5 +60,23 @@ public class Media extends DBObject  {
     public void setUserId(int userId) {
         this.userId = userId;
     }
+
+
+    // DBObjectInterface ..................................................
+
+    @Override
+    public boolean shallowEquals(DBObject o) {
+        Media x = (Media) o;
+        return type.equals(x.type)
+            && fileName.equals(x.fileName)
+            && userId==x.userId
+            && dateTaken.equals(x.dateTaken);
+    }
+
+    @Override
+    public boolean deepEquals(DBObject o) {
+        return this.shallowEquals(o);
+    }
+
 
 }

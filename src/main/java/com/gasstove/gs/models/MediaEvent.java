@@ -6,7 +6,7 @@ import com.google.gson.Gson;
 
 public class MediaEvent extends DBObject {
 
-    // media_event_mapping table
+    // table fields
     private int mediaId;
     private int eventId;
     private int numDownloads;
@@ -15,7 +15,7 @@ public class MediaEvent extends DBObject {
     private int numLikes;
     private int numDislikes;
 
-    // media information
+    // cross-table fields
     private String mediaType;
     private String mediaFileName;
     private Integer userId;
@@ -138,4 +138,30 @@ public class MediaEvent extends DBObject {
     public void setNumDislikes(int numDislikes) {
         this.numDislikes = numDislikes;
     }
+
+
+    // DBObjectInterface ..................................................
+
+    @Override
+    public boolean shallowEquals(DBObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return  mediaId==x.mediaId
+                && eventId==x.eventId
+                && numDownloads==x.numDownloads
+                && shared.equals(x.shared)
+                && comment.equals(x.comment)
+                && numLikes==x.numLikes
+                && numDislikes==x.numDislikes;
+    }
+
+    @Override
+    public boolean deepEquals(DBObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return this.shallowEquals(o)
+                && mediaType.equals(x.mediaType)
+                && mediaFileName.equals(x.mediaFileName)
+                && userId.equals(x.userId)
+                && mediaDateTaken.equals(x.mediaDateTaken);
+    }
+
 }

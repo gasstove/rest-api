@@ -5,8 +5,11 @@ import com.google.gson.Gson;
 
 public class User extends DBObject  {
 
+    // table fields
     private String first;
     private String last;
+
+    // cross table fields
 
     // CONSTRUCTION .......................................................
 
@@ -47,6 +50,21 @@ public class User extends DBObject  {
 
     public void setLast(String last) {
         this.last = last;
+    }
+
+
+    // DBObjectInterface ..................................................
+
+    @Override
+    public boolean shallowEquals(DBObject o) {
+        User x = (User) o;
+        return first.equals(x.first)
+               && last.equals(x.last);
+    }
+
+    @Override
+    public boolean deepEquals(DBObject o) {
+        return this.shallowEquals(o);
     }
 
 }

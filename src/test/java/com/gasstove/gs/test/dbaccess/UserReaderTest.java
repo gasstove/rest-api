@@ -3,7 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.test.TestConfiguration;
-import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -14,42 +14,21 @@ import static org.junit.Assert.*;
  * Tests methods for EventReader
  *
  */
-public class UserReaderTest {
+public class UserReaderTest extends BaseReaderTest<User> {
 
-    UserIO userIO = new UserIO(TestConfiguration.db);
-
-    @Test
-    public void testGetUsersBasicInfo() {
-        try {
-            ArrayList<User> list = userIO.getAll();
-            assertTrue(list.size() > 0);
-            assertTrue(list.get(0).getFirst() != null);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
+    public UserReaderTest(){
+        io = new UserIO(TestConfiguration.db);
+        test_id = TestConfiguration.user_id;
     }
 
-    @Test
-    public void testGetUserFull() {
-        try {
-            User a = userIO.getUserBasicInfo(TestConfiguration.user_id);
-            assertTrue(a.getFirst().length() > 0);
-            assertTrue(a.getId() == TestConfiguration.user_id);
-//            assertNotNull(a.getEventsBasicInfo());
-            assertNotNull(a.getLast());
-//            assertNotNull(a.getContactMethod());
-//            assertNotNull(a.isSubscriber());
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
-    }
+    ////////////////////////////////////////////
+    // additional readers
+    ////////////////////////////////////////////
 
     @Test
-    public void testGetUsersForEvent() {
+    public void test_getUsersForEvent() {
         try {
-            ArrayList<User> us = userIO.getUsersForEvent(TestConfiguration.event_id);
+            ArrayList<User> us = ((UserIO)io).getUsersForEvent(TestConfiguration.event_id);
             assertNotNull(us);
             assertTrue(us.size()>0);
             User u = us.get(0);
@@ -61,9 +40,10 @@ public class UserReaderTest {
         }
     }
 
-    @After
-    public void close(){
-        userIO.close();
+    @Ignore
+    @Test
+    public void test_getUserIdsForEventInRole() {
+
     }
 
 }

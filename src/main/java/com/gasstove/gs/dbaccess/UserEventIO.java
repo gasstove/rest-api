@@ -1,6 +1,7 @@
 package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.*;
+import com.gasstove.gs.util.Permissions;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,14 +23,16 @@ public class UserEventIO extends BaseIO <UserEvent> {
 
     @Override
     protected UserEvent generate_from_result_set(ResultSet rs){
-//        UserEvent x = new UserEvent();
-//        try {
-//        } catch (SQLException exp) {
-//            exp.printStackTrace();
-//            return null;
-//        }
-//        return x;
-        return null;
+        UserEvent x = new UserEvent();
+        try {
+            x.setUserId(rs.getInt("user_id"));
+            x.setEventId(rs.getInt("event_id"));
+            x.setRole(Permissions.Role.valueOf(rs.getString("role")));
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+            return null;
+        }
+        return x;
     }
 
     @Override

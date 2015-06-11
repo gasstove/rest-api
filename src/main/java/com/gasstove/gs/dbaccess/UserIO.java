@@ -62,33 +62,6 @@ public class UserIO extends BaseIO <User> {
     // additional readers
     ////////////////////////////////////////////
 
-    /**
-     *
-     * @param uId the user id to query for
-     * @return User a fully populated user object
-     */
-    public User getUserBasicInfo(int uId) {
-        User user = new User();
-        try {
-
-            // query for user
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM user where id = ?");
-            stmt.setInt(1, uId);
-            ResultSet rs = stmt.executeQuery();
-            if (rs.next()) {
-                user.setId(rs.getInt("id"));
-                user.setFirst(rs.getString("first"));
-                user.setLast(rs.getString("last"));
-//                user.setContactMethod(rs.getString("contact_method"));
-//                user.setIsSubscriber(rs.getBoolean("is_subscriber"));
-            }
-
-        } catch (SQLException sq) {
-            sq.printStackTrace();
-        }
-        return user;
-    }
-
     public ArrayList<User> getUsersForEvent(int eId){
         ArrayList<User> users = new ArrayList<User>();
         try {

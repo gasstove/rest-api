@@ -1,21 +1,22 @@
 package com.gasstove.gs.models;
 
-import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
 import com.gasstove.gs.util.Util;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class Event extends DBObject {
 
+    // table fields
     private String name;
-    private Integer ownerId;
     private Time openDate;
     private Time closeDate;
     private Boolean joinInvitation;
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
+
+    // cross-table fields
+    private Integer ownerId;
 
     // CONSTRUCTION .......................................................
 
@@ -112,4 +113,24 @@ public class Event extends DBObject {
         this.ownerId = ownerIds.isEmpty() ? null : ownerIds.get(0);
     }
 
+    // DBObjectInterface ..................................................
+
+    @Override
+    public boolean shallowEquals(DBObject o) {
+        Event x = (Event) o;
+        return name.equals(x.name)
+            && openDate.equals(x.openDate)
+            && closeDate.equals(x.closeDate)
+            && joinInvitation.equals(x.joinInvitation)
+            && joinAllowByAccept.equals(x.joinAllowByAccept)
+            && joinAllowAuto.equals(x.joinAllowAuto);
+    }
+
+    @Override
+    public boolean deepEquals(DBObject o) {
+        Event x = (Event) o;
+        return this.shallowEquals(x)
+            && ownerId.equals(x.ownerId);
+
+    }
 }

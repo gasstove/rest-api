@@ -1,17 +1,18 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
 
 import java.util.ArrayList;
 
 public class UserEvent extends DBObject {
 
-    private User user;
-    private Role role;
-    private Event event;
-    private Time joinDate;
+    // table fields
+    private int userId;
+    private int eventId;
 
-    // refs
+    // cross table fields
+    private Permissions.Role role;
     private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();
     private ArrayList<MediaEvent> sharedMedia = new ArrayList<MediaEvent>();
 
@@ -20,28 +21,28 @@ public class UserEvent extends DBObject {
 
     // GET/SET .......................................................
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public Role getRole() {
+    public Permissions.Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Permissions.Role role) {
         this.role = role;
     }
 
-    public Event getEvent() {
-        return event;
+    public int getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
     public ArrayList<MediaEvent> getMyMedia() {
@@ -51,4 +52,41 @@ public class UserEvent extends DBObject {
     public void setMyMedia(ArrayList<MediaEvent> myMedia) {
         this.myMedia = myMedia;
     }
+
+    // DBObjectInterface ..................................................
+
+    @Override
+    public boolean shallowEquals(DBObject o) {
+        UserEvent x = (UserEvent) o;
+        return  this.userId==x.userId
+             && this.eventId==x.eventId;
+    }
+
+    @Override
+    public boolean deepEquals(DBObject o) {
+        UserEvent x = (UserEvent) o;
+
+        boolean result = this.shallowEquals(x);
+
+        result &= this.role.compareTo(x.role)==0;
+
+        // assumes they are in the same order - not good.
+        if(x.myMedia!=null && myMedia!=null){
+            if(x.myMedia.size()!=myMedia.size())
+                return false;
+            for(int i=0;i<myMedia.size();i++)
+                result &= myMedia.get(i).deepEquals(x.myMedia.get(i));
+        }
+
+        if(x.sharedMedia!=null && sharedMedia!=null){
+            if(x.sharedMedia.size()!=sharedMedia.size())
+                return false;
+            for(int i=0;i<sharedMedia.size();i++)
+                result &= sharedMedia.get(i).deepEquals(x.sharedMedia.get(i));
+        }
+
+        return result;
+
+    }
+
 }

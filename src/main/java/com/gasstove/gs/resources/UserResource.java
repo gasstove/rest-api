@@ -91,7 +91,7 @@ public class UserResource {
                 throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_user = userIO.getUserBasicInfo(userId);
+            return_user = userIO.getWithId(userId);
 
             response = new Response(true, "New user successfully saved", return_user.toJson());
 
@@ -133,7 +133,7 @@ public class UserResource {
         UserIO userIO = null;
         try {
             userIO = new UserIO(db);
-            User user = userIO.getUserBasicInfo(Integer.parseInt(userId));
+            User user = userIO.getWithId(Integer.parseInt(userId));
             returnJSON = user.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();

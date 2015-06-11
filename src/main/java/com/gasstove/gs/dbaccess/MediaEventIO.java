@@ -23,14 +23,20 @@ public class MediaEventIO extends BaseIO<MediaEvent> {
 
     @Override
     protected MediaEvent generate_from_result_set(ResultSet rs){
-//        MediaEvent x = new MediaEvent();
-//        try {
-//        } catch (SQLException exp) {
-//            exp.printStackTrace();
-//            return null;
-//        }
-//        return x;
-        return null;
+        MediaEvent x = new MediaEvent();
+        try {
+            x.setMediaId(rs.getInt("media_id"));
+            x.setEventId(rs.getInt("event_id"));
+            x.setNumDownloads(rs.getInt("num_downloads"));
+            x.setShared(rs.getBoolean("shared"));
+            x.setComment(rs.getString("comment"));
+            x.setNumLikes(rs.getInt("num_likes"));
+            x.setNumDislikes(rs.getInt("num_dislikes"));
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+            return null;
+        }
+        return x;
     }
 
     @Override

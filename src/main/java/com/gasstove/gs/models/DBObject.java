@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 /**
  * Base class for all models
  */
-public class DBObject {
+public abstract class DBObject implements DBObjectInterface {
 
     protected int id = -1;
 

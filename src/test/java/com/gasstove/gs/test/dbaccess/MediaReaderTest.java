@@ -3,62 +3,34 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.MediaIO;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.test.TestConfiguration;
-import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
-
-import java.util.ArrayList;
-
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
 
 /**
  * Created by gomes on 4/6/15.
  */
-public class MediaReaderTest {
+public class MediaReaderTest extends BaseReaderTest<Media> {
 
-    MediaIO mediaIO = new MediaIO(TestConfiguration.db);
+    public MediaReaderTest(){
+        io = new MediaIO(TestConfiguration.db);
+        test_id = TestConfiguration.media_id;
+    }
 
+    ////////////////////////////////////////////
+    // additional readers
+    ////////////////////////////////////////////
+
+    @Ignore
     @Test
-    public void testGetMediasBasicInfo() {
-        try {
-            ArrayList<Media> list = mediaIO.getAll();
-            assertTrue(list.size() > 0);
-            assertTrue(list.get(0).getFileName() != null);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
+    public void test_getMediaForUserAndEvent() {
+
     }
 
+    @Ignore
     @Test
-    public void testGetMedia() {
-        try {
-            Media m = mediaIO.getWithId(TestConfiguration.media_id);
-            assertTrue(m.getId() == TestConfiguration.media_id);
-            assertTrue(m.getFileName().length()>0);
-            assertTrue(m.getType().length()>0);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            fail();
-        }
+    public void test_getSharedMediaForEvent() {
+
     }
 
-//    @Test
-//    public void testGetMediaForEvent() {
-//        try {
-//            ArrayList<MediaEvent> m = mr.getMediaForEvent(TestDefaults.event_id);
-//            assertNotNull(m);
-//            assertTrue(m.size()>0);
-//        } catch (Exception exp) {
-//            exp.printStackTrace();
-//            fail();
-//        }
-//    }
-
-
-    @After
-    public void close(){
-        mediaIO.close();
-    }
 
 }
