@@ -1,6 +1,6 @@
 package com.gasstove.gs.test.resources;
 
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import com.gasstove.gs.resources.AbstractResource;
 import com.gasstove.gs.resources.Response;
@@ -40,7 +40,7 @@ public abstract class AbstractResourceTest {
         try {
 
             // create an event
-            DBObject obj = Factory.generate_random(clath);
+            AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
             String responseStr = resource.insert(obj.toJson());
@@ -49,7 +49,7 @@ public abstract class AbstractResourceTest {
             Response response = (new Gson()).fromJson(responseStr,Response.class);
 
             // put it into a DBObject
-            DBObject return_obj = (DBObject) clath.newInstance();
+            AbstractObject return_obj = (AbstractObject) clath.newInstance();
             return_obj.populate_from_Json(response.resource);
 
             // delete it

@@ -1,6 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by gomes on 6/9/15.
  */
-public class EventIO extends BaseIO<Event> {
+public class EventIO extends AbstractIO<Event> {
 
     public EventIO(){};
     public EventIO(String db) { super(db); }
@@ -57,7 +57,7 @@ public class EventIO extends BaseIO<Event> {
     }
 
     @Override
-    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException {
         Event x = (Event) obj;
         int i=1;
         ps.setString(  i++ , x.getName());

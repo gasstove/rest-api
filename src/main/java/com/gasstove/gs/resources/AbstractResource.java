@@ -1,7 +1,7 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.BaseIO;
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.dbaccess.AbstractIO;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Util;
 
@@ -49,10 +49,10 @@ public abstract class AbstractResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getAll() {
         String returnJSON = "";
-        BaseIO io = null;
+        AbstractIO io = null;
         try {
             io = this.get_connection();
-            ArrayList<DBObject> objs = io.getAll();
+            ArrayList<AbstractObject> objs = io.getAll();
             returnJSON = Util.getGson().toJson(objs);
         } catch (Exception exp) {
             exp.printStackTrace();
@@ -78,10 +78,10 @@ public abstract class AbstractResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getForId(@PathParam("id") String id) {
         String returnJSON = "";
-        BaseIO io = null;
+        AbstractIO io = null;
         try {
             io = get_connection();
-            DBObject user = (DBObject) io.getWithId(Integer.parseInt(id));
+            AbstractObject user = (AbstractObject) io.getWithId(Integer.parseInt(id));
             returnJSON = user.toJson();
         } catch (Exception exp) {
             exp.printStackTrace();
@@ -98,10 +98,10 @@ public abstract class AbstractResource {
     @Consumes({ MediaType.APPLICATION_JSON })
     public String insert(String objStr)  {
 
-        DBObject get_obj, return_obj;
+        AbstractObject get_obj, return_obj;
         Response response;
 
-        BaseIO io = null;
+        AbstractIO io = null;
 
         /** check headers
          List<String> authHeaders = this.headers.getRequestHeader("Authorization");
@@ -123,7 +123,7 @@ public abstract class AbstractResource {
         try {
 
             // generate an Event
-            get_obj = (DBObject) objclass.newInstance();
+            get_obj = (AbstractObject) objclass.newInstance();
             get_obj.populate_from_Json(objStr);
 
             // connect
@@ -136,7 +136,7 @@ public abstract class AbstractResource {
             if(eventId<0) throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_obj = (DBObject) io.getWithId(eventId);
+            return_obj = (AbstractObject) io.getWithId(eventId);
 
             response = new Response(true, "New event successfully saved", return_obj.toJson());
 
@@ -161,7 +161,7 @@ public abstract class AbstractResource {
     public String delete(@PathParam("id") String id) {
         Response response;
 
-        BaseIO io = null;
+        AbstractIO io = null;
 
         try {
 
@@ -190,8 +190,8 @@ public abstract class AbstractResource {
         return response.toJSON();
     }
 
-    protected BaseIO get_connection() throws Exception {
-        BaseIO io = (BaseIO) ioclass.newInstance();
+    protected AbstractIO get_connection() throws Exception {
+        AbstractIO io = (AbstractIO) ioclass.newInstance();
         io.connect(db);
         return io;
     }

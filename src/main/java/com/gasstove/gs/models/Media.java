@@ -3,7 +3,7 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Time;
 import com.gasstove.gs.util.Util;
 
-public class Media extends DBObject  {
+public class Media extends AbstractObject {
 
     // table fields
     private String type;
@@ -28,6 +28,20 @@ public class Media extends DBObject  {
         this.setUserId(x.getUserId());
         this.setFileName(x.getFileName());
         this.setDateTaken(x.getDateTaken());
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        Media x = (Media) o;
+        return type.equals(x.type)
+                && fileName.equals(x.fileName)
+                && userId==x.userId
+                && dateTaken.equals(x.dateTaken);
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        return this.shallowEquals(o);
     }
 
     // GET/SET .......................................................
@@ -64,21 +78,5 @@ public class Media extends DBObject  {
         this.userId = userId;
     }
 
-
-    // DBObjectInterface ..................................................
-
-    @Override
-    public boolean shallowEquals(DBObject o) {
-        Media x = (Media) o;
-        return type.equals(x.type)
-            && fileName.equals(x.fileName)
-            && userId==x.userId
-            && dateTaken.equals(x.dateTaken);
-    }
-
-    @Override
-    public boolean deepEquals(DBObject o) {
-        return this.shallowEquals(o);
-    }
 
 }

@@ -1,20 +1,17 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Util;
-import com.google.gson.Gson;
-
-import java.sql.ResultSet;
 
 /**
  * Base class for all models
  */
-public abstract class DBObject {
+public abstract class AbstractObject {
 
     protected int id = -1;
 
-    public DBObject(){};
+    public AbstractObject(){};
 
-    public DBObject(String json){
+    public AbstractObject(String json){
         this.populate_from_Json(json);
     }
 
@@ -42,13 +39,13 @@ public abstract class DBObject {
      * @param o
      * @return
      */
-    public boolean shallowEquals(DBObject o){ return false; };
+    public boolean shallowEquals(AbstractObject o){ return false; };
 
     /** Compare with another DBObject in terms of table and cross-table fields
      *
      * @param o
      * @return
      */
-    public boolean deepEquals(DBObject o){ return false; };
+    public boolean deepEquals(AbstractObject o){ return false; };
 
 }

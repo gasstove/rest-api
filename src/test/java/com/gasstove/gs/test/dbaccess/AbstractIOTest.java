@@ -1,7 +1,7 @@
 package com.gasstove.gs.test.dbaccess;
 
-import com.gasstove.gs.dbaccess.BaseIO;
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.dbaccess.AbstractIO;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import org.junit.After;
 import org.junit.Test;
@@ -16,7 +16,7 @@ import static org.junit.Assert.*;
 public abstract class AbstractIOTest<T> {
 
     Class clath;
-    BaseIO io;
+    AbstractIO io;
     int test_id;
 
     ///////////////////////////////////////////////////////
@@ -62,7 +62,7 @@ public abstract class AbstractIOTest<T> {
         try {
 
             // create an object
-            DBObject obj1 = Factory.generate_random(clath);
+            AbstractObject obj1 = Factory.generate_random(clath);
 
             // insert into database, get the id
             obj1.setId(io.insert(obj1));
@@ -77,7 +77,7 @@ public abstract class AbstractIOTest<T> {
             io.update(obj1);
 
             // check it worked
-            DBObject obj2 = (DBObject) io.getWithId(obj1.getId());
+            AbstractObject obj2 = (AbstractObject) io.getWithId(obj1.getId());
             assertTrue( obj1.shallowEquals(obj2) );
 
             // remove it

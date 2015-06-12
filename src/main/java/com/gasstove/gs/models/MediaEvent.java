@@ -2,9 +2,8 @@ package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Time;
 import com.gasstove.gs.util.Util;
-import com.google.gson.Gson;
 
-public class MediaEvent extends DBObject {
+public class MediaEvent extends AbstractObject {
 
     // table fields
     private int mediaId;
@@ -43,6 +42,28 @@ public class MediaEvent extends DBObject {
         this.setMediaFileName(x.getMediaFileName());
         this.setUserId(x.getUserId());
         this.setMediaDateTaken(x.getMediaDateTaken());
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return  mediaId==x.mediaId
+                && eventId==x.eventId
+                && numDownloads==x.numDownloads
+                && shared.equals(x.shared)
+                && comment.equals(x.comment)
+                && numLikes==x.numLikes
+                && numDislikes==x.numDislikes;
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return this.shallowEquals(o)
+                && mediaType.equals(x.mediaType)
+                && mediaFileName.equals(x.mediaFileName)
+                && userId.equals(x.userId)
+                && mediaDateTaken.equals(x.mediaDateTaken);
     }
 
     // GET/SET .......................................................
@@ -141,31 +162,6 @@ public class MediaEvent extends DBObject {
 
     public void setNumDislikes(int numDislikes) {
         this.numDislikes = numDislikes;
-    }
-
-
-    // DBObjectInterface ..................................................
-
-    @Override
-    public boolean shallowEquals(DBObject o) {
-        MediaEvent x = (MediaEvent) o;
-        return  mediaId==x.mediaId
-                && eventId==x.eventId
-                && numDownloads==x.numDownloads
-                && shared.equals(x.shared)
-                && comment.equals(x.comment)
-                && numLikes==x.numLikes
-                && numDislikes==x.numDislikes;
-    }
-
-    @Override
-    public boolean deepEquals(DBObject o) {
-        MediaEvent x = (MediaEvent) o;
-        return this.shallowEquals(o)
-                && mediaType.equals(x.mediaType)
-                && mediaFileName.equals(x.mediaFileName)
-                && userId.equals(x.userId)
-                && mediaDateTaken.equals(x.mediaDateTaken);
     }
 
 }

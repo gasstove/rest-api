@@ -1,6 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.util.Permissions;
 
@@ -13,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by gomes on 6/9/15.
  */
-public class UserIO extends BaseIO <User> {
+public class UserIO extends AbstractIO<User> {
 
     public UserIO(){};
     public UserIO(String db) { super(db); }
@@ -51,7 +51,7 @@ public class UserIO extends BaseIO <User> {
     }
 
     @Override
-    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException {
         User user = (User) obj;
         int i=1;
         ps.setString(i++, user.getFirst());

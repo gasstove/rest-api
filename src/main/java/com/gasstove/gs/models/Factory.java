@@ -13,9 +13,9 @@ public class Factory {
     /** genretate an instance of a subclass (clath) of DBObject.
      * Populate with random data
      */
-    public static DBObject generate_random(Class clath){
+    public static AbstractObject generate_random(Class clath){
 
-        DBObject obj = null;
+        AbstractObject obj = null;
         String classname = clath.getSimpleName();
         User user = null;
         Event event = null;
@@ -77,7 +77,7 @@ public class Factory {
 
     /** modify a DBObject in some arbitrary way
      */
-    public static void modify(DBObject x){
+    public static void modify(AbstractObject x){
         String classname = x.getClass().getSimpleName();
 
         if( classname.equals("Event"))

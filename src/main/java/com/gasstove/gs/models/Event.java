@@ -5,7 +5,7 @@ import com.gasstove.gs.util.Util;
 
 import java.util.ArrayList;
 
-public class Event extends DBObject {
+public class Event extends AbstractObject {
 
     // table fields
     private String name;
@@ -50,6 +50,25 @@ public class Event extends DBObject {
         str += "\tjoinAllowAuto: " + joinAllowAuto+ "\n";
         str += "\townerId: " + ownerId;
         return str;
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        Event x = (Event) o;
+        return name.equals(x.name)
+                && openDate.equals(x.openDate)
+                && closeDate.equals(x.closeDate)
+                && joinInvitation.equals(x.joinInvitation)
+                && joinAllowByAccept.equals(x.joinAllowByAccept)
+                && joinAllowAuto.equals(x.joinAllowAuto);
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        Event x = (Event) o;
+        return this.shallowEquals(x)
+                && ownerId.equals(x.ownerId);
+
     }
 
     // GET/SET .......................................................
@@ -115,24 +134,4 @@ public class Event extends DBObject {
         this.ownerId = ownerIds.isEmpty() ? null : ownerIds.get(0);
     }
 
-    // DBObjectInterface ..................................................
-
-    @Override
-    public boolean shallowEquals(DBObject o) {
-        Event x = (Event) o;
-        return name.equals(x.name)
-            && openDate.equals(x.openDate)
-            && closeDate.equals(x.closeDate)
-            && joinInvitation.equals(x.joinInvitation)
-            && joinAllowByAccept.equals(x.joinAllowByAccept)
-            && joinAllowAuto.equals(x.joinAllowAuto);
-    }
-
-    @Override
-    public boolean deepEquals(DBObject o) {
-        Event x = (Event) o;
-        return this.shallowEquals(x)
-            && ownerId.equals(x.ownerId);
-
-    }
 }

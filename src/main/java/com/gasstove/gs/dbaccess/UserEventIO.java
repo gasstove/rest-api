@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by gomes on 6/9/15.
  */
-public class UserEventIO extends BaseIO <UserEvent> {
+public class UserEventIO extends AbstractIO<UserEvent> {
 
     public UserEventIO(){};
     public UserEventIO(String db) { super(db); }
@@ -51,7 +51,7 @@ public class UserEventIO extends BaseIO <UserEvent> {
     }
 
     @Override
-    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException {
         UserEvent userevent = (UserEvent) obj;
         int i=1;
         ps.setInt(i++, userevent.getEventId());

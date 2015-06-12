@@ -1,6 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Time;
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 /**
  * Created by gomes on 6/9/15.
  */
-public class MediaIO extends BaseIO <Media> {
+public class MediaIO extends AbstractIO<Media> {
 
     public MediaIO(){};
     public MediaIO(String db) { super(db); }
@@ -53,7 +53,7 @@ public class MediaIO extends BaseIO <Media> {
     }
 
     @Override
-    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException {
         Media media = (Media) obj;
         int i=1;
         ps.setString(i++, media.getType());

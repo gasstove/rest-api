@@ -1,9 +1,8 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Util;
-import com.google.gson.Gson;
 
-public class User extends DBObject  {
+public class User extends AbstractObject {
 
     // table fields
     private String first;
@@ -36,6 +35,18 @@ public class User extends DBObject  {
         return str;
     }
 
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        User x = (User) o;
+        return first.equals(x.first)
+                && last.equals(x.last);
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        return this.shallowEquals(o);
+    }
+
     // GET/SET ............................................................
 
     public String getFirst() {
@@ -52,21 +63,6 @@ public class User extends DBObject  {
 
     public void setLast(String last) {
         this.last = last;
-    }
-
-
-    // DBObjectInterface ..................................................
-
-    @Override
-    public boolean shallowEquals(DBObject o) {
-        User x = (User) o;
-        return first.equals(x.first)
-               && last.equals(x.last);
-    }
-
-    @Override
-    public boolean deepEquals(DBObject o) {
-        return this.shallowEquals(o);
     }
 
 }

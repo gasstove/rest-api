@@ -1,6 +1,6 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.DBObject;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.DBConnection;
 
@@ -10,7 +10,7 @@ import java.util.ArrayList;
 /**
  * Created by gomes on 6/9/15.
  */
-public abstract class BaseIO <T> {
+public abstract class AbstractIO<T> {
 
     protected Connection conn;
 
@@ -32,15 +32,15 @@ public abstract class BaseIO <T> {
     // CONSTRUCTION
     ///////////////////////////////////////////
 
-    public BaseIO() {
+    public AbstractIO() {
         this(Configuration.dbConnect);
     }
 
-    public BaseIO(String db) {
+    public AbstractIO(String db) {
         this.connect(db);
     }
 
-    public BaseIO(Connection conn) {
+    public AbstractIO(Connection conn) {
         this.conn = conn;
     }
 
@@ -57,7 +57,7 @@ public abstract class BaseIO <T> {
     ///////////////////////////////////////////
 
     /** insert single row into a table **/
-    public final int insert(DBObject obj) throws Exception{
+    public final int insert(AbstractObject obj) throws Exception{
         String sql = "INSERT into " + get_table_name() + "(" + get_csv_fields() + ") " + "VALUES(" + get_csv_question_marks() + ")";
         PreparedStatement statement = conn.prepareStatement(sql);
         fill_prepared_statement(statement,obj);
@@ -68,7 +68,7 @@ public abstract class BaseIO <T> {
     };
 
     /** update single row in a table **/
-    public final int update(DBObject obj) throws Exception{
+    public final int update(AbstractObject obj) throws Exception{
         String sql = "UPDATE " + get_table_name() + " SET " + get_csv_fields_question_marks()+"WHERE id=?";
         PreparedStatement statement = conn.prepareStatement(sql);
         int i = fill_prepared_statement(statement,obj);
@@ -149,7 +149,7 @@ public abstract class BaseIO <T> {
     protected T generate_from_result_set(ResultSet rs){ return null; };
     protected String get_table_name(){ return null; }
     protected ArrayList<String> get_fields(){ return null; }
-    protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException { return -1; }
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException { return -1; }
 
     ///////////////////////////////////////////
     // private
