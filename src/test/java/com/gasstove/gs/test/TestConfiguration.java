@@ -14,6 +14,9 @@ public class TestConfiguration {
     public static Integer user_id = 36;
     public static Integer event_id = 1;
     public static Integer media_id = 15;
+    public static Integer mediaevent_id = 1;
+    public static Integer userevent_id = 1;
+
 
     // standard response values per test
 //    public static String expectedResponseStatus = "OK";

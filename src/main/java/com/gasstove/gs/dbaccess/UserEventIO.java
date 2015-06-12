@@ -27,7 +27,7 @@ public class UserEventIO extends BaseIO <UserEvent> {
         try {
             x.setUserId(rs.getInt("user_id"));
             x.setEventId(rs.getInt("event_id"));
-            x.setRole(Permissions.Role.valueOf(rs.getString("role")));
+            x.setRole(Permissions.Role.valueOf(rs.getString("role").toUpperCase()));
         } catch (SQLException exp) {
             exp.printStackTrace();
             return null;
@@ -43,17 +43,19 @@ public class UserEventIO extends BaseIO <UserEvent> {
     @Override
     protected ArrayList<String> get_fields(){
         ArrayList<String> x = new ArrayList<String>();
-        x.add("first");
-        x.add("last");
+        x.add("event_id");
+        x.add("user_id");
+        x.add("role");
         return x;
     }
 
     @Override
     protected int fill_prepared_statement(PreparedStatement ps,DBObject obj) throws SQLException {
-        User user = (User) obj;
+        UserEvent userevent = (UserEvent) obj;
         int i=1;
-        ps.setString(i++, user.getFirst());
-        ps.setString(i++, user.getLast());
+        ps.setInt(i++, userevent.getEventId());
+        ps.setInt(i++, userevent.getUserId());
+        ps.setString(i++,userevent.getRole().toString().toLowerCase());
         return i;
     }
 

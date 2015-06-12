@@ -10,9 +10,9 @@ public class UserEvent extends DBObject {
     // table fields
     private int userId;
     private int eventId;
+    private Permissions.Role role;
 
     // cross table fields
-    private Permissions.Role role;
     private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();
     private ArrayList<MediaEvent> sharedMedia = new ArrayList<MediaEvent>();
 
@@ -59,16 +59,14 @@ public class UserEvent extends DBObject {
     public boolean shallowEquals(DBObject o) {
         UserEvent x = (UserEvent) o;
         return  this.userId==x.userId
-             && this.eventId==x.eventId;
+             && this.eventId==x.eventId
+             && this.role.compareTo(x.role)==0;
     }
 
     @Override
     public boolean deepEquals(DBObject o) {
         UserEvent x = (UserEvent) o;
-
         boolean result = this.shallowEquals(x);
-
-        result &= this.role.compareTo(x.role)==0;
 
         // assumes they are in the same order - not good.
         if(x.myMedia!=null && myMedia!=null){

@@ -2,17 +2,21 @@ package com.gasstove.gs.test.dbaccess;
 
 import com.gasstove.gs.dbaccess.EventIO;
 import com.gasstove.gs.models.Event;
-
 import com.gasstove.gs.test.TestConfiguration;
 import org.junit.Test;
 
 import java.util.ArrayList;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-public class EventReaderTest extends BaseReaderTest<Event> {
+/**
+ * Created by gomes on 6/11/15.
+ */
+public class EventIOTest extends AbstractIOTest<Event> {
 
-    public EventReaderTest(){
+    public EventIOTest(){
+        clath = Event.class;
         io = new EventIO(TestConfiguration.db);
         test_id = TestConfiguration.event_id;
     }
@@ -26,11 +30,9 @@ public class EventReaderTest extends BaseReaderTest<Event> {
         try {
             ArrayList<Event> es = ((EventIO)io).getEventsForUser(TestConfiguration.user_id);
             assertNotNull(es);
-            assertTrue(es.size()>0);
-            Event e = es.get(0);
-            assertTrue(e.getName().length() > 0);
-            assertNotNull(e.getCloseDate());
-            assertNotNull(e.getOpenDate());
+            assertEquals(es.size(),1);
+            String expected = "{\"name\":\"holt\",\"openDate\":\"1970-01-10T08:45:40.880-08:00\",\"closeDate\":\"1970-01-10T08:45:40.880-08:00\",\"ownerId\":41,\"id\":7}";
+            assertEquals(es.get(0).toJson(), expected);
         } catch (Exception exp) {
             exp.printStackTrace();
             fail();
