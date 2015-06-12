@@ -37,21 +37,19 @@ public abstract class BaseIO <T> {
     }
 
     public BaseIO(String db) {
+        this.connect(db);
+    }
+
+    public BaseIO(Connection conn) {
+        this.conn = conn;
+    }
+
+    public void connect(String db){
         try {
             conn = (new DBConnection()).getConnection(db);
         } catch (SQLException e) {
             System.err.print("Unable to connect to database. " + e.getMessage());
         }
-    }
-
-    public BaseIO(Connection conn) {
-        this.conn = conn;
-//        // try to get database username from connection
-//        try {
-//            this.dbUserName = this.dbConn.getMetaData().getUserName();
-//        } catch (java.sql.SQLException exp) {
-//            System.err.print("Error Getting Username from connection object. " + exp.getMessage());
-//        }
     }
 
     ///////////////////////////////////////////

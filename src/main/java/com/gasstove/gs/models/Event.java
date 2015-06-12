@@ -18,11 +18,15 @@ public class Event extends DBObject {
     // cross-table fields
     private Integer ownerId;
 
-    // CONSTRUCTION .......................................................
+    // CONSTRUCTION  .......................................................
 
-    public Event(){};
+    public Event() { }
+    public Event(String json) { super(json); }
 
-    public Event(String json){
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         Event x = Util.getGson().fromJson(json, Event.class);
         this.setId(x.getId());
         this.setName(x.getName());
@@ -33,8 +37,6 @@ public class Event extends DBObject {
         this.setJoinAllowAuto(x.isJoinAllowAuto());
         this.setOwnerId(x.getOwnerId());
     }
-
-    // OVERRIDES .......................................................
 
     @Override
     public String toString() {

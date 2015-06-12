@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class MediaIO extends BaseIO <Media> {
 
+    public MediaIO(){};
     public MediaIO(String db) { super(db); }
     public MediaIO(Connection conn){ super(conn); }
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class UserEventIO extends BaseIO <UserEvent> {
 
+    public UserEventIO(){};
     public UserEventIO(String db) { super(db); }
     public UserEventIO(Connection conn){ super(conn); }
 

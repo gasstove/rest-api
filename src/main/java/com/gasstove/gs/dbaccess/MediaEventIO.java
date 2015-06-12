@@ -14,6 +14,7 @@ import java.util.ArrayList;
  */
 public class MediaEventIO extends BaseIO<MediaEvent> {
 
+    public MediaEventIO(){};
     public MediaEventIO(String db) { super(db); }
     public MediaEventIO(Connection conn){ super(conn); }
 

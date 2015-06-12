@@ -15,6 +15,7 @@ import java.util.ArrayList;
  */
 public class UserIO extends BaseIO <User> {
 
+    public UserIO(){};
     public UserIO(String db) { super(db); }
     public UserIO(Connection conn){ super(conn); }
 

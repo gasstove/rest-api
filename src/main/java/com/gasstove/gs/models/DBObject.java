@@ -8,15 +8,23 @@ import java.sql.ResultSet;
 /**
  * Base class for all models
  */
-public abstract class DBObject implements DBObjectInterface {
+public abstract class DBObject {
 
     protected int id = -1;
 
-    // SERIALIZE .....................................................
+    public DBObject(){};
+
+    public DBObject(String json){
+        this.populate_from_Json(json);
+    }
+
+    // SERIALIZE / DESERIALIZE .......................................
 
     public String toJson(){
         return Util.getGson().toJson(this);
     }
+
+    public void populate_from_Json(String json){ };
 
     // GET/SET .......................................................
 
@@ -27,5 +35,20 @@ public abstract class DBObject implements DBObjectInterface {
     public void setId(int id) {
         this.id = id;
     }
+
+    // COMPARE .......................................................
+
+    /** compare with another DBObject in terms of table fields
+     * @param o
+     * @return
+     */
+    public boolean shallowEquals(DBObject o){ return false; };
+
+    /** Compare with another DBObject in terms of table and cross-table fields
+     *
+     * @param o
+     * @return
+     */
+    public boolean deepEquals(DBObject o){ return false; };
 
 }

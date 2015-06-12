@@ -23,9 +23,13 @@ public class MediaEvent extends DBObject {
 
     // CONSTRUCTION .......................................................
 
-    public MediaEvent(){};
+    public MediaEvent() { }
+    public MediaEvent(String json) { super(json); }
 
-    public MediaEvent(String json){
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         MediaEvent x = Util.getGson().fromJson(json, MediaEvent.class);
         this.setId(x.getId());
         this.setMediaId(x.getMediaId());

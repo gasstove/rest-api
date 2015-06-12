@@ -13,6 +13,7 @@ import java.util.ArrayList;
  */
 public class EventIO extends BaseIO<Event> {
 
+    public EventIO(){};
     public EventIO(String db) { super(db); }
     public EventIO(Connection conn){ super(conn); }
 

@@ -11,19 +11,19 @@ import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
 /**
- * Restful Jersey based servlet for Image Resource
+ * Restful Jersey based servlet
  * <p/>
  * Reference:
  * http://docs.oracle.com/cd/E19226-01/820-7627/giepu/index.html
  */
 
 @Path("/medias")
-public class MediaResource {
-
-    private String db = Configuration.dbConnect;     // used to distinguish test and dev
+public class MediaResource extends AbstractResource  {
 
     public MediaResource(String db){
-        this.db = db;
+        super(db);
+        this.ioclass = MediaIO.class;
+        this.objclass = Media.class;
     }
 
     ////////////////////////////////////////////////////////////
@@ -40,7 +40,7 @@ public class MediaResource {
         String returnJSON = "";
         MediaIO mediaIO = null;
         try {
-            mediaIO = new MediaIO(db);
+            mediaIO = (MediaIO) get_connection();
             ArrayList<Media> medias = mediaIO.getAll();
             returnJSON = Util.getGson().toJson(medias);
         } catch (Exception exp) {
@@ -67,8 +67,9 @@ public class MediaResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaBasicInfo(@PathParam("mediaId") String mediaId) {
         String returnJSON;
-        MediaIO mediaIO = new MediaIO(db);
+        MediaIO mediaIO = null;
         try {
+            mediaIO = (MediaIO) get_connection();
             Media media = mediaIO.getWithId(Integer.parseInt(mediaId));
             returnJSON = media.toJson();
         } catch (Exception exp) {
@@ -91,7 +92,7 @@ public class MediaResource {
         String returnJSON;
         MediaIO mediaIO = null;
         try {
-            mediaIO = new MediaIO(db);
+            mediaIO = (MediaIO) get_connection();
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mediaIO.getSharedMediaForEvent(eId);
             returnJSON = Util.getGson().toJson(mediaevents);
@@ -115,7 +116,7 @@ public class MediaResource {
         String returnJSON;
         MediaIO mediaIO = null;
         try {
-            mediaIO = new MediaIO(db);
+            mediaIO = (MediaIO) get_connection();
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = mediaIO.getMediaForUserAndEvent(uId,eId);

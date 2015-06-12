@@ -2,175 +2,75 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
-import com.gasstove.gs.util.Configuration;
-import com.gasstove.gs.util.DBConnection;
 import com.gasstove.gs.util.Util;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 @Path("/users")
-public class UserResource {
-
-    private String db = Configuration.dbConnect;     // used to distinguish test and dev
+public class UserResource extends AbstractResource  {
 
     public UserResource(String db){
-        this.db = db;
+        super(db);
+        this.ioclass = UserIO.class;
+        this.objclass = User.class;
     }
 
     ////////////////////////////////////////////////////////////
     // '/'
     ////////////////////////////////////////////////////////////
 
-    /**
-     *  Returns ids and names of all users.
-     */
-    @Path("/")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getUsersBasicInfo() {
-        String returnJSON = "";
-        UserIO userIO = null;
-        try {
-            userIO = new UserIO(db);
-            ArrayList<User> users = userIO.getAll();
-            returnJSON = Util.getGson().toJson(users);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            userIO.close();
-        }
-        return returnJSON;
-    }
-
-    @Path("/")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON })
-    @Consumes({ MediaType.APPLICATION_JSON })
-    public String insertUser(String userString)  {
-
-        User get_user, return_user;
-        Response response;
-        Connection dbConn = null;
-
-        /** check headers
-         List<String> authHeaders = this.headers.getRequestHeader("Authorization");
-         List<String> dbHeader = this.headers.getRequestHeader("DB");
-         if (authHeaders==null || dbHeader==null)
-         return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
-         */
-
-        /** authenticate
-         String encodedUserPass = authHeaders.get(0);
-         String dbName = dbHeader.get(0);
-         OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
-         */
-
-        /**
-         Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
-         */
-
-        try {
-
-            get_user = new User(userString);
-
-            // connect to db
-            dbConn = (new DBConnection()).getConnection(db);
-
-            UserIO userIO = new UserIO(dbConn);
-
-            // insert or update
-            int userId = get_user.getId()<0  ? userIO.insert(get_user) : userIO.update(get_user);
-
-            // check success
-            if(userId<0)
-                throw new Exception("Insert|update failed");
-
-            // query and send it back
-            return_user = userIO.getWithId(userId);
-
-            response = new Response(true, "New user successfully saved", return_user.toJson());
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            // rollback transaction
-            //oraDatabase.rollbackTransaction(conn);
-
-            response = new Response(false, "Error saving new user, " + e.getMessage(), null);
-
-        } finally {
-            try {
-                // close connection
-                dbConn.close();
-            } catch (SQLException exp) {
-                response = new Response(false, "Error closing db connection, " + exp.getMessage(), null);
-            }
-        }
-
-        return response.toJSON();
-    }
-
-    ////////////////////////////////////////////////////////////
-    // '/#'
-    ////////////////////////////////////////////////////////////
-
-    /**
-     * Restful method to return user object by id
-     *
-     * @param userId   The id of the user to be loaded
-     * @return JSON representation of User object
-     */
-    @Path("/{userId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getUserBasicInfo(@PathParam("userId") String userId) {
-        String returnJSON = "";
-        UserIO userIO = null;
-        try {
-            userIO = new UserIO(db);
-            User user = userIO.getWithId(Integer.parseInt(userId));
-            returnJSON = user.toJson();
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            userIO.close();
-        }
-        return returnJSON;
-    }
-
-    @Path("/{userId: [0-9]+}")
-    @DELETE
-    public String deleteUser(@PathParam("eventId") String userId)  {
-
-        Response response;
-
-        try {
-
-            UserIO userWriter = new UserIO(db);
-            boolean success = userWriter.delete(Integer.parseInt(userId));
-
-            response = success ?
-                    new Response(true, "User successfully deleted",null) :
-                    new Response(true, "User deletion failed",null) ;
-
-        } catch (Exception e) {
-            e.printStackTrace();
-
-            // rollback transaction
-            //oraDatabase.rollbackTransaction(conn);
-
-            response = new Response(false, "Error saving new user, " + e.getMessage(), null);
-
-        }
-
-        return response.toJSON();
-    }
+//    /**
+//     *  Returns ids and names of all users.
+//     */
+//    @Path("/")
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getUsersBasicInfo() {
+//        String returnJSON = "";
+//        UserIO userIO = null;
+//        try {
+//            userIO = (UserIO) get_connection();
+//            ArrayList<User> users = userIO.getAll();
+//            returnJSON = Util.getGson().toJson(users);
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+//        } finally {
+//            userIO.close();
+//        }
+//        return returnJSON;
+//    }
+//
+//    ////////////////////////////////////////////////////////////
+//    // '/#'
+//    ////////////////////////////////////////////////////////////
+//
+//    /**
+//     * Restful method to return user object by id
+//     *
+//     * @param userId   The id of the user to be loaded
+//     * @return JSON representation of User object
+//     */
+//    @Path("/{userId: [0-9]+}")
+//    @GET
+//    @Produces({MediaType.APPLICATION_JSON})
+//    public String getUserBasicInfo(@PathParam("userId") String userId) {
+//        String returnJSON = "";
+//        UserIO userIO = null;
+//        try {
+//            userIO = (UserIO) get_connection();
+//            User user = userIO.getWithId(Integer.parseInt(userId));
+//            returnJSON = user.toJson();
+//        } catch (Exception exp) {
+//            exp.printStackTrace();
+//            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+//        } finally {
+//            userIO.close();
+//        }
+//        return returnJSON;
+//    }
 
     ////////////////////////////////////////////////////////////
     // '/event/#'
@@ -183,7 +83,7 @@ public class UserResource {
         String returnJSON = "";
         UserIO userIO = null;
         try {
-            userIO = new UserIO(db);
+            userIO = (UserIO) get_connection();
             ArrayList<User> users = userIO.getUsersForEvent(Integer.parseInt(eventId));
             returnJSON = Util.getGson().toJson(users);
         } catch (Exception exp) {

@@ -13,17 +13,19 @@ public class User extends DBObject  {
 
     // CONSTRUCTION .......................................................
 
-    public User(){};
+    public User() { }
+    public User(String json) { super(json); }
 
-    public User(String json){
+
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         User x = Util.getGson().fromJson(json, User.class);
-
         this.setId(x.getId());
         this.setFirst(x.getFirst());
         this.setLast(x.getLast());
     }
-
-    // OVERRIDES .......................................................
 
     @Override
     public String toString() {

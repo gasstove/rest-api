@@ -2,6 +2,7 @@ package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
+import com.gasstove.gs.util.Util;
 
 import java.util.ArrayList;
 
@@ -18,6 +19,19 @@ public class UserEvent extends DBObject {
 
     // CONSTRUCTION .......................................................
 
+    public UserEvent() { }
+    public UserEvent(String json) { super(json); }
+
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
+        UserEvent x = Util.getGson().fromJson(json, UserEvent.class);
+        this.setId(x.getId());
+        this.setUserId(x.getUserId());
+        this.setEventId(x.getEventId());
+        this.setRole(x.getRole());
+    }
 
     // GET/SET .......................................................
 

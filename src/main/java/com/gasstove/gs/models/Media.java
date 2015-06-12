@@ -15,11 +15,14 @@ public class Media extends DBObject  {
 
     // CONSTRUCTION .......................................................
 
-    public Media(){};
+    public Media() { }
+    public Media(String json) { super(json); }
 
-    public Media(String json){
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         Media x = Util.getGson().fromJson(json,Media.class);
-
         this.setId(x.getId());
         this.setType(x.getType());
         this.setUserId(x.getUserId());
@@ -77,6 +80,5 @@ public class Media extends DBObject  {
     public boolean deepEquals(DBObject o) {
         return this.shallowEquals(o);
     }
-
 
 }
