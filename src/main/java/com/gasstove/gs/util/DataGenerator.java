@@ -109,7 +109,8 @@ public class DataGenerator {
                 "shared boolean NOT NULL, " +
                 "comment varchar, " +
                 "num_likes int, " +
-                "num_dislikes int " +
+                "num_dislikes int, " +
+                "unique(media_id,event_id) " +
                 ")";
         stmt.execute(sql);
 
@@ -118,7 +119,8 @@ public class DataGenerator {
                 "type varchar NOT NULL, " +
                 "file_name	varchar NOT NULL, " +
                 "user_id INTEGER, " +
-                "date_taken smalldatetime NOT NULL " +
+                "date_taken smalldatetime NOT NULL, " +
+                "unique(file_name) " +
                 ")";
         stmt.execute(sql);
 
@@ -137,14 +139,18 @@ public class DataGenerator {
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
                 "event_id int NOT NULL, " +
                 "user_id int NOT NULL, " +
-                "role varchar NOT NULL" +
+                "role varchar NOT NULL, " +
+                "unique(event_id,user_id) " +
                 ")";
          stmt.execute(sql);
 
          sql =  "CREATE TABLE user( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+//                "username varchar NOT NULL, " +
+//                "password varchar NOT NULL, " +
                 "first varchar NOT NULL, " +
                 "last varchar NOT NULL " +
+//                "unique(username) " +
                 ")";
          stmt.execute(sql);
          System.out.println("Database created");
@@ -216,7 +222,7 @@ public class DataGenerator {
             // guest pool is all users minus the event owner
 //            HashSet<User> guest_pool = (HashSet<User>) all_users.clone();
 //            guest_pool.remove(event.owner);
-            event.invite_from(all_users);
+            event.invite_from(all_users,event.owner);
         }
 
         // event users and owners take a bunch of photos
@@ -379,6 +385,7 @@ public class DataGenerator {
         String name;
         Time open_date;
         Time close_date;
+        public User owner;
         ArrayList<UserRole> userroles = new ArrayList<UserRole>();
         ArrayList<Media> medias = new ArrayList<Media>();
 //        HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
@@ -389,9 +396,15 @@ public class DataGenerator {
             this.close_date = this.open_date.add_hours( Util.randBetween((double) MIN_EVENT_DURATION,(double) MAX_EVENT_DURATION) );
         }
 
-        public void invite_from(HashSet<User> user_pool){
+        public void invite_from(HashSet<User> user_pool,User owner){
             int num_guests = Util.randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
-            ArrayList<User> guests = Util.sample_without_replacement(user_pool, num_guests);
+            if(num_guests==0)
+                return;
+            // get one additional guest
+            ArrayList<User> guests = Util.sample_without_replacement(user_pool, num_guests+1);
+            // remove owner, or remove additional guest
+            if(!guests.remove(owner))
+                guests.remove(0);
             this.add_guests(guests);
             // inform users
             for(User user : guests)
@@ -412,6 +425,7 @@ public class DataGenerator {
         }
 
         public void add_owner( User user ){
+            this.owner = user;
             this.userroles.add(new UserRole(user, Permissions.Role.OWNER));
         }
 

@@ -2,7 +2,6 @@ package com.gasstove.gs.dbaccess;
 
 import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.User;
-import com.gasstove.gs.util.Permissions;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -63,41 +62,5 @@ public class UserIO extends AbstractIO<User> {
     // additional readers
     ////////////////////////////////////////////
 
-    public ArrayList<User> getUsersForEvent(int eId){
-        ArrayList<User> users = new ArrayList<User>();
-        try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT user.id, first, last FROM user, user_event_mapping aem WHERE aem.event_id=? AND aem.user_id = user.id");
-            stmt.setInt(1, eId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                User a = new User();
-                a.setId(rs.getInt("id"));
-                a.setFirst(rs.getString("first"));
-                a.setLast(rs.getString("last"));
-                users.add(a);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return users;
-    }
-
-    public ArrayList<Integer> getUserIdsForEventInRole(int eId, Permissions.Role role){
-        ArrayList<Integer> ids = new ArrayList<Integer>();
-        try {
-            PreparedStatement stmt = conn.prepareStatement(
-                    "SELECT uem.user_id as id " +
-                            "FROM event , user_event_mapping as uem " +
-                            "WHERE event.id=? and uem.role=? and uem.event_id=event.id");
-            stmt.setInt(1, eId);
-            stmt.setString(2,role.toString().toLowerCase());
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next())
-                ids.add(rs.getInt("id"));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return ids;
-    }
 
 }

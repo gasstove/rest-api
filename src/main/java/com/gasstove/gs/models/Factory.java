@@ -21,7 +21,7 @@ public class Factory {
         Event event = null;
         MediaEvent mediaevent = null;
 
-        if( classname.equals("Event") || classname.equals("UserEvent")) {
+        if( classname.equals("Event") ) {
             event = new Event();
             event.setName("random event");
             event.setOpenDate(new Time(0));
@@ -33,7 +33,7 @@ public class Factory {
             obj = event;
         }
 
-        if( classname.equals("Media") || classname.equals("UserEvent")){
+        if( classname.equals("Media") ){
             Media media = new Media();
             media.setFileName("random file name");
             media.setUserId(12345);
@@ -63,11 +63,8 @@ public class Factory {
 
         if( classname.equals("UserEvent")){
             UserEvent userevent = new UserEvent();
-            userevent.setUserId(user.getId());
-            userevent.setEventId(event.getId());
-            ArrayList<MediaEvent> medialist = new ArrayList<MediaEvent>();
-            medialist.add(mediaevent);
-            userevent.setMyMedia(medialist);
+            userevent.setUserId(12345);
+            userevent.setEventId(12345);
             userevent.setRole(Permissions.Role.GUEST);
             obj = userevent;
         }

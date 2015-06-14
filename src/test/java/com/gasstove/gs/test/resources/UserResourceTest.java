@@ -3,14 +3,8 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.resources.UserResource;
 import com.gasstove.gs.test.TestConfiguration;
-import org.junit.Ignore;
-import org.junit.Test;
-
-import static org.junit.Assert.*;
 
 public class UserResourceTest extends AbstractResourceTest  {
-
-    UserResource ur = new UserResource(TestConfiguration.db);
 
     public UserResourceTest(){
         this.clath = User.class;
@@ -20,35 +14,5 @@ public class UserResourceTest extends AbstractResourceTest  {
         this.use_id = TestConfiguration.user_id.toString();
     }
 
-    @Test
-    public void test_getUsersForEvent() {
-        String response = ur.getUsersForEvent(TestConfiguration.event_id.toString());
-        String expected = "[{\"first\":\"Launa\",\"last\":\"Loud\",\"id\":33},{\"first\":\"Catrice\",\"last\":\"Chapple\",\"id\":9},{\"first\":\"Takako\",\"last\":\"Troxel\",\"id\":21},{\"first\":\"Cornelius\",\"last\":\"Chau\",\"id\":12},{\"first\":\"Ceola\",\"last\":\"Cue\",\"id\":2}]";
-        assertTrue(response.equals(expected));
-    }
-
-    @Ignore
-    @Test
-    public void test_addUsersToEvent() {
-
-        // create new event
-
-
-        // add users
-
-
-        // delete event
-
-
-
-        String userarray = "";
-
-
-
-        ur.addUsersToEvent(TestConfiguration.event_id.toString(),userarray);
-
-
-
-    }
 
 }

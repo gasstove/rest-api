@@ -1,11 +1,14 @@
 package com.gasstove.gs.util;
 
+import com.gasstove.gs.models.AbstractObject;
+import com.gasstove.gs.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 /**
  * Utility methods
@@ -75,6 +78,18 @@ public class Util {
     }
 
     // MISC ................................................................
+
+    public static String jsonArray(ArrayList<AbstractObject> collection){
+        if (collection.isEmpty())
+            return "[]";
+        StringBuilder str = new StringBuilder();
+        str.append("[");
+        for (AbstractObject obj : collection)
+            str.append(obj.toJson()).append(",");
+        str.setLength(str.length() - 1);
+        str.append("]");
+        return str.toString();
+    }
 
     public static String joinToString(Collection<?> collection, CharSequence separator) {
         if (collection.isEmpty())

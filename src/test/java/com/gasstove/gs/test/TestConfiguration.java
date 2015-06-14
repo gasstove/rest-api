@@ -17,6 +17,16 @@ public class TestConfiguration {
     public static Integer mediaevent_id = 1;
     public static Integer userevent_id = 1;
 
+    public static boolean doprint = true;
+
+    public static void printout(String response,String expected,String methodname){
+        if(TestConfiguration.doprint) {
+            System.out.println(methodname);
+            System.out.println(response);
+            System.out.println(expected);
+        }
+    }
+
 
     // standard response values per test
 //    public static String expectedResponseStatus = "OK";

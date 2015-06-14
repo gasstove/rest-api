@@ -21,7 +21,7 @@ public abstract class AbstractObject {
         return Util.getGson().toJson(this);
     }
 
-    public void populate_from_Json(String json){ };
+    public void populate_from_Json(String json){}
 
     // GET/SET .......................................................
 

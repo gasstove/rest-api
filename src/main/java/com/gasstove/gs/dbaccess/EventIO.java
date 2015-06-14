@@ -23,20 +23,20 @@ public class EventIO extends AbstractIO<Event> {
 
     @Override
     protected Event generate_from_result_set(ResultSet rs){
-        Event e = new Event();
+        Event x = new Event();
         try {
-            e.setId(rs.getInt("id"));
-            e.setName(rs.getString("name"));
-            e.setOpenDate(new Time(rs.getInt("open_date")));
-            e.setCloseDate(new Time(rs.getInt("close_date")));
-            e.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
-            e.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
-            e.setJoinInvitation(rs.getBoolean("join_invitation"));
+            x.setId(rs.getInt("id"));
+            x.setName(rs.getString("name"));
+            x.setOpenDate(new Time(rs.getInt("open_date")));
+            x.setCloseDate(new Time(rs.getInt("close_date")));
+            x.setJoinAllowAuto(rs.getBoolean("join_allow_auto"));
+            x.setJoinAllowByAccept(rs.getBoolean("join_allow_by_accept"));
+            x.setJoinInvitation(rs.getBoolean("join_invitation"));
         } catch (SQLException exp) {
             exp.printStackTrace();
             return null;
         }
-        return e;
+        return x;
     }
 
     @Override
@@ -79,8 +79,8 @@ public class EventIO extends AbstractIO<Event> {
 
         if(e!=null) {
             // add owner id
-            UserIO userIO = new UserIO(conn);
-            e.setOwnerId(userIO.getUserIdsForEventInRole(e.getId(), Permissions.Role.OWNER));
+            UserEventIO userEventIO = new UserEventIO(conn);
+            e.setOwnerId(userEventIO.getUserIdsForEventInRole(e.getId(), Permissions.Role.OWNER));
         }
 
         return e;
@@ -91,9 +91,9 @@ public class EventIO extends AbstractIO<Event> {
         ArrayList<Event> E = super.getAll();
 
         // add owner id
-        UserIO userIO = new UserIO(conn);
+        UserEventIO userEventIO = new UserEventIO(conn);
         for(Event e : E)
-            e.setOwnerId( userIO.getUserIdsForEventInRole( e.getId(), Permissions.Role.OWNER));
+            e.setOwnerId( userEventIO.getUserIdsForEventInRole( e.getId(), Permissions.Role.OWNER));
         return E;
     }
 
@@ -101,26 +101,6 @@ public class EventIO extends AbstractIO<Event> {
     // additional readers
     ////////////////////////////////////////////
 
-    public ArrayList<Event> getEventsForUser(int uId) {
-        ArrayList<Event> events = new ArrayList<Event>();
-        UserIO ur = new UserIO(conn);
-        try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, user_event_mapping aem WHERE aem.user_id=? AND aem.event_id = event.id");
-            stmt.setInt(1, uId);
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                Event e = new Event();
-                e.setId(rs.getInt("eid"));
-                e.setName(rs.getString("name"));
-                e.setOpenDate(new Time(rs.getInt("open_date")));
-                e.setCloseDate(new Time(rs.getInt("close_date")));
-                e.setOwnerId(ur.getUserIdsForEventInRole(e.getId(),Permissions.Role.OWNER));
-                events.add(e);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return events;
-    }
+
 
 }

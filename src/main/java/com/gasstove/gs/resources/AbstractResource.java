@@ -67,12 +67,6 @@ public abstract class AbstractResource {
     // '/#'
     ////////////////////////////////////////////////////////////
 
-    /**
-     * Restful method to return user object by id
-     *
-     * @param userId   The id of the user to be loaded
-     * @return JSON representation of User object
-     */
     @Path("/{id: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -122,7 +116,7 @@ public abstract class AbstractResource {
 
         try {
 
-            // generate an Event
+            // generate an object
             get_obj = (AbstractObject) objclass.newInstance();
             get_obj.populate_from_Json(objStr);
 
@@ -130,15 +124,15 @@ public abstract class AbstractResource {
             io = this.get_connection();
 
             // insert or update
-            int eventId = get_obj.getId()<0  ? io.insert(get_obj) : io.update(get_obj);
+            int objId = get_obj.getId()<0  ? io.insert(get_obj) : io.update(get_obj);
 
             // check success
-            if(eventId<0) throw new Exception("Insert|update failed");
+            if(objId<0) throw new Exception("Insert|update failed");
 
             // query and send it back
-            return_obj = (AbstractObject) io.getWithId(eventId);
+            return_obj = (AbstractObject) io.getWithId(objId);
 
-            response = new Response(true, "New event successfully saved", return_obj.toJson());
+            response = new Response(true, "New object successfully saved", return_obj.toJson());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -146,7 +140,7 @@ public abstract class AbstractResource {
             // rollback transaction
             //oraDatabase.rollbackTransaction(conn);
 
-            response = new Response(false, "Error saving new event, " + e.getMessage(), null);
+            response = new Response(false, "Error saving new object, " + e.getMessage(), null);
 
         } finally {
             io.close();
@@ -182,7 +176,7 @@ public abstract class AbstractResource {
             // rollback transaction
             //oraDatabase.rollbackTransaction(conn);
 
-            response = new Response(false, "Error saving new event, " + e.getMessage(), null);
+            response = new Response(false, "Error saving new object, " + e.getMessage(), null);
         } finally {
             io.close();
         }
@@ -195,5 +189,7 @@ public abstract class AbstractResource {
         io.connect(db);
         return io;
     }
+
+
 
 }

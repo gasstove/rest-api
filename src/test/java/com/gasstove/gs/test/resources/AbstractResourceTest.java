@@ -4,9 +4,11 @@ import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import com.gasstove.gs.resources.AbstractResource;
 import com.gasstove.gs.resources.Response;
+import com.gasstove.gs.test.TestConfiguration;
 import com.google.gson.Gson;
 import org.junit.Test;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
@@ -25,14 +27,16 @@ public abstract class AbstractResourceTest {
     public void test_getAll() {
         System.out.println("test_getAll for " + resource.getClass().getSimpleName() );
         String response = resource.getAll();
-        assertTrue(response.equals(getAll_exp));
+        TestConfiguration.printout(response, getAll_exp, "test_getAll");
+        assertEquals(getAll_exp, response);
     }
 
     @Test
     public void test_getForId() {
         System.out.println("test_getForId for " + resource.getClass().getSimpleName() );
         String response = resource.getForId(use_id);
-        assertTrue(response.equals(getForId_exp));
+        TestConfiguration.printout(response, getForId_exp, "test_getForId");
+        assertEquals(getForId_exp, response);
     }
 
     @Test
@@ -53,7 +57,6 @@ public abstract class AbstractResourceTest {
             return_obj.populate_from_Json(response.resource);
 
             // delete it
-
             responseStr = resource.delete(String.format("%d",return_obj.getId()));
             assertTrue(responseStr.contains("Object successfully deleted"));
 
