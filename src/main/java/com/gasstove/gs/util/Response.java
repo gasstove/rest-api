@@ -24,15 +24,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-package com.gasstove.gs.resources;
+package com.gasstove.gs.util;
 
 import com.google.gson.Gson;
 
-/**
- * Holds static methods to return JSON response object
- *
- * @author: mnjuhn
- */
 public class Response {
 
     public boolean success;

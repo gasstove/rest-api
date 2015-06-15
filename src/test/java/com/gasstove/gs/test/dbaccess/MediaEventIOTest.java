@@ -55,7 +55,7 @@ public class MediaEventIOTest extends AbstractIOTest<MediaEvent> {
 
     @Test
     public void test_getSharedMediaForEvent() {
-        ArrayList<MediaEvent> arr = ((MediaEventIO)io).getMediaForEvent(TestConfiguration.event_id);
+        ArrayList<MediaEvent> arr = ((MediaEventIO)io).getSharedMediaForEvent(TestConfiguration.event_id);
         assertNotNull(arr);
         assertEquals(10,arr.size());
         String response = arr.get(0).toJson();

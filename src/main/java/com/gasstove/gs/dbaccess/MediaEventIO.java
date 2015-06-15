@@ -113,7 +113,7 @@ public class MediaEventIO extends AbstractIO<MediaEvent> {
         return mediaevents;
     }
 
-    public ArrayList<MediaEvent> getMediaForEvent(int eId){
+    public ArrayList<MediaEvent> getSharedMediaForEvent(int eId){
         ArrayList<MediaEvent> mediaevents = new ArrayList<MediaEvent>();
         try {
             String sql = "SELECT mm.media_id, mm.num_downloads, mm.comment, mm.num_likes, mm.num_dislikes, " +

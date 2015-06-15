@@ -2,19 +2,17 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.AbstractIO;
 import com.gasstove.gs.models.AbstractObject;
-import com.gasstove.gs.util.Configuration;
+import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.Context;
-import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
 /**
- * Created by gomes on 6/11/15.
+ * Provides getAll, getWithId, and insert, update, delete functionality.
  */
-public abstract class AbstractResource {
+public class AbstractResource {
 
     protected String db;
     protected Class ioclass;
@@ -23,15 +21,11 @@ public abstract class AbstractResource {
 //    @Context
 //    Request req;
 
-    @Context
-    HttpHeaders headers;
+//    @Context
+//    HttpHeaders headers;
 
     // @Context
     // private ServletContext context;
-
-    public AbstractResource(){
-        this.db = Configuration.dbConnect;
-    }
 
     public AbstractResource(String db){
         this.db = db;
@@ -51,7 +45,7 @@ public abstract class AbstractResource {
         String returnJSON = "";
         AbstractIO io = null;
         try {
-            io = this.get_connection();
+            io = get_connection();
             ArrayList<AbstractObject> objs = io.getAll();
             returnJSON = Util.getGson().toJson(objs);
         } catch (Exception exp) {
@@ -67,6 +61,8 @@ public abstract class AbstractResource {
     // '/#'
     ////////////////////////////////////////////////////////////
 
+    /** get table row with id
+     */
     @Path("/{id: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
@@ -86,11 +82,13 @@ public abstract class AbstractResource {
         return returnJSON;
     }
 
+    /** insert or update table row
+     */
     @Path("/")
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
-    public String insert(String objStr)  {
+    public String insertOrUpdate(String objStr)  {
 
         AbstractObject get_obj, return_obj;
         Response response;
@@ -149,7 +147,8 @@ public abstract class AbstractResource {
         return response.toJSON();
     }
 
-
+    /** delete table row
+     */
     @Path("/{id: [0-9]+}")
     @DELETE
     public String delete(@PathParam("id") String id) {
@@ -189,7 +188,5 @@ public abstract class AbstractResource {
         io.connect(db);
         return io;
     }
-
-
 
 }

@@ -17,7 +17,7 @@ public class TestConfiguration {
     public static Integer mediaevent_id = 1;
     public static Integer userevent_id = 1;
 
-    public static boolean doprint = true;
+    public static boolean doprint = false;
 
     public static void printout(String response,String expected,String methodname){
         if(TestConfiguration.doprint) {

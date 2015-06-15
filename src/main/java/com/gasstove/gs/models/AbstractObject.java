@@ -5,6 +5,7 @@ import com.gasstove.gs.util.Util;
 /**
  * Base class for all models
  */
+
 public abstract class AbstractObject {
 
     protected int id = -1;

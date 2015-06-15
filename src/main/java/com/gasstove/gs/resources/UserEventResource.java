@@ -4,7 +4,9 @@ import com.gasstove.gs.dbaccess.UserEventIO;
 import com.gasstove.gs.models.Event;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.models.UserEvent;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Permissions;
+import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 
@@ -12,12 +14,13 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
-/**
- * Created by gomes on 6/13/15.
- */
-
 @Path("/userevents")
 public class UserEventResource extends AbstractResource  {
+
+    @SuppressWarnings("unused")
+    public UserEventResource(){
+        this(Configuration.dbConnect);
+    };
 
     public UserEventResource(String db){
         super(db);

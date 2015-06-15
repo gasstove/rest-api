@@ -2,6 +2,8 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.MediaEventIO;
 import com.gasstove.gs.models.MediaEvent;
+import com.gasstove.gs.util.Configuration;
+import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 
 import javax.ws.rs.GET;
@@ -11,10 +13,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
-/**
- * Created by gomes on 6/13/15.
- */
+@Path("/mediaevents")
 public class MediaEventResource extends AbstractResource {
+
+    @SuppressWarnings("unused")
+    public MediaEventResource(){
+        this(Configuration.dbConnect);
+    };
 
     public MediaEventResource(String db) {
         super(db);
@@ -29,13 +34,13 @@ public class MediaEventResource extends AbstractResource {
     @Path("/event/{eventId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getMediaForEvent(@PathParam("eventId") String eventId) {
+    public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
         String returnJSON;
         MediaEventIO io = null;
         try {
             io = (MediaEventIO) get_connection();
             int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = io.getMediaForEvent(eId);
+            ArrayList<MediaEvent> mediaevents = io.getSharedMediaForEvent(eId);
             returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();

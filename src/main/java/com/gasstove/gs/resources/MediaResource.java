@@ -2,6 +2,7 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.MediaIO;
 import com.gasstove.gs.models.Media;
+import com.gasstove.gs.util.Configuration;
 
 import javax.ws.rs.*;
 
@@ -14,6 +15,11 @@ import javax.ws.rs.*;
 
 @Path("/medias")
 public class MediaResource extends AbstractResource  {
+
+    @SuppressWarnings("unused")
+    public MediaResource(){
+        this(Configuration.dbConnect);
+    };
 
     public MediaResource(String db){
         super(db);

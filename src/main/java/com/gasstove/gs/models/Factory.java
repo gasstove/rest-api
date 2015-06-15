@@ -3,8 +3,6 @@ package com.gasstove.gs.models;
 import com.gasstove.gs.util.Permissions;
 import com.gasstove.gs.util.Time;
 
-import java.util.ArrayList;
-
 /**
  * Created by gomes on 6/9/15.
  */
@@ -17,9 +15,9 @@ public class Factory {
 
         AbstractObject obj = null;
         String classname = clath.getSimpleName();
-        User user = null;
-        Event event = null;
-        MediaEvent mediaevent = null;
+        User user;
+        Event event;
+        MediaEvent mediaevent;
 
         if( classname.equals("Event") ) {
             event = new Event();

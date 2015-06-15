@@ -3,7 +3,7 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import com.gasstove.gs.resources.AbstractResource;
-import com.gasstove.gs.resources.Response;
+import com.gasstove.gs.util.Response;
 import com.gasstove.gs.test.TestConfiguration;
 import com.google.gson.Gson;
 import org.junit.Test;
@@ -47,7 +47,7 @@ public abstract class AbstractResourceTest {
             AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
-            String responseStr = resource.insert(obj.toJson());
+            String responseStr = resource.insertOrUpdate(obj.toJson());
 
             // get it
             Response response = (new Gson()).fromJson(responseStr,Response.class);
