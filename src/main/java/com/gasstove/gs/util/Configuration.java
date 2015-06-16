@@ -5,6 +5,7 @@ package com.gasstove.gs.util;
  */
 public class Configuration {
 
+    public static String testDBBackup = "src/main/resources/gasstoveTest_backup.db";
     public static String testDB = "src/main/resources/gasstoveTest.db";
     public static String devDB = "src/main/resources/gasstoveDev.db";
 

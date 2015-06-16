@@ -1,9 +1,23 @@
 package com.gasstove.gs.test.resources;
 
+import com.gasstove.gs.dbaccess.UserIO;
+import com.gasstove.gs.models.User;
 import com.gasstove.gs.models.UserEvent;
 import com.gasstove.gs.resources.UserEventResource;
 import com.gasstove.gs.test.TestConfiguration;
+import com.gasstove.gs.util.Configuration;
+import com.gasstove.gs.util.Util;
+import com.google.gson.reflect.TypeToken;
+import org.apache.commons.io.FileUtils;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
+
+import java.io.File;
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -11,6 +25,9 @@ import static org.junit.Assert.*;
  * Created by gomes on 6/13/15.
  */
 public class UserEventResourceTest extends AbstractResourceTest {
+
+    File testDB = new File(Configuration.testDB);
+    File testDBBackup = new File(Configuration.testDBBackup);
 
     public UserEventResourceTest(){
         this.clath = UserEvent.class;
@@ -22,6 +39,7 @@ public class UserEventResourceTest extends AbstractResourceTest {
 
     @Test
     public void test_getUsersForEvent() {
+        System.out.println("test_getUsersForEvent");
         String response = ((UserEventResource)resource).getUsersForEvent(TestConfiguration.event_id.toString());
         String expected = "[{\"first\":\"Teresa\",\"last\":\"Torrain\",\"id\":13},{\"first\":\"Ed\",\"last\":\"Eggen\",\"id\":16},{\"first\":\"Maynard\",\"last\":\"Magnusson\",\"id\":30},{\"first\":\"Adelaida\",\"last\":\"Ariza\",\"id\":45},{\"first\":\"Hildegarde\",\"last\":\"Hellman\",\"id\":50}]";
         TestConfiguration.printout(response, expected, "test_getUsersForEvent");
@@ -36,5 +54,64 @@ public class UserEventResourceTest extends AbstractResourceTest {
         TestConfiguration.printout(response,expected,"test_getEventsForUser");
         assertEquals(response,expected);
     }
+
+    @Test
+    public void test_addUsersToEvent() {
+
+        System.out.println("test_addUsersToEvent");
+
+        // make a copy of the database. This is the easiest way to revert the
+        // changes that are made by this test.
+        try {
+            FileUtils.copyFile(testDB,testDBBackup);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        UserEventResource uer = (UserEventResource) resource;
+        String event_id = TestConfiguration.event_id.toString();
+
+        // get guests in event
+        String users_json = uer.getUsersForEvent(event_id);
+        Type type = new TypeToken<ArrayList<User>>(){}.getType();
+        ArrayList<User> users = Util.getGson().fromJson(users_json,type);
+
+        // remove a user
+        User removed_user = users.get(users.size()-1);
+        users.remove(removed_user);
+
+        // add user
+        UserIO uio = new UserIO(TestConfiguration.db);
+        User added_user =  uio.getWithId(1);
+        users.add(added_user);
+        uio.close();
+
+        // update table
+        uer.cloberGuestsInEvent(event_id, Util.getGson().toJson(users));
+
+        // get guests in event
+        String users_json2 = uer.getUsersForEvent(event_id);
+        ArrayList<User> users2 = Util.getGson().fromJson(users_json2,type);
+
+        // check removed_user is not there and added_user is there
+        boolean found_added = false;
+        for(User u : users2) {
+            found_added |= u.getId()==added_user.getId();
+            assertFalse(u.getId() == removed_user.getId());
+        }
+        assertTrue(found_added);
+
+        // copy database back and delete backup
+        try {
+            FileUtils.copyFile(testDBBackup,testDB);
+            FileUtils.forceDelete(testDBBackup);
+        } catch (IOException e) {
+            e.printStackTrace();
+            fail();
+        }
+
+    }
+
 
 }
