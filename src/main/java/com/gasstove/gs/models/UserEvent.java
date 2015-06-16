@@ -1,54 +1,70 @@
 package com.gasstove.gs.models;
 
-import com.gasstove.gs.util.Time;
+import com.gasstove.gs.util.Permissions;
+import com.gasstove.gs.util.Util;
 
-import java.util.ArrayList;
+public class UserEvent extends AbstractObject {
 
-public class UserEvent extends DBObject {
-
-    private User user;
-    private Role role;
-    private Event event;
-    private Time joinDate;
-
-    // refs
-    private ArrayList<MediaEvent> myMedia = new ArrayList<MediaEvent>();
-    private ArrayList<MediaEvent> sharedMedia = new ArrayList<MediaEvent>();
+    // table fields
+    private int userId;
+    private int eventId;
+    private Permissions.Role role;
 
     // CONSTRUCTION .......................................................
 
+    public UserEvent() { }
+    public UserEvent(String json) { super(json); }
+
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
+        UserEvent x = Util.getGson().fromJson(json, UserEvent.class);
+        this.setId(x.getId());
+        this.setUserId(x.getUserId());
+        this.setEventId(x.getEventId());
+        this.setRole(x.getRole());
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        UserEvent x = (UserEvent) o;
+        return  this.userId==x.userId
+                && this.eventId==x.eventId
+                && this.role.compareTo(x.role)==0;
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        UserEvent x = (UserEvent) o;
+        boolean result = this.shallowEquals(x);
+        return result;
+    }
 
     // GET/SET .......................................................
 
-    public User getUser() {
-        return user;
+    public int getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
-    public Role getRole() {
+    public Permissions.Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(Permissions.Role role) {
         this.role = role;
     }
 
-    public Event getEvent() {
-        return event;
+    public int getEventId() {
+        return eventId;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventId(int eventId) {
+        this.eventId = eventId;
     }
 
-    public ArrayList<MediaEvent> getMyMedia() {
-        return myMedia;
-    }
-
-    public void setMyMedia(ArrayList<MediaEvent> myMedia) {
-        this.myMedia = myMedia;
-    }
 }

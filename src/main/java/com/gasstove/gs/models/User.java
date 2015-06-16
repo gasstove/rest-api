@@ -1,26 +1,30 @@
 package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Util;
-import com.google.gson.Gson;
 
-public class User extends DBObject  {
+public class User extends AbstractObject {
 
+    // table fields
     private String first;
     private String last;
 
+    // cross table fields
+
     // CONSTRUCTION .......................................................
 
-    public User(){};
+    public User() { }
+    public User(String json) { super(json); }
 
-    public User(String json){
+
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         User x = Util.getGson().fromJson(json, User.class);
-
         this.setId(x.getId());
         this.setFirst(x.getFirst());
         this.setLast(x.getLast());
     }
-
-    // OVERRIDES .......................................................
 
     @Override
     public String toString() {
@@ -29,6 +33,18 @@ public class User extends DBObject  {
         str += "\tfirst: " + first+ "\n";
         str += "\tlast: " + last;
         return str;
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        User x = (User) o;
+        return first.equals(x.first)
+                && last.equals(x.last);
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        return this.shallowEquals(o);
     }
 
     // GET/SET ............................................................

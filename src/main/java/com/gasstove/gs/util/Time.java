@@ -54,6 +54,11 @@ public class Time {
         return jodatime.toString();
     }
 
+    @Override
+    public boolean equals(Object o) {
+        Time x = (Time) o;
+        return this.jodatime.equals(x.jodatime);
+    }
 
     // STATICS ..........................................................
 

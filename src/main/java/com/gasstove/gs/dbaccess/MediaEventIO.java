@@ -1,75 +1,90 @@
 package com.gasstove.gs.dbaccess;
 
-import com.gasstove.gs.models.Media;
+import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Time;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
- * Database reader for Media
+ * Created by gomes on 6/9/15.
  */
-public class MediaReader extends BaseReader {
+public class MediaEventIO extends AbstractIO<MediaEvent> {
 
-    public MediaReader() { super(); }
-    public MediaReader(Connection conn) { super(conn); }
+    public MediaEventIO(){};
+    public MediaEventIO(String db) { super(db); }
+    public MediaEventIO(Connection conn){ super(conn); }
 
-    /**
-     * Returns a list of all the medias in the db.
-     * Provides for each media: id, type, file_name
-     *
-     * @return ArrayList<Media> a list of media objects
-     */
-    public ArrayList<Media> getMediasBasicInfo() {
-        ArrayList<Media> medias = new ArrayList<Media>();
+    ////////////////////////////////////////////
+    // Configuration
+    ////////////////////////////////////////////
+
+    @Override
+    protected MediaEvent generate_from_result_set(ResultSet rs){
+        MediaEvent x = new MediaEvent();
         try {
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery("Select * FROM media");
-            while (rs.next()) {
-                Media media = new Media();
-                media.setId(rs.getInt("id"));
-                media.setType(rs.getString("type"));
-                media.setFileName(rs.getString("file_name"));
-                media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(new Time(rs.getInt("date_taken")));
-                medias.add(media);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            x.setId(rs.getInt("id"));
+            x.setMediaId(rs.getInt("media_id"));
+            x.setEventId(rs.getInt("event_id"));
+            x.setNumDownloads(rs.getInt("num_downloads"));
+            x.setShared(rs.getBoolean("shared"));
+            x.setComment(rs.getString("comment"));
+            x.setNumLikes(rs.getInt("num_likes"));
+            x.setNumDislikes(rs.getInt("num_dislikes"));
+        } catch (SQLException exp) {
+            exp.printStackTrace();
+            return null;
         }
-        return medias;
+        return x;
     }
 
-    public Media getMediaBasicInfo(int mId){
-
-        Media media = new Media();
-        try {
-
-            // query media table
-            PreparedStatement stmt = conn.prepareStatement("SELECT * FROM media WHERE id = ?");
-            stmt.setInt(1,mId);
-            ResultSet rs = stmt.executeQuery();
-            if(rs.next()){
-                media.setId(rs.getInt("id"));
-                media.setType(rs.getString("type"));
-                media.setFileName(rs.getString("file_name"));
-                media.setUserId(rs.getInt("user_id"));
-                media.setDateTaken(new Time(rs.getInt("date_taken")));
-            }
-        } catch (SQLException sq) {
-            sq.printStackTrace();
-        }
-        return media;
+    @Override
+    protected String get_table_name(){
+        return "media_event_mapping";
     }
+
+    @Override
+    protected ArrayList<String> get_fields(){
+        ArrayList<String> x = new ArrayList<String>();
+        x.add("media_id");
+        x.add("event_id");
+        x.add("num_downloads");
+        x.add("shared");
+        x.add("comment");
+        x.add("num_likes");
+        x.add("num_dislikes");
+        return x;
+    }
+
+    @Override
+    protected int fill_prepared_statement(PreparedStatement ps,AbstractObject obj) throws SQLException {
+        MediaEvent mediaevent = (MediaEvent) obj;
+        int i=1;
+        ps.setInt(i++, mediaevent.getMediaId());
+        ps.setInt(i++, mediaevent.getEventId());
+        ps.setInt(i++, mediaevent.getNumDownloads());
+        ps.setBoolean(i++, mediaevent.getShared());
+        ps.setString(i++, mediaevent.getComment() );
+        ps.setInt(i++, mediaevent.getNumLikes());
+        ps.setInt(i++, mediaevent.getNumDislikes());
+        return i;
+    }
+
+    ////////////////////////////////////////////
+    // additional readers
+    ////////////////////////////////////////////
 
     public ArrayList<MediaEvent> getMediaForUserAndEvent(int uId,int eId){
         ArrayList<MediaEvent> mediaevents = new ArrayList<MediaEvent>();
         try {
-            // query media_mapping table
+            // query media_event_mapping table
             String sql = "SELECT mm.media_id, mm.num_downloads, mm.shared, mm.comment, mm.num_likes, " +
                     "mm.num_dislikes, media.type, media.file_name, media.user_id, media.date_taken " +
-                    "FROM media_mapping as mm, media " +
+                    "FROM media_event_mapping as mm, media " +
                     "WHERE mm.event_id =? " +
                     "AND media.id = mm.media_id " +
                     "AND media.user_id=? ";
@@ -103,7 +118,7 @@ public class MediaReader extends BaseReader {
         try {
             String sql = "SELECT mm.media_id, mm.num_downloads, mm.comment, mm.num_likes, mm.num_dislikes, " +
                     "media.type, media.file_name, media.user_id, media.date_taken " +
-                    "FROM media_mapping as mm, media " +
+                    "FROM media_event_mapping as mm, media " +
                     "WHERE mm.event_id = ? " +
                     "AND mm.shared = 1 " +
                     "AND media.id = mm.media_id ";
@@ -129,6 +144,23 @@ public class MediaReader extends BaseReader {
             sq.printStackTrace();
         }
         return mediaevents;
+    }
+
+
+    // TODO: write test
+    public final boolean deleteForEventId(int event_id) throws Exception{
+        String sql = "DELETE from media_event_mapping WHERE event_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,event_id);
+        return statement.executeUpdate()==1;
+    }
+
+    // TODO: write test
+    public final boolean deleteForMediaId(int media_id) throws Exception{
+        String sql = "DELETE from media_event_mapping WHERE media_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,media_id);
+        return statement.executeUpdate()==1;
     }
 
 }

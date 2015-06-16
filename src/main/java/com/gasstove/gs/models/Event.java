@@ -5,24 +5,29 @@ import com.gasstove.gs.util.Util;
 
 import java.util.ArrayList;
 
-public class Event extends DBObject {
+public class Event extends AbstractObject {
 
+    // table fields
     private String name;
-    private Integer ownerId;
     private Time openDate;
     private Time closeDate;
     private Boolean joinInvitation;
     private Boolean joinAllowByAccept;
     private Boolean joinAllowAuto;
 
-    // CONSTRUCTION .......................................................
+    // cross-table fields
+    private Integer ownerId;
 
-    public Event(){};
+    // CONSTRUCTION  .......................................................
 
-    public Event(String json){
+    public Event() { }
+    public Event(String json) { super(json); }
 
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         Event x = Util.getGson().fromJson(json, Event.class);
-
         this.setId(x.getId());
         this.setName(x.getName());
         this.setOpenDate(x.getOpenDate() );
@@ -30,9 +35,8 @@ public class Event extends DBObject {
         this.setJoinAllowByAccept(x.isJoinAllowByAccept());
         this.setJoinInvitation(x.isJoinInvitation());
         this.setJoinAllowAuto(x.isJoinAllowAuto());
+        this.setOwnerId(x.getOwnerId());
     }
-
-    // OVERRIDES .......................................................
 
     @Override
     public String toString() {
@@ -43,8 +47,28 @@ public class Event extends DBObject {
         str += "\tclose date: " + closeDate+ "\n";
         str += "\tjoinInvitation: " + joinInvitation+ "\n";
         str += "\tjoinAllowbyAccept: " + joinAllowByAccept+ "\n";
-        str += "\tjoinAllowAuto: " + joinAllowAuto;
+        str += "\tjoinAllowAuto: " + joinAllowAuto+ "\n";
+        str += "\townerId: " + ownerId;
         return str;
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        Event x = (Event) o;
+        return name.equals(x.name)
+                && openDate.equals(x.openDate)
+                && closeDate.equals(x.closeDate)
+                && joinInvitation.equals(x.joinInvitation)
+                && joinAllowByAccept.equals(x.joinAllowByAccept)
+                && joinAllowAuto.equals(x.joinAllowAuto);
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        Event x = (Event) o;
+        return this.shallowEquals(x)
+                && ownerId.equals(x.ownerId);
+
     }
 
     // GET/SET .......................................................
@@ -99,6 +123,10 @@ public class Event extends DBObject {
 
     public Integer getOwnerId() {
         return ownerId;
+    }
+
+    public void setOwnerId(Integer ownerId) {
+        this.ownerId = ownerId;
     }
 
     public void setOwnerId(ArrayList<Integer> ownerIds) {

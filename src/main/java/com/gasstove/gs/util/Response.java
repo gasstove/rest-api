@@ -24,15 +24,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  **/
 
-package com.gasstove.gs.resources;
+package com.gasstove.gs.util;
 
 import com.google.gson.Gson;
 
-/**
- * Holds static methods to return JSON response object
- *
- * @author: mnjuhn
- */
 public class Response {
 
     public boolean success;
@@ -43,6 +38,14 @@ public class Response {
         this.success = success;
         this.message = message;
         this.resource = resource;
+    }
+
+    public Response(String json){
+        Gson gson = new Gson();
+        Response r = gson.fromJson(json,Response.class);
+        this.success = r.success;
+        this.message = r.message;
+        this.resource = r.resource;
     }
 
 	public String toJSONP(boolean success, String message, String resource) {
@@ -85,5 +88,6 @@ public class Response {
 
         return (new Gson()).toJson(this,Response.class);
     }
+
 
 }

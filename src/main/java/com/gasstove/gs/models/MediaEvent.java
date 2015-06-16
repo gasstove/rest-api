@@ -2,11 +2,10 @@ package com.gasstove.gs.models;
 
 import com.gasstove.gs.util.Time;
 import com.gasstove.gs.util.Util;
-import com.google.gson.Gson;
 
-public class MediaEvent extends DBObject {
+public class MediaEvent extends AbstractObject {
 
-    // media_mapping table
+    // table fields
     private int mediaId;
     private int eventId;
     private int numDownloads;
@@ -15,7 +14,7 @@ public class MediaEvent extends DBObject {
     private int numLikes;
     private int numDislikes;
 
-    // media information
+    // cross-table fields
     private String mediaType;
     private String mediaFileName;
     private Integer userId;
@@ -23,9 +22,13 @@ public class MediaEvent extends DBObject {
 
     // CONSTRUCTION .......................................................
 
-    public MediaEvent(){};
+    public MediaEvent() { }
+    public MediaEvent(String json) { super(json); }
 
-    public MediaEvent(String json){
+    // OVERRIDES .......................................................
+
+    @Override
+    public void populate_from_Json(String json){
         MediaEvent x = Util.getGson().fromJson(json, MediaEvent.class);
         this.setId(x.getId());
         this.setMediaId(x.getMediaId());
@@ -39,6 +42,28 @@ public class MediaEvent extends DBObject {
         this.setMediaFileName(x.getMediaFileName());
         this.setUserId(x.getUserId());
         this.setMediaDateTaken(x.getMediaDateTaken());
+    }
+
+    @Override
+    public boolean shallowEquals(AbstractObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return  mediaId==x.mediaId
+                && eventId==x.eventId
+                && numDownloads==x.numDownloads
+                && shared.equals(x.shared)
+                && comment.equals(x.comment)
+                && numLikes==x.numLikes
+                && numDislikes==x.numDislikes;
+    }
+
+    @Override
+    public boolean deepEquals(AbstractObject o) {
+        MediaEvent x = (MediaEvent) o;
+        return this.shallowEquals(o)
+                && mediaType.equals(x.mediaType)
+                && mediaFileName.equals(x.mediaFileName)
+                && userId.equals(x.userId)
+                && mediaDateTaken.equals(x.mediaDateTaken);
     }
 
     // GET/SET .......................................................
@@ -138,4 +163,5 @@ public class MediaEvent extends DBObject {
     public void setNumDislikes(int numDislikes) {
         this.numDislikes = numDislikes;
     }
+
 }

@@ -1,110 +1,86 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.MediaReader;
+import com.gasstove.gs.dbaccess.MediaEventIO;
+import com.gasstove.gs.dbaccess.MediaIO;
+import com.gasstove.gs.dbaccess.UserEventIO;
 import com.gasstove.gs.models.Media;
-import com.gasstove.gs.models.MediaEvent;
-import com.gasstove.gs.util.Util;
+import com.gasstove.gs.util.Configuration;
+import com.gasstove.gs.util.Response;
 
 import javax.ws.rs.*;
-import javax.ws.rs.core.MediaType;
-import java.util.ArrayList;
 
 /**
- * Restful Jersey based servlet for Image Resource
+ * Restful Jersey based servlet
  * <p/>
  * Reference:
  * http://docs.oracle.com/cd/E19226-01/820-7627/giepu/index.html
  */
 
 @Path("/medias")
-public class MediaResource {
+public class MediaResource extends AbstractResource  {
+
+    @SuppressWarnings("unused")
+    public MediaResource(){
+        this(Configuration.dbConnect);
+    };
+
+    public MediaResource(String db){
+        super(db);
+        this.ioclass = MediaIO.class;
+        this.objclass = Media.class;
+    }
 
     /**
-     *  This is the root resource for medias. It returns all medias
+     * Delete media item,
+     *  1) delete a row from the media table
+     *  2) MediaEventIO.deleteForMediaId
+     * @param id
+     * @return
      */
-    @Path("/")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getMediasBasicInfo() {
+    @Override
+    public String delete(@PathParam("id") String id) {
+
+        boolean success = true;
+        MediaEventIO mediaEventIO = null;
+
+        try {
+            int media_id = Integer.parseInt(id);
+
+            // delete row in events table, get a response
+            String resp_json = super.delete(id);
+            success &= (new Response(resp_json)).success;
+
+            // delete from media_events
+            if(success) {
+                mediaEventIO = new MediaEventIO(db);
+                success &= mediaEventIO.deleteForMediaId(media_id);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mediaEventIO!=null)
+                mediaEventIO.close();
+            Response response = success ?
+                    new Response(true, "Media successfully deleted",null) :
+                    new Response(false, "Media deletion failed",null) ;
+            return response.toJSON();
+        }
+    }
+
+    public String delete_all_media_for_user(String user_id){
         String returnJSON = "";
-        MediaReader mr = null;
+        MediaIO io = null;
         try {
-            mr = new MediaReader();
-            ArrayList<Media> medias = mr.getMediasBasicInfo();
-            returnJSON = Util.getGson().toJson(medias);
+            io = (MediaIO) get_connection();
+            io.delete_all_media_for_user(Integer.parseInt(user_id));
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            //returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            mr.close();
+            io.close();
         }
         return returnJSON;
-    }
 
-    /**
-     * Restful method to return media object by id
-     *
-     * @param mediaId The id of the media to be loaded
-     * @return JSON representation of Media object
-     */
-    @Path("/{mediaId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getMediaBasicInfo(@PathParam("mediaId") String mediaId) {
-        String returnJSON;
-        MediaReader mr = null;
-        try {
-            mr = new MediaReader();
-            Media media = mr.getMediaBasicInfo(Integer.parseInt(mediaId));
-            returnJSON = media.toJson();
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            mr.close();
-        }
-        return returnJSON;
     }
-
-    @Path("/event/{eventId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
-        String returnJSON;
-        MediaReader mr = null;
-        try {
-            mr = new MediaReader();
-            int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = mr.getSharedMediaForEvent(eId);
-            returnJSON = Util.getGson().toJson(mediaevents);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            mr.close();
-        }
-        return returnJSON;
-    }
-
-    @Path("/event/{eventId: [0-9]+}/user/{userId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId) {
-        String returnJSON;
-        MediaReader mr = null;
-        try {
-            mr = new MediaReader();
-            int uId = Integer.parseInt(userId);
-            int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = mr.getMediaForUserAndEvent(uId,eId);
-            returnJSON = Util.getGson().toJson(mediaevents);
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            mr.close();
-        }
-        return returnJSON;
-    }
-
 }

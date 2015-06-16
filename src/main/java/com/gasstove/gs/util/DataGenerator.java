@@ -3,7 +3,6 @@ package com.gasstove.gs.util;
 import java.io.File;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
@@ -12,29 +11,26 @@ import java.util.Map;
  */
 public class DataGenerator {
 
-    // db file
-    private final String dbfile = "src/main/resources/gasstove.db";
-
     //set these values to manipulate test records
-    private final int MIN_USER_PER_EVENT = 1;
-    private final int MAX_USER_PER_EVENT = 30;
+    private static final int MIN_USER_PER_EVENT = 1;
+    private static final int MAX_USER_PER_EVENT = 30;
 
-    private final int MIN_MEDIA_PER_EVENTUSER = 0;
-    private final int MAX_MEDIA_PER_EVENTUSER = 10;
+    private static final int MIN_MEDIA_PER_EVENTUSER = 0;
+    private static final int MAX_MEDIA_PER_EVENTUSER = 10;
 
     // true if a media item can belong to more than one event, false otherwise
-    private final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = true;
+    private static final boolean ALLOW_MULTIPLE_EVENTS_PER_MEDIA = true;
 
     // if above is true, average number of events a media item belongs to (can be 1.5)
-    private final float AVG_EVENT_PER_MEDIA = 2f;
+    private static final float AVG_EVENT_PER_MEDIA = 2f;
 
-    private final int MIN_EVENT_YEAR = 2014;
-    private final int MAX_EVENT_YEAR = 2016;
-    private final int MIN_EVENT_DURATION = 5;   // hours
-    private final int MAX_EVENT_DURATION = 10;  // hours
+    private static final int MIN_EVENT_YEAR = 2014;
+    private static final int MAX_EVENT_YEAR = 2016;
+    private static final int MIN_EVENT_DURATION = 5;   // hours
+    private static final int MAX_EVENT_DURATION = 10;  // hours
 
-    private final int NUM_USERS = 50;
-    private final int NUM_EVENTS = 10;
+    private static final int NUM_USERS = 50;
+    private static final int NUM_EVENTS = 10;
 
     private Connection connection = null;
     private PreparedStatement  statement = null;
@@ -46,12 +42,20 @@ public class DataGenerator {
      * @param args
      */
     public static void main(String[] args){
+
+        // args[0]=="test" => generate test data
+        // args[0]=="dev" => generate dev data
+        String dbfile = "";
+        if(args[0].compareTo("test")==0)
+            dbfile = Configuration.testDB;
+        else if(args[0].compareTo("dev")==0)
+            dbfile = Configuration.devDB;
+
         DataGenerator t = new DataGenerator();
         DataContainer data = t.generate_data();
-
         try {
-            //t.dropTables();
-            t.getConnection();
+            t.dropTables(dbfile);
+            t.getConnection("jdbc:sqlite:"+dbfile);
             t.createDB();
             t.insert_db(data);
         }
@@ -65,14 +69,14 @@ public class DataGenerator {
      *
      * @return Connection database connection
      */
-    public void getConnection() throws SQLException {
-        connection = new DBConnection().getConnection();
+    public void getConnection(String dbfile) throws SQLException {
+        connection = new DBConnection().getConnection(dbfile);
     }
 
-    public void dropTables(){
+    public void dropTables(String dbfile){
         try {
             System.out.println("Dropping tables...");
-            File f = new File(this.dbfile);
+            File f = new File(dbfile);
             f.delete();
         }catch(Exception e){
             e.printStackTrace();
@@ -94,7 +98,7 @@ public class DataGenerator {
 
         stmt.execute(sql);
 
-        sql = "CREATE TABLE media_mapping (" +
+        sql = "CREATE TABLE media_event_mapping (" +
                 "id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, " +
                 "media_id int NOT NULL, " +
                 "event_id int NOT NULL, " +
@@ -102,7 +106,8 @@ public class DataGenerator {
                 "shared boolean NOT NULL, " +
                 "comment varchar, " +
                 "num_likes int, " +
-                "num_dislikes int " +
+                "num_dislikes int, " +
+                "unique(media_id,event_id) " +
                 ")";
         stmt.execute(sql);
 
@@ -111,7 +116,8 @@ public class DataGenerator {
                 "type varchar NOT NULL, " +
                 "file_name	varchar NOT NULL, " +
                 "user_id INTEGER, " +
-                "date_taken smalldatetime NOT NULL " +
+                "date_taken smalldatetime NOT NULL, " +
+                "unique(file_name) " +
                 ")";
         stmt.execute(sql);
 
@@ -131,14 +137,17 @@ public class DataGenerator {
                 "event_id int NOT NULL, " +
                 "user_id int NOT NULL, " +
                 "role varchar NOT NULL, " +
-                "join_date smalldatetime NOT NULL " +
+                "unique(event_id,user_id) " +
                 ")";
          stmt.execute(sql);
 
          sql =  "CREATE TABLE user( " +
                 "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, " +
+//                "username varchar NOT NULL, " +
+//                "password varchar NOT NULL, " +
                 "first varchar NOT NULL, " +
                 "last varchar NOT NULL " +
+//                "unique(username) " +
                 ")";
          stmt.execute(sql);
          System.out.println("Database created");
@@ -170,7 +179,7 @@ public class DataGenerator {
         stmt = connection.createStatement();
         stmt.execute(sql);
 
-        sql = "DELETE FROM media_mapping";
+        sql = "DELETE FROM media_event_mapping";
         stmt = connection.createStatement();
         stmt.execute(sql);
 
@@ -210,7 +219,7 @@ public class DataGenerator {
             // guest pool is all users minus the event owner
 //            HashSet<User> guest_pool = (HashSet<User>) all_users.clone();
 //            guest_pool.remove(event.owner);
-            event.invite_from(all_users);
+            event.invite_from(all_users,event.owner);
         }
 
         // event users and owners take a bunch of photos
@@ -283,8 +292,8 @@ public class DataGenerator {
             event.insert_guests_db();
         }
 
-        // insert media info into media_mapping
-        System.out.println("Inserting media mapping for "+data.all_medias.size()+" media items.");
+        // insert media info into media_event_mapping
+        System.out.println("Inserting media event mapping for "+data.all_medias.size()+" media items.");
         for(Media media : data.all_medias)
             media.insert_event_mapping_db();
 
@@ -354,7 +363,7 @@ public class DataGenerator {
 
         public void insert_event_mapping_db() throws SQLException {
             for(Event event : events) {
-                String sql = "INSERT into media_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
+                String sql = "INSERT into media_event_mapping(media_id, event_id,num_downloads,shared) VALUES(?,?,?,?)";
                 statement = connection.prepareStatement(sql);
                 int i=1;
                 statement.setInt(i++, this.id);
@@ -373,6 +382,7 @@ public class DataGenerator {
         String name;
         Time open_date;
         Time close_date;
+        public User owner;
         ArrayList<UserRole> userroles = new ArrayList<UserRole>();
         ArrayList<Media> medias = new ArrayList<Media>();
 //        HashMap<User,Integer> userEventId_for_user = new HashMap<User,Integer>();
@@ -383,9 +393,15 @@ public class DataGenerator {
             this.close_date = this.open_date.add_hours( Util.randBetween((double) MIN_EVENT_DURATION,(double) MAX_EVENT_DURATION) );
         }
 
-        public void invite_from(HashSet<User> user_pool){
+        public void invite_from(HashSet<User> user_pool,User owner){
             int num_guests = Util.randBetween(MIN_USER_PER_EVENT, MAX_USER_PER_EVENT);
-            ArrayList<User> guests = Util.sample_without_replacement(user_pool, num_guests);
+            if(num_guests==0)
+                return;
+            // get one additional guest
+            ArrayList<User> guests = Util.sample_without_replacement(user_pool, num_guests+1);
+            // remove owner, or remove additional guest
+            if(!guests.remove(owner))
+                guests.remove(0);
             this.add_guests(guests);
             // inform users
             for(User user : guests)
@@ -406,6 +422,7 @@ public class DataGenerator {
         }
 
         public void add_owner( User user ){
+            this.owner = user;
             this.userroles.add(new UserRole(user, Permissions.Role.OWNER));
         }
 
@@ -438,13 +455,12 @@ public class DataGenerator {
 
             // add users to this event
             for(UserRole userrole : this.userroles) {
-                String sql = "INSERT into user_event_mapping(event_id, user_id,role,join_date) VALUES(?,?,?,?)";
+                String sql = "INSERT into user_event_mapping(event_id, user_id,role) VALUES(?,?,?)";
                 statement = connection.prepareStatement(sql);
                 int i=1;
                 statement.setInt( i++, this.id);
                 statement.setInt( i++, userrole.user.id);
                 statement.setString(i++, userrole.role.toString().toLowerCase() );
-                statement.setDate( i++, this.open_date.toSqlDate() );
                 statement.execute();
 
 //                // extract user_event ids

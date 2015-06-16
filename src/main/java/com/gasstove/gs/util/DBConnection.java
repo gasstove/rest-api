@@ -12,10 +12,14 @@ public class DBConnection {
     Connection connection = null;
 
     public Connection getConnection() throws SQLException {
+        return this.getConnection(Configuration.dbConnect);
+    }
+
+    public Connection getConnection(String db) throws SQLException {
         try {
-//            Class.forName("org.sqlite.JDBC");
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection(Configuration.dbConnect);
+            //Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection(db);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
