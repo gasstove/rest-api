@@ -50,7 +50,7 @@ public class DataGenerator {
         DataContainer data = t.generate_data();
 
         try {
-            t.dropTables();
+            //t.dropTables();
             t.getConnection();
             t.createDB();
             t.insert_db(data);
