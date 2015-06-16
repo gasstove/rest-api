@@ -146,4 +146,21 @@ public class MediaEventIO extends AbstractIO<MediaEvent> {
         return mediaevents;
     }
 
+
+    // TODO: write test
+    public final boolean deleteForEventId(int event_id) throws Exception{
+        String sql = "DELETE from media_event_mapping WHERE event_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,event_id);
+        return statement.executeUpdate()==1;
+    }
+
+    // TODO: write test
+    public final boolean deleteForMediaId(int media_id) throws Exception{
+        String sql = "DELETE from media_event_mapping WHERE media_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,media_id);
+        return statement.executeUpdate()==1;
+    }
+
 }

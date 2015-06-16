@@ -1,8 +1,11 @@
 package com.gasstove.gs.resources;
 
+import com.gasstove.gs.dbaccess.MediaEventIO;
 import com.gasstove.gs.dbaccess.MediaIO;
+import com.gasstove.gs.dbaccess.UserEventIO;
 import com.gasstove.gs.models.Media;
 import com.gasstove.gs.util.Configuration;
+import com.gasstove.gs.util.Response;
 
 import javax.ws.rs.*;
 
@@ -27,4 +30,57 @@ public class MediaResource extends AbstractResource  {
         this.objclass = Media.class;
     }
 
+    /**
+     * Delete media item,
+     *  1) delete a row from the media table
+     *  2) MediaEventIO.deleteForMediaId
+     * @param id
+     * @return
+     */
+    @Override
+    public String delete(@PathParam("id") String id) {
+
+        boolean success = true;
+        MediaEventIO mediaEventIO = null;
+
+        try {
+            int media_id = Integer.parseInt(id);
+
+            // delete row in events table, get a response
+            String resp_json = super.delete(id);
+            success &= (new Response(resp_json)).success;
+
+            // delete from media_events
+            if(success) {
+                mediaEventIO = new MediaEventIO(db);
+                success &= mediaEventIO.deleteForMediaId(media_id);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if(mediaEventIO!=null)
+                mediaEventIO.close();
+            Response response = success ?
+                    new Response(true, "Media successfully deleted",null) :
+                    new Response(false, "Media deletion failed",null) ;
+            return response.toJSON();
+        }
+    }
+
+    public String delete_all_media_for_user(String user_id){
+        String returnJSON = "";
+        MediaIO io = null;
+        try {
+            io = (MediaIO) get_connection();
+            io.delete_all_media_for_user(Integer.parseInt(user_id));
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            //returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+        } finally {
+            io.close();
+        }
+        return returnJSON;
+
+    }
 }

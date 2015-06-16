@@ -133,4 +133,13 @@ public class UserEventIO extends AbstractIO<UserEvent> {
         return statement.executeUpdate()==1;
     }
 
+    // TODO: write test
+    public final boolean deleteForEventId(int event_id) throws Exception{
+        String sql = "DELETE from user_event_mapping WHERE event_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,event_id);
+        return statement.executeUpdate()==1;
+    }
+
+
 }

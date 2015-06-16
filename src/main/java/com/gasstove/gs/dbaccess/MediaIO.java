@@ -63,9 +63,13 @@ public class MediaIO extends AbstractIO<Media> {
     }
 
     ////////////////////////////////////////////
-    // additional readers
+    // additional readers / writers
     ////////////////////////////////////////////
 
+    public boolean delete_all_media_for_user(int user_id){
+        // TODO
+        return false;
+    }
 
 
 }

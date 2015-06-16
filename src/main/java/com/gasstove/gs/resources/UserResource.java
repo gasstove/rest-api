@@ -20,4 +20,20 @@ public class UserResource extends AbstractResource  {
         this.objclass = User.class;
     }
 
+    @Override
+    public String delete(@PathParam("id") String id) {
+
+        String super_str = super.delete(id);
+
+        // if not success, return
+
+        // delete all events belonging to this user
+        String event_str = (new EventResource(this.db)).delete_all_events_for_user(id);
+
+        // delete all media belonging to this user
+        String media_str = (new MediaResource(this.db)).delete_all_media_for_user(id);
+
+        return "";
+
+    }
 }

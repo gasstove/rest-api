@@ -57,31 +57,6 @@ public class AbstractResource {
         return returnJSON;
     }
 
-    ////////////////////////////////////////////////////////////
-    // '/#'
-    ////////////////////////////////////////////////////////////
-
-    /** get table row with id
-     */
-    @Path("/{id: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getForId(@PathParam("id") String id) {
-        String returnJSON = "";
-        AbstractIO io = null;
-        try {
-            io = get_connection();
-            AbstractObject user = (AbstractObject) io.getWithId(Integer.parseInt(id));
-            returnJSON = user.toJson();
-        } catch (Exception exp) {
-            exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
-        } finally {
-            io.close();
-        }
-        return returnJSON;
-    }
-
     /** insert or update table row
      */
     @Path("/")
@@ -147,6 +122,31 @@ public class AbstractResource {
         return response.toJSON();
     }
 
+    ////////////////////////////////////////////////////////////
+    // '/#'
+    ////////////////////////////////////////////////////////////
+
+    /** get table row with id
+     */
+    @Path("/{id: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getForId(@PathParam("id") String id) {
+        String returnJSON = "";
+        AbstractIO io = null;
+        try {
+            io = get_connection();
+            AbstractObject user = (AbstractObject) io.getWithId(Integer.parseInt(id));
+            returnJSON = user.toJson();
+        } catch (Exception exp) {
+            exp.printStackTrace();
+            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+        } finally {
+            io.close();
+        }
+        return returnJSON;
+    }
+
     /** delete table row
      */
     @Path("/{id: [0-9]+}")
@@ -167,7 +167,7 @@ public class AbstractResource {
             // check success
             response = success ?
                     new Response(true, "Object successfully deleted",null) :
-                    new Response(true, "Object deletion failed",null) ;
+                    new Response(false, "Object deletion failed",null) ;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,7 +175,8 @@ public class AbstractResource {
             // rollback transaction
             //oraDatabase.rollbackTransaction(conn);
 
-            response = new Response(false, "Error saving new object, " + e.getMessage(), null);
+            response = new Response(false, "Object deletion failed",null) ;
+
         } finally {
             io.close();
         }

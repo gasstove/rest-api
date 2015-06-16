@@ -40,6 +40,14 @@ public class Response {
         this.resource = resource;
     }
 
+    public Response(String json){
+        Gson gson = new Gson();
+        Response r = gson.fromJson(json,Response.class);
+        this.success = r.success;
+        this.message = r.message;
+        this.resource = r.resource;
+    }
+
 	public String toJSONP(boolean success, String message, String resource) {
 
 		// make sure to escape all quotes within message and resource strings
@@ -80,5 +88,6 @@ public class Response {
 
         return (new Gson()).toJson(this,Response.class);
     }
+
 
 }
