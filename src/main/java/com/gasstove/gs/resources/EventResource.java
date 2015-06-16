@@ -76,7 +76,7 @@ public class EventResource extends AbstractResource {
     }
 
     // TODO
-    public String delete_all_events_for_user(String user_id){
+    public String deleteEventsOwnedBy(String user_id){
 
         // user UserEventResource to get all events for this user
 

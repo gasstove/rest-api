@@ -68,7 +68,7 @@ public class MediaResource extends AbstractResource  {
         }
     }
 
-    public String delete_all_media_for_user(String user_id){
+    public String deleteMediaOwnedBy(String user_id){
         String returnJSON = "";
         MediaIO io = null;
         try {
