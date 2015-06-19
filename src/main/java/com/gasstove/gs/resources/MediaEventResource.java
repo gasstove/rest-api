@@ -39,14 +39,14 @@ public class MediaEventResource extends AbstractResource {
         MediaEventIO io = null;
         try {
             io = (MediaEventIO) get_connection();
-            int eId = Integer.parseInt(eventId);
-            ArrayList<MediaEvent> mediaevents = io.getSharedMediaForEvent(eId);
+            ArrayList<MediaEvent> mediaevents = io.getSharedMediaForEvent(Integer.parseInt(eventId));
             returnJSON = Util.getGson().toJson(mediaevents);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
         return returnJSON;
     }
@@ -71,7 +71,8 @@ public class MediaEventResource extends AbstractResource {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
         return returnJSON;
     }

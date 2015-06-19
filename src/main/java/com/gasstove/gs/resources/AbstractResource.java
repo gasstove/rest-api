@@ -52,7 +52,8 @@ public class AbstractResource {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
         return returnJSON;
     }
@@ -116,7 +117,8 @@ public class AbstractResource {
             response = new Response(false, "Error saving new object, " + e.getMessage(), null);
 
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
 
         return response.toJSON();
@@ -142,7 +144,8 @@ public class AbstractResource {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
         return returnJSON;
     }
@@ -178,7 +181,8 @@ public class AbstractResource {
             response = new Response(false, "Object deletion failed",null) ;
 
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
 
         return response.toJSON();
