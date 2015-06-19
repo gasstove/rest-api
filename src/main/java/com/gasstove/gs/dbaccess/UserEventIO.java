@@ -88,12 +88,12 @@ public class UserEventIO extends AbstractIO<UserEvent> {
         ArrayList<Event> events = new ArrayList<Event>();
         UserEventIO userEventIO = new UserEventIO(conn);
         try {
-            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as eid, * FROM event, user_event_mapping aem WHERE aem.user_id=? AND aem.event_id = event.id");
+            PreparedStatement stmt = conn.prepareStatement("SELECT event.id as id, event.name as name, event.open_date as open_date, event.close_date as close_date FROM event, user_event_mapping aem WHERE aem.user_id=? AND aem.event_id = event.id");
             stmt.setInt(1, uId);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Event e = new Event();
-                e.setId(rs.getInt("eid"));
+                e.setId(rs.getInt("id"));
                 e.setName(rs.getString("name"));
                 e.setOpenDate(new Time(rs.getInt("open_date")));
                 e.setCloseDate(new Time(rs.getInt("close_date")));
