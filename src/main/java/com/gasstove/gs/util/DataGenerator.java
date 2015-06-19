@@ -11,9 +11,6 @@ import java.util.Map;
  */
 public class DataGenerator {
 
-    // db file
-    private static final String dbfile = "src/main/resources/gasstoveDev.db";
-
     //set these values to manipulate test records
     private static final int MIN_USER_PER_EVENT = 1;
     private static final int MAX_USER_PER_EVENT = 30;
