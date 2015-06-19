@@ -78,7 +78,8 @@ public class MediaResource extends AbstractResource  {
             exp.printStackTrace();
             //returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
         } finally {
-            io.close();
+            if(io!=null)
+                io.close();
         }
         return returnJSON;
 

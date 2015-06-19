@@ -550,6 +550,7 @@ public class DataGenerator {
             this.role = role;
         }
     }
+
     /* .. STATICS ....................................................... */
 
     static String[] userNames = {
