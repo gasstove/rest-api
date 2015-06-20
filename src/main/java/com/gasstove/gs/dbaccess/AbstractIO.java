@@ -33,7 +33,7 @@ public abstract class AbstractIO<T> {
     ///////////////////////////////////////////
 
     public AbstractIO() {
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     }
 
     public AbstractIO(String db) {

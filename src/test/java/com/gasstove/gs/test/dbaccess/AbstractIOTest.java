@@ -3,7 +3,9 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.AbstractIO;
 import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
+import com.gasstove.gs.util.Configuration;
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,6 +20,10 @@ public abstract class AbstractIOTest<T> {
     Class clath;
     AbstractIO io;
     int test_id;
+
+    public AbstractIOTest(){
+        Configuration.profile = Configuration.PROFILE.test;
+    }
 
     ///////////////////////////////////////////////////////
     // READER

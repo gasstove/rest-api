@@ -3,9 +3,11 @@ package com.gasstove.gs.test.resources;
 import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import com.gasstove.gs.resources.AbstractResource;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.test.TestConfiguration;
 import com.google.gson.Gson;
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -23,6 +25,10 @@ public abstract class AbstractResourceTest {
     protected String getAll_exp;            // expected return value of getAll
     protected String use_id;                // object id to use in getForId test
     protected String getForId_exp;          // expected return value of getForId(use_id)
+
+    public AbstractResourceTest(){
+        Configuration.profile = Configuration.PROFILE.test;
+    }
 
     @Test
     public void test_getAll() {

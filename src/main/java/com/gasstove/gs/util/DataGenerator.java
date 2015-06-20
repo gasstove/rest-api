@@ -45,17 +45,16 @@ public class DataGenerator {
 
         // args[0]=="test" => generate test data
         // args[0]=="dev" => generate dev data
-        String dbfile = "";
         if(args[0].compareTo("test")==0)
-            dbfile = Configuration.testDB;
+            Configuration.profile = Configuration.PROFILE.dev;
         else if(args[0].compareTo("dev")==0)
-            dbfile = Configuration.devDB;
+            Configuration.profile = Configuration.PROFILE.test;
 
         DataGenerator t = new DataGenerator();
         DataContainer data = t.generate_data();
         try {
-            t.dropTables(dbfile);
-            t.getConnection("jdbc:sqlite:"+dbfile);
+            t.dropTables( Configuration.getDB() );
+            t.getConnection( Configuration.getDriver() + Configuration.getDB() );
             t.createDB();
             t.insert_db(data);
         }

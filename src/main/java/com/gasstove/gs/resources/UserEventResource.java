@@ -22,7 +22,7 @@ public class UserEventResource extends AbstractResource  {
 
     @SuppressWarnings("unused")
     public UserEventResource(){
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     };
 
     public UserEventResource(String db){

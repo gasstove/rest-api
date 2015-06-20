@@ -21,7 +21,7 @@ public class MediaResource extends AbstractResource  {
 
     @SuppressWarnings("unused")
     public MediaResource(){
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     };
 
     public MediaResource(String db){

@@ -12,7 +12,7 @@ public class UserResource extends AbstractResource  {
 
     @SuppressWarnings("unused")
     public UserResource(){
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     };
 
     public UserResource(String db){

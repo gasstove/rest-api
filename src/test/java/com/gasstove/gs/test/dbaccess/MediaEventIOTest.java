@@ -3,6 +3,7 @@ package com.gasstove.gs.test.dbaccess;
 import com.gasstove.gs.dbaccess.MediaEventIO;
 import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.test.TestConfiguration;
+import com.gasstove.gs.util.Configuration;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -18,7 +19,7 @@ public class MediaEventIOTest extends AbstractIOTest<MediaEvent> {
 
     public MediaEventIOTest(){
         clath = MediaEvent.class;
-        io = new MediaEventIO(TestConfiguration.db);
+        io = new MediaEventIO(Configuration.getDB());
         test_id = TestConfiguration.mediaevent_id;
     }
 

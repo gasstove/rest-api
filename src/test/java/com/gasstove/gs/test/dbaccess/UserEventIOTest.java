@@ -4,6 +4,7 @@ import com.gasstove.gs.dbaccess.UserEventIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.models.UserEvent;
 import com.gasstove.gs.test.TestConfiguration;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Permissions;
 import org.junit.Test;
 
@@ -20,7 +21,7 @@ public class UserEventIOTest extends AbstractIOTest<UserEvent> {
 
     public UserEventIOTest(){
         clath = UserEvent.class;
-        io = new UserEventIO(TestConfiguration.db);
+        io = new UserEventIO(Configuration.getDB());
         test_id = TestConfiguration.userevent_id;
     }
 

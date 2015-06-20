@@ -1,7 +1,5 @@
 package com.gasstove.gs.test;
 
-import com.gasstove.gs.util.Configuration;
-
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,7 +7,10 @@ import java.net.URL;
 
 public class TestConfiguration {
 
-    public static final String db = "jdbc:sqlite:" + Configuration.testDB;
+    private static final String SERVER_BASE_URI = "http://localhost:50000";
+    private static final String REST_API_PATH = "/gs-rest-api";
+
+//    public static final String db = "jdbc:sqlite:" + Configuration.testDB;
 
     public static Integer user_id = 36;
     public static Integer event_id = 1;
@@ -27,7 +28,6 @@ public class TestConfiguration {
         }
     }
 
-
     // standard response values per test
 //    public static String expectedResponseStatus = "OK";
 //    public static int expectedResponseCode = 200;
@@ -41,7 +41,7 @@ public class TestConfiguration {
         HttpURLConnection conn = null;
 
         try {
-            String url = Configuration.SERVER_BASE_URI + Configuration.REST_API_PATH + uri;
+            String url = TestConfiguration.SERVER_BASE_URI + TestConfiguration.REST_API_PATH + uri;
 
             // Construct Http Connection object
             URL requestUrl = new URL(url);
@@ -78,4 +78,5 @@ public class TestConfiguration {
             return null;
         }
     }
+
 }

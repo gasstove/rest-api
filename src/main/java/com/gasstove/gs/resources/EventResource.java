@@ -15,7 +15,7 @@ public class EventResource extends AbstractResource {
 
     @SuppressWarnings("unused")
     public EventResource(){
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     }
 
     public EventResource(String db){

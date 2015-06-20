@@ -6,15 +6,50 @@ package com.gasstove.gs.util;
 public class Configuration {
 
     public static String testDBBackup = "src/main/resources/gasstoveTest_backup.db";
-    public static String testDB = "src/main/resources/gasstoveTest.db";
-    public static String devDB = "src/main/resources/gasstoveDev.db";
 
-    public static final String SERVER_BASE_URI = "http://localhost:50000";
-    public static final String REST_API_PATH = "/gs-rest-api";
-    //public static final String dbConnect = "jdbc:sqlite:" + Configuration.devDB;
+//
+//    //public static final String dbConnect = "jdbc:sqlite:" + Configuration.devDB;
+//
+//    public static final String dbConnect = Configuration.prodDB;
+//    //public static final String PROD_SERVER_BASE_URI = "http://52.10.166.27:8080";
 
-    public static String prodDB = "jdbc:mysql://localhost:3306/gasstove?user=root&password=";
-    public static final String dbConnect = Configuration.prodDB;
-    //public static final String PROD_SERVER_BASE_URI = "http://52.10.166.27:8080";
+    ////////////////////////////////////////////////////////
+    // PROFILES
+    ////////////////////////////////////////////////////////
+
+    public enum PROFILE { test , dev , prod }
+
+    public static PROFILE profile  = PROFILE.dev;
+
+    public static String getDB(){
+        return getDriver() + getDBLink();
+    }
+
+    public static String getDBLink(){
+
+        switch( Configuration.profile ) {
+            case test:
+                return "src/main/resources/gasstoveTest.db";
+            case dev:
+                return "src/main/resources/gasstoveDev.db";
+            case prod:
+                return "//localhost:3306/gasstove?user=root&password=";
+            default:
+                return "";
+        }
+    }
+
+    public static String getDriver(){
+        switch( Configuration.profile ) {
+            case test:
+            case dev:
+                return "jdbc:sqlite:";
+            case prod:
+                return "jdbc:mysql:";
+            default:
+                return "";
+        }
+
+    }
 
 }

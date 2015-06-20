@@ -18,7 +18,7 @@ public class MediaEventResource extends AbstractResource {
 
     @SuppressWarnings("unused")
     public MediaEventResource(){
-        this(Configuration.dbConnect);
+        this(Configuration.getDB());
     };
 
     public MediaEventResource(String db) {
