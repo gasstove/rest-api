@@ -27,7 +27,7 @@ import static org.junit.Assert.*;
 public class UserEventResourceTest extends AbstractResourceTest {
 
     File testDB = new File(Configuration.getDB());
-    File testDBBackup = new File(Configuration.testDBBackup);
+    File testDBBackup = new File("src/main/resources/gasstoveTest_backup.db");
 
     public UserEventResourceTest(){
         this.clath = UserEvent.class;
@@ -55,6 +55,7 @@ public class UserEventResourceTest extends AbstractResourceTest {
         assertEquals(response,expected);
     }
 
+    @Ignore
     @Test
     public void test_addUsersToEvent() {
 

@@ -54,7 +54,7 @@ public class DataGenerator {
         DataContainer data = t.generate_data();
         try {
             t.dropTables( Configuration.getDB() );
-            t.getConnection( Configuration.getDriver() + Configuration.getDB() );
+            t.getConnection( Configuration.getDBPrefix() + Configuration.getDB() );
             t.createDB();
             t.insert_db(data);
         }

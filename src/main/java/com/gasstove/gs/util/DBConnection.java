@@ -17,8 +17,7 @@ public class DBConnection {
 
     public Connection getConnection(String db) throws SQLException {
         try {
-//            Class.forName("com.mysql.jdbc.Driver");
-            Class.forName("org.sqlite.JDBC");
+            Class.forName(Configuration.getDriverClassPath());
             connection = DriverManager.getConnection(db);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();

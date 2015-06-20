@@ -108,6 +108,7 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
                     <stopPort>50001</stopPort>
                     <stopKey>STOP</stopKey>
                     <connectors>
