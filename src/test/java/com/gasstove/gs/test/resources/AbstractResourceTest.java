@@ -6,6 +6,7 @@ import com.gasstove.gs.resources.AbstractResource;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.test.TestConfiguration;
 import com.google.gson.Gson;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -39,6 +40,7 @@ public abstract class AbstractResourceTest {
         assertEquals(getForId_exp, response);
     }
 
+    @Ignore
     @Test
     public void test_insertdelete(){
         try {
