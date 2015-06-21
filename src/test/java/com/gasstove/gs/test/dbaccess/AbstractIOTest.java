@@ -87,7 +87,7 @@ public abstract class AbstractIOTest<T> {
             assertTrue( obj1.shallowEquals(obj2) );
 
             // remove it
-            assertTrue( io.delete(obj1.getId()) );
+            io.delete(obj1.getId());
 
             // check it is not there
             assertNull(io.getWithId(obj1.getId()));

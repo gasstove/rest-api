@@ -165,12 +165,10 @@ public class AbstractResource {
             io = this.get_connection();
 
             // write
-            boolean success = io.delete(Integer.parseInt(id));
+            io.delete(Integer.parseInt(id));
 
             // check success
-            response = success ?
-                    new Response(true, "Object successfully deleted",null) :
-                    new Response(false, "Object deletion failed",null) ;
+            response = new Response(true, "Object successfully deleted",null);
 
         } catch (Exception e) {
             e.printStackTrace();

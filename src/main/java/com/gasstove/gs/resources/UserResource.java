@@ -7,6 +7,8 @@ import com.gasstove.gs.util.Response;
 
 import javax.ws.rs.*;
 
+import static org.junit.Assert.fail;
+
 @Path("/users")
 public class UserResource extends AbstractResource  {
 
@@ -59,6 +61,7 @@ public class UserResource extends AbstractResource  {
 
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         } finally {
             Response response = success ?
                     new Response(true, "User successfully deleted",null) :

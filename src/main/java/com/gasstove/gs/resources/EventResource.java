@@ -9,6 +9,7 @@ import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 
 import javax.ws.rs.*;
+import java.util.ArrayList;
 
 @Path("/events")
 public class EventResource extends AbstractResource {
@@ -35,33 +36,28 @@ public class EventResource extends AbstractResource {
     @Override
     public String delete(@PathParam("id") String id) {
 
-        boolean success = true;
         UserEventIO userEventIO = null;
         MediaEventIO mediaEventIO = null;
+        boolean success = false;
 
-        // TODO : THE main table delete has to go last!!!
-        // TODO: TRANSACTIONS!
         try {
             int event_id = Integer.parseInt(id);
 
-            // delete row in events table, get a response
-            String resp_json = super.delete(id);
-            success &= (new Response(resp_json)).success;
-
             // delete from user_events
-            if(success) {
-                userEventIO = new UserEventIO(db);
-                success &= userEventIO.deleteForEventId(event_id);
-            }
+            userEventIO = new UserEventIO(db);
+            userEventIO.deleteForEventId(event_id);
 
             // delete from media_events
-            if(success) {
-                mediaEventIO = new MediaEventIO(db);
-                success &= mediaEventIO.deleteForEventId(event_id);
-            }
+            mediaEventIO = new MediaEventIO(db);
+            mediaEventIO.deleteForEventId(event_id);
+
+            // delete row in events table, get a response
+            String resp_json = super.delete(id);
+            success = (new Response(resp_json)).success;
 
         } catch (Exception e) {
             e.printStackTrace();
+            return (new Response(false, "Event deletion failed",null)).toJSON();
         } finally {
             if(userEventIO!=null)
                 userEventIO.close();
@@ -75,14 +71,27 @@ public class EventResource extends AbstractResource {
 
     }
 
-    // TODO
-    public String deleteEventsOwnedBy(String user_id){
+    public String deleteEventsOwnedBy(String user_id_str){
 
-        // user UserEventResource to get all events for this user
+        int user_id = Integer.parseInt(user_id_str);
+
+        // use UserEventIO to get all events for this user
+        UserEventIO usereventIO = new UserEventIO(db);
+        ArrayList<Event> events = usereventIO.getEventsForUser(user_id);
+        usereventIO.close();
 
         // use Event resource to delete all those events
+        boolean success = true;
+        for(Event event : events){
+            Response response = new Response(delete(String.format("%d",event.getId())));
+            success &= response.success;
+        }
 
-        return "";
+        Response return_resp = success ?
+                new Response(true, "Events successfully deleted",null) :
+                new Response(false, "Events deletion failed",null);
+
+        return return_resp.toJSON();
     }
 
 }

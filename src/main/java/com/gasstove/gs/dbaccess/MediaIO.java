@@ -66,10 +66,12 @@ public class MediaIO extends AbstractIO<Media> {
     // additional readers / writers
     ////////////////////////////////////////////
 
-    public boolean delete_all_media_for_user(int user_id){
-        // TODO
-        return false;
+    // TODO: write test
+    public final void delete_all_media_for_user(int user_id) throws Exception {
+        String sql = "DELETE from media WHERE user_id=?";
+        PreparedStatement statement = conn.prepareStatement(sql);
+        statement.setInt(1,user_id);
+        statement.executeUpdate();
     }
-
 
 }

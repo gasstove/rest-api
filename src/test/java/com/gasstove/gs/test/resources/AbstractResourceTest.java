@@ -46,7 +46,6 @@ public abstract class AbstractResourceTest {
         assertEquals(getForId_exp, response);
     }
 
-    @Ignore
     @Test
     public void test_insertdelete(){
         try {
@@ -66,7 +65,7 @@ public abstract class AbstractResourceTest {
 
             // delete it
             responseStr = resource.delete(String.format("%d",return_obj.getId()));
-            assertTrue(responseStr.contains("Object successfully deleted"));
+            assertTrue(responseStr.contains("successfully deleted"));
 
         } catch (Exception exp) {
             exp.printStackTrace();

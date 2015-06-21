@@ -125,20 +125,21 @@ public class UserEventIO extends AbstractIO<UserEvent> {
         return users;
     }
 
-    public final boolean deleteForEventAndUserIds(int event_id, int user_id) throws Exception{
+    // TODO : write test
+    public final void deleteForEventAndUserIds(int event_id, int user_id) throws Exception {
         String sql = "DELETE from user_event_mapping WHERE event_id=? AND user_id=?";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setInt(1,event_id);
         statement.setInt(2,user_id);
-        return statement.executeUpdate()==1;
+        statement.executeUpdate();
     }
 
     // TODO: write test
-    public final boolean deleteForEventId(int event_id) throws Exception{
+    public final void deleteForEventId(int event_id) throws Exception {
         String sql = "DELETE from user_event_mapping WHERE event_id=?";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setInt(1,event_id);
-        return statement.executeUpdate()==1;
+        statement.executeUpdate();
     }
 
 

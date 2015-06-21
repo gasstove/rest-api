@@ -80,11 +80,11 @@ public abstract class AbstractIO<T> {
     }
 
     /** delete single row from a table **/
-    public final boolean delete(int id) throws Exception{
+    public final void delete(int id) throws Exception{
         String sql = "DELETE from " + get_table_name() + " WHERE id=?";
         PreparedStatement statement = conn.prepareStatement(sql);
         statement.setInt(1,id);
-        return statement.executeUpdate()==1;
+        statement.executeUpdate();
     }
 
     ///////////////////////////////////////////

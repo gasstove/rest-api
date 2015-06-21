@@ -101,6 +101,4 @@ public class EventIO extends AbstractIO<Event> {
     // additional readers
     ////////////////////////////////////////////
 
-
-
 }

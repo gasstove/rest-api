@@ -53,11 +53,12 @@ public class MediaResource extends AbstractResource  {
             // delete from media_events
             if(success) {
                 mediaEventIO = new MediaEventIO(db);
-                success &= mediaEventIO.deleteForMediaId(media_id);
+                mediaEventIO.deleteForMediaId(media_id);
             }
 
         } catch (Exception e) {
             e.printStackTrace();
+            return (new Response(false, "Media deletion failed",null)).toJSON();
         } finally {
             if(mediaEventIO!=null)
                 mediaEventIO.close();
@@ -69,19 +70,21 @@ public class MediaResource extends AbstractResource  {
     }
 
     public String deleteMediaOwnedBy(String user_id){
-        String returnJSON = "";
         MediaIO io = null;
+        Response response;
         try {
             io = (MediaIO) get_connection();
             io.delete_all_media_for_user(Integer.parseInt(user_id));
         } catch (Exception exp) {
             exp.printStackTrace();
-            //returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            response = new Response(false, exp.getMessage(), null);
+            return response.toJSON();
         } finally {
             if(io!=null)
                 io.close();
+            response = new Response(true, "Media successfully deleted",null);
+            return response.toJSON();
         }
-        return returnJSON;
 
     }
 }
