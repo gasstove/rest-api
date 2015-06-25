@@ -13,7 +13,7 @@ public class Configuration {
 
     public enum PROFILE { test , dev , prod }
 
-    public static PROFILE profile  = PROFILE.prod;
+    public static PROFILE profile  = PROFILE.dev;
 
     public static String getDB(){
         return getDBPrefix() + getDBLink();

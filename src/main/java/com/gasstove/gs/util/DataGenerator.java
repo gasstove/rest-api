@@ -46,15 +46,15 @@ public class DataGenerator {
         // args[0]=="test" => generate test data
         // args[0]=="dev" => generate dev data
         if(args[0].compareTo("test")==0)
-            Configuration.profile = Configuration.PROFILE.dev;
-        else if(args[0].compareTo("dev")==0)
             Configuration.profile = Configuration.PROFILE.test;
+        else if(args[0].compareTo("dev")==0)
+            Configuration.profile = Configuration.PROFILE.dev;
 
         DataGenerator t = new DataGenerator();
         DataContainer data = t.generate_data();
         try {
             t.dropTables( Configuration.getDB() );
-            t.getConnection( Configuration.getDBPrefix() + Configuration.getDB() );
+            t.getConnection( Configuration.getDB() );
             t.createDB();
             t.insert_db(data);
         }
