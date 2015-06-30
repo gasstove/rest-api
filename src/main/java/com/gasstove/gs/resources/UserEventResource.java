@@ -44,7 +44,9 @@ public class UserEventResource extends AbstractResource  {
         try {
             io = (UserEventIO) get_connection();
             ArrayList<Event> events = io.getEventsForUser(Integer.parseInt(userId));
-            returnJSON = Util.getGson().toJson(events);
+            returnJSON = Configuration.USE_JSONP ?
+                         "callback1("+Util.getGson().toJson(events)+")":
+                         Util.getGson().toJson(events);
         } catch (Exception exp) {
             exp.printStackTrace();
             returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();

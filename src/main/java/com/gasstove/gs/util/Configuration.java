@@ -5,6 +5,7 @@ package com.gasstove.gs.util;
  */
 public class Configuration {
 
+    public static final boolean USE_JSONP = true;
 //    public static final String PROD_SERVER_BASE_URI = "http://52.10.166.27:8080";
 
     ////////////////////////////////////////////////////////
