@@ -58,14 +58,14 @@ public class MediaResource extends AbstractResource  {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return (new Response(false, "Media deletion failed",null)).toJSON();
+            return (new Response(false, "Media deletion failed",null)).format(response_format);
         } finally {
             if(mediaEventIO!=null)
                 mediaEventIO.close();
             Response response = success ?
                     new Response(true, "Media successfully deleted",null) :
                     new Response(false, "Media deletion failed",null) ;
-            return response.toJSON();
+            return response.format(response_format);
         }
     }
 
@@ -78,12 +78,12 @@ public class MediaResource extends AbstractResource  {
         } catch (Exception exp) {
             exp.printStackTrace();
             response = new Response(false, exp.getMessage(), null);
-            return response.toJSON();
+            return response.format(response_format);
         } finally {
             if(io!=null)
                 io.close();
             response = new Response(true, "Media successfully deleted",null);
-            return response.toJSON();
+            return response.format(response_format);
         }
 
     }

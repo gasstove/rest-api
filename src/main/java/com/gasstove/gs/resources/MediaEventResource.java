@@ -35,20 +35,20 @@ public class MediaEventResource extends AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
-        String returnJSON;
+        String returnString;
         MediaEventIO io = null;
         try {
             io = (MediaEventIO) get_connection();
             ArrayList<MediaEvent> mediaevents = io.getSharedMediaForEvent(Integer.parseInt(eventId));
-            returnJSON = Util.getGson().toJson(mediaevents);
+            returnString = Util.formatArray(mediaevents,response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnString;
     }
 
     ////////////////////////////////////////////////////////////
@@ -59,22 +59,22 @@ public class MediaEventResource extends AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId) {
-        String returnJSON;
+        String returnString;
         MediaEventIO io = null;
         try {
             io = (MediaEventIO) get_connection();
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = io.getMediaForUserAndEvent(uId,eId);
-            returnJSON = Util.getGson().toJson(mediaevents);
+            returnString = Util.formatArray(mediaevents,response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnString;
     }
 
 }

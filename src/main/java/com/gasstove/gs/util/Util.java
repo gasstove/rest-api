@@ -1,7 +1,6 @@
 package com.gasstove.gs.util;
 
 import com.gasstove.gs.models.AbstractObject;
-import com.gasstove.gs.models.User;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -76,16 +75,30 @@ public class Util {
 
     // MISC ................................................................
 
-    public static String jsonArray(ArrayList<AbstractObject> collection){
-        if (collection.isEmpty())
-            return "[]";
-        StringBuilder str = new StringBuilder();
-        str.append("[");
-        for (AbstractObject obj : collection)
-            str.append(obj.toJson()).append(",");
-        str.setLength(str.length() - 1);
-        str.append("]");
-        return str.toString();
+//    public static String jsonArray(ArrayList<AbstractObject> collection){
+//        if (collection.isEmpty())
+//            return "[]";
+//        StringBuilder str = new StringBuilder();
+//        str.append("[");
+//        for (AbstractObject obj : collection)
+//            str.append(obj.format(Configuration.FORMAT.json)).append(",");
+//        str.setLength(str.length() - 1);
+//        str.append("]");
+//        return str.toString();
+//    }
+
+    public static String formatArray(ArrayList<?> a,Configuration.FORMAT format){
+        switch(format){
+            case json:
+                return Util.getGson().toJson(a);
+            case jsonp:
+                return Util.json2jsonp( Util.getGson().toJson(a) );
+        }
+        return null;
+    }
+
+    public static String json2jsonp(String json){
+        return "callback1(" + json + ");";
     }
 
     public static String joinToString(Collection<?> collection, CharSequence separator) {

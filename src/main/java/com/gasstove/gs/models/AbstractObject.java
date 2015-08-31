@@ -1,5 +1,6 @@
 package com.gasstove.gs.models;
 
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Util;
 
 /**
@@ -18,8 +19,14 @@ public abstract class AbstractObject {
 
     // SERIALIZE / DESERIALIZE .......................................
 
-    public String toJson(){
-        return Util.getGson().toJson(this);
+    public String format(Configuration.FORMAT format){
+        switch(format){
+            case json:
+                return Util.getGson().toJson(this);
+            case jsonp:
+                return Util.json2jsonp( Util.getGson().toJson(this) );
+        }
+        return null;
     }
 
     public void populate_from_Json(String json){}

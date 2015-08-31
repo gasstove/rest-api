@@ -38,12 +38,12 @@ public class MediaEventIOTest extends AbstractIOTest<MediaEvent> {
             assertEquals(2,arr.size());
 
             String response, expected;
-            response = arr.get(0).toJson();
+            response = arr.get(0).format(Configuration.FORMAT.json);
             expected = "{\"mediaId\":34,\"eventId\":1,\"numDownloads\":5375,\"shared\":false,\"numLikes\":0,\"numDislikes\":0,\"mediaType\":\"audio\",\"mediaFileName\":\"media_1109\",\"userId\":45,\"mediaDateTaken\":\"1969-12-15T18:35:32.594-08:00\",\"id\":-1}";
             TestConfiguration.printout(response,expected,"test_getMediaForUserAndEvent");
             assertEquals(expected,response);
 
-            response = arr.get(1).toJson();
+            response = arr.get(1).format(Configuration.FORMAT.json);
             expected = "{\"mediaId\":271,\"eventId\":1,\"numDownloads\":4664,\"shared\":false,\"numLikes\":0,\"numDislikes\":0,\"mediaType\":\"photo\",\"mediaFileName\":\"media_1032\",\"userId\":45,\"mediaDateTaken\":\"1969-12-11T05:37:18.495-08:00\",\"id\":-1}";
             TestConfiguration.printout(response,expected,"test_getMediaForUserAndEvent");
             assertEquals(expected,response);
@@ -59,7 +59,7 @@ public class MediaEventIOTest extends AbstractIOTest<MediaEvent> {
         ArrayList<MediaEvent> arr = ((MediaEventIO)io).getSharedMediaForEvent(TestConfiguration.event_id);
         assertNotNull(arr);
         assertEquals(10,arr.size());
-        String response = arr.get(0).toJson();
+        String response = arr.get(0).format(Configuration.FORMAT.json);
         String expected = "{\"mediaId\":92,\"eventId\":1,\"numDownloads\":1448,\"shared\":true,\"numLikes\":0,\"numDislikes\":0,\"mediaType\":\"photo\",\"mediaFileName\":\"media_1269\",\"userId\":50,\"mediaDateTaken\":\"1970-01-24T18:58:27.146-08:00\",\"id\":-1}";
         TestConfiguration.printout(response,expected,"test_getSharedMediaForEvent");
         assertEquals(expected,response);

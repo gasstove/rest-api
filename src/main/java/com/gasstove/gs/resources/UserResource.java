@@ -66,7 +66,7 @@ public class UserResource extends AbstractResource  {
             Response response = success ?
                     new Response(true, "User successfully deleted",null) :
                     new Response(false, "User deletion failed",null) ;
-            return response.toJSON();
+            return response.format(response_format);
         }
 
     }

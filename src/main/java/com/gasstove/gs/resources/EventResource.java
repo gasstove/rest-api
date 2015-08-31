@@ -1,6 +1,5 @@
 package com.gasstove.gs.resources;
 
-import com.gasstove.gs.dbaccess.AbstractIO;
 import com.gasstove.gs.dbaccess.EventIO;
 import com.gasstove.gs.dbaccess.MediaEventIO;
 import com.gasstove.gs.dbaccess.UserEventIO;
@@ -57,7 +56,7 @@ public class EventResource extends AbstractResource {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return (new Response(false, "Event deletion failed",null)).toJSON();
+            return (new Response(false, "Event deletion failed",null)).format(response_format);
         } finally {
             if(userEventIO!=null)
                 userEventIO.close();
@@ -66,7 +65,7 @@ public class EventResource extends AbstractResource {
             Response response = success ?
                     new Response(true, "Event successfully deleted",null) :
                     new Response(false, "Event deletion failed",null) ;
-            return response.toJSON();
+            return response.format(response_format);
         }
 
     }
@@ -91,7 +90,7 @@ public class EventResource extends AbstractResource {
                 new Response(true, "Events successfully deleted",null) :
                 new Response(false, "Events deletion failed",null);
 
-        return return_resp.toJSON();
+        return return_resp.format(response_format);
     }
 
 }

@@ -40,54 +40,63 @@ public class Response {
         this.resource = resource;
     }
 
-    public Response(String json){
+    public Response(String json) {
         Gson gson = new Gson();
-        Response r = gson.fromJson(json,Response.class);
+        Response r = gson.fromJson(json, Response.class);
         this.success = r.success;
         this.message = r.message;
         this.resource = r.resource;
     }
 
-	public String toJSONP(boolean success, String message, String resource) {
-
-		// make sure to escape all quotes within message and resource strings
-		if (message != null) {
-			message = message.replace("\"", "\\\"");
-		}
-
-		// Construct JSON string of success, message and resource
-		String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
-				+ ", \"resource\":" + resource + "}";
-
-		// replace all newline characters for JSON since they prevent it from being parsed into an object
-		returnJSON = returnJSON.replace("\n", "");
-
-		return returnJSON;
-	}
-
-    public String toJSON() {
-
-//        // make sure to escape all quotes within message and resource strings
-//        if (message != null) {
-//            message = message.replace("\\", "\\\\");
-//            message = message.replace("\"", "\\\"");
-//        }
-//        if (resource != null) {
-//            resource = resource.replace("\\", "\\\\");
-//            resource = resource.replace("\"", "\\\"");
-//        }
+//	public String toJSONP(boolean success, String message, String resource) {
 //
-//        // Construct JSON string of success, message and resource
-//        String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
-//                + ", \"resource\":" + "\"" + resource + "\"" + "}";
+//		// make sure to escape all quotes within message and resource strings
+//		if (message != null) {
+//			message = message.replace("\"", "\\\"");
+//		}
 //
-//        // replace all newline characters for JSON since they prevent it from being parsed into an object
-//        returnJSON = returnJSON.replace("\n", "");
+//		// Construct JSON string of success, message and resource
+//		String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
+//				+ ", \"resource\":" + resource + "}";
 //
-//        return returnJSON;
+//		// replace all newline characters for JSON since they prevent it from being parsed into an object
+//		returnJSON = returnJSON.replace("\n", "");
+//
+//		return returnJSON;
+//	}
+//
+//    public String toJSON() {
+//
+////        // make sure to escape all quotes within message and resource strings
+////        if (message != null) {
+////            message = message.replace("\\", "\\\\");
+////            message = message.replace("\"", "\\\"");
+////        }
+////        if (resource != null) {
+////            resource = resource.replace("\\", "\\\\");
+////            resource = resource.replace("\"", "\\\"");
+////        }
+////
+////        // Construct JSON string of success, message and resource
+////        String returnJSON = "{\"success\":" + success + ", \"message\":" + "\"" + message + "\""
+////                + ", \"resource\":" + "\"" + resource + "\"" + "}";
+////
+////        // replace all newline characters for JSON since they prevent it from being parsed into an object
+////        returnJSON = returnJSON.replace("\n", "");
+////
+////        return returnJSON;
+//
+//        return (new Gson()).toJson(this,Response.class);
+//    }
 
-        return (new Gson()).toJson(this,Response.class);
+    public String format(Configuration.FORMAT format) {
+        switch (format) {
+            case json:
+                return (new Gson()).toJson(this, Response.class);
+            case jsonp:
+                return Util.json2jsonp( (new Gson()).toJson(this, Response.class) );
+        }
+        return null;
     }
-
 
 }

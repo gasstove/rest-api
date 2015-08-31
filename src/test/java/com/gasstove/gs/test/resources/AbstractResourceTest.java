@@ -7,8 +7,6 @@ import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.test.TestConfiguration;
 import com.google.gson.Gson;
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -54,7 +52,7 @@ public abstract class AbstractResourceTest {
             AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
-            String responseStr = resource.insertOrUpdate(obj.toJson());
+            String responseStr = resource.insertOrUpdate(obj.format(Configuration.FORMAT.json));
 
             // get it
             Response response = (new Gson()).fromJson(responseStr,Response.class);

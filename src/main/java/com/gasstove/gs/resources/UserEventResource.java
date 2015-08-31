@@ -39,22 +39,20 @@ public class UserEventResource extends AbstractResource  {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsForUser(@PathParam("userId") String userId) {
-        String returnJSON = "";
+        String returnString = "";
         UserEventIO io = null;
         try {
             io = (UserEventIO) get_connection();
             ArrayList<Event> events = io.getEventsForUser(Integer.parseInt(userId));
-            returnJSON = Configuration.USE_JSONP ?
-                         "callback1("+Util.getGson().toJson(events)+")":
-                         Util.getGson().toJson(events);
+            returnString = Util.formatArray(events,response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnString;
     }
 
     ////////////////////////////////////////////////////////////
@@ -65,20 +63,20 @@ public class UserEventResource extends AbstractResource  {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getUsersForEvent(@PathParam("eventId") String eventId) {
-        String returnJSON = "";
+        String returnString = "";
         UserEventIO io = null;
         try {
             io = (UserEventIO) get_connection();
             ArrayList<User> users = io.getUsersForEvent(Integer.parseInt(eventId));
-            returnJSON = Util.getGson().toJson(users);
+            returnString = Util.formatArray(users,response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnString;
     }
 
     @Path("/event/{eventId: [0-9]+}")
@@ -137,7 +135,7 @@ public class UserEventResource extends AbstractResource  {
             io.close();
         }
 
-        return response.toJSON();
+        return response.format(response_format);
     }
 
 }

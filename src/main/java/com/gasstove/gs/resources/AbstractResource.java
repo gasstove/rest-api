@@ -2,6 +2,7 @@ package com.gasstove.gs.resources;
 
 import com.gasstove.gs.dbaccess.AbstractIO;
 import com.gasstove.gs.models.AbstractObject;
+import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 
@@ -17,6 +18,7 @@ public class AbstractResource {
     protected String db;
     protected Class ioclass;
     protected Class objclass;
+    protected Configuration.FORMAT response_format = Configuration.FORMAT.jsonp; // TODO: PASS THIS IN
 
 //    @Context
 //    Request req;
@@ -42,20 +44,20 @@ public class AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAll() {
-        String returnJSON = "";
+        String returnStr = "";
         AbstractIO io = null;
         try {
             io = get_connection();
             ArrayList<AbstractObject> objs = io.getAll();
-            returnJSON = Util.getGson().toJson(objs);
+            returnStr = Util.formatArray(objs,response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnStr = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnStr;
     }
 
     /** insert or update table row
@@ -106,7 +108,7 @@ public class AbstractResource {
             // query and send it back
             return_obj = (AbstractObject) io.getWithId(objId);
 
-            response = new Response(true, "New object successfully saved", return_obj.toJson());
+            response = new Response(true, "New object successfully saved", return_obj.format(Configuration.FORMAT.json));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -121,7 +123,7 @@ public class AbstractResource {
                 io.close();
         }
 
-        return response.toJSON();
+        return response.format(response_format);
     }
 
     ////////////////////////////////////////////////////////////
@@ -134,20 +136,20 @@ public class AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getForId(@PathParam("id") String id) {
-        String returnJSON = "";
+        String returnString = "";
         AbstractIO io = null;
         try {
             io = get_connection();
-            AbstractObject user = (AbstractObject) io.getWithId(Integer.parseInt(id));
-            returnJSON = user.toJson();
+            AbstractObject obj = (AbstractObject) io.getWithId(Integer.parseInt(id));
+            returnString = obj.format(response_format);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnJSON = (new Response(false, exp.getMessage(), null)).toJSON();
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
         } finally {
             if(io!=null)
                 io.close();
         }
-        return returnJSON;
+        return returnString;
     }
 
     /** delete table row
@@ -183,7 +185,7 @@ public class AbstractResource {
                 io.close();
         }
 
-        return response.toJSON();
+        return response.format(response_format);
     }
 
     protected AbstractIO get_connection() throws Exception {

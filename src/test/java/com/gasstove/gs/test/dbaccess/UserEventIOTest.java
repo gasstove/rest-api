@@ -45,7 +45,7 @@ public class UserEventIOTest extends AbstractIOTest<UserEvent> {
             String response,expected;
             for(int i=0;i<us.size();i++) {
                 expected = exp.get(i);
-                response = us.get(i).toJson();
+                response = us.get(i).format(Configuration.FORMAT.json);
                 TestConfiguration.printout(response,expected,"test_getUsersForEvent");
                 assertEquals(expected,response);
             }
