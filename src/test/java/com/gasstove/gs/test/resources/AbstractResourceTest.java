@@ -41,8 +41,11 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_getForId() {
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         System.out.println("test_getForId for " + resource.getClass().getSimpleName() );
-        String response = resource.getForId(use_id);
+        String response = resource.getForId(use_id,callback);
         TestConfiguration.printout(response, getForId_exp, "test_getForId");
         assertEquals(getForId_exp, response);
     }
