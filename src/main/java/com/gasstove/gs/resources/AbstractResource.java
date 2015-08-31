@@ -45,8 +45,8 @@ public class AbstractResource {
     @Produces({MediaType.APPLICATION_JSON})
     public String getAll(@QueryParam("gaswrapper") String callback) {
 
-        System.out.println("getAll " + callback);
-
+        if(callback==null)
+            callback = "callbackX";
 
         String returnStr = "";
         AbstractIO io = null;
