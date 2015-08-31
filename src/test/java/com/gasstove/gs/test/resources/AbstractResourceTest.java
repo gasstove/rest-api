@@ -30,8 +30,11 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_getAll() {
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         System.out.println("test_getAll for " + resource.getClass().getSimpleName() );
-        String response = resource.getAll();
+        String response = resource.getAll(callback);
         TestConfiguration.printout(response, getAll_exp, "test_getAll");
         assertEquals(getAll_exp, response);
     }
@@ -46,13 +49,16 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_insertdelete(){
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         try {
 
             // create an event
             AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
-            String responseStr = resource.insertOrUpdate(obj.format(Configuration.FORMAT.json));
+            String responseStr = resource.insertOrUpdate(obj.format(Configuration.FORMAT.json,callback));
 
             // get it
             Response response = (new Gson()).fromJson(responseStr,Response.class);

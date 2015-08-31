@@ -19,12 +19,12 @@ public abstract class AbstractObject {
 
     // SERIALIZE / DESERIALIZE .......................................
 
-    public String format(Configuration.FORMAT format){
+    public String format(Configuration.FORMAT format,String callback){
         switch(format){
             case json:
                 return Util.getGson().toJson(this);
             case jsonp:
-                return Util.json2jsonp( Util.getGson().toJson(this) );
+                return Util.json2jsonp( Util.getGson().toJson(this) ,callback);
         }
         return null;
     }

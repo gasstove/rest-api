@@ -6,10 +6,7 @@ import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import java.util.ArrayList;
 
@@ -34,16 +31,17 @@ public class MediaEventResource extends AbstractResource {
     @Path("/event/{eventId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getSharedMediaForEvent(@PathParam("eventId") String eventId) {
+    public String getSharedMediaForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
+
         String returnString;
         MediaEventIO io = null;
         try {
             io = (MediaEventIO) get_connection();
             ArrayList<MediaEvent> mediaevents = io.getSharedMediaForEvent(Integer.parseInt(eventId));
-            returnString = Util.formatArray(mediaevents,response_format);
+            returnString = Util.formatArray(mediaevents,response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
@@ -58,7 +56,8 @@ public class MediaEventResource extends AbstractResource {
     @Path("/event/{eventId: [0-9]+}/user/{userId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId) {
+    public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId,@QueryParam("gaswrapper") String callback) {
+
         String returnString;
         MediaEventIO io = null;
         try {
@@ -66,10 +65,10 @@ public class MediaEventResource extends AbstractResource {
             int uId = Integer.parseInt(userId);
             int eId = Integer.parseInt(eventId);
             ArrayList<MediaEvent> mediaevents = io.getMediaForUserAndEvent(uId,eId);
-            returnString = Util.formatArray(mediaevents,response_format);
+            returnString = Util.formatArray(mediaevents,response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();

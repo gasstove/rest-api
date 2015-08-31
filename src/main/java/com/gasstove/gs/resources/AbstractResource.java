@@ -43,16 +43,20 @@ public class AbstractResource {
     @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getAll() {
+    public String getAll(@QueryParam("gaswrapper") String callback) {
+
+        System.out.println("getAll " + callback);
+
+
         String returnStr = "";
         AbstractIO io = null;
         try {
             io = get_connection();
             ArrayList<AbstractObject> objs = io.getAll();
-            returnStr = Util.formatArray(objs,response_format);
+            returnStr = Util.formatArray(objs,response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnStr = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnStr = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
@@ -67,6 +71,8 @@ public class AbstractResource {
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public String insertOrUpdate(String objStr)  {
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
 
         AbstractObject get_obj, return_obj;
         Response response;
@@ -108,7 +114,7 @@ public class AbstractResource {
             // query and send it back
             return_obj = (AbstractObject) io.getWithId(objId);
 
-            response = new Response(true, "New object successfully saved", return_obj.format(Configuration.FORMAT.json));
+            response = new Response(true, "New object successfully saved", return_obj.format(Configuration.FORMAT.json,callback));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -123,7 +129,7 @@ public class AbstractResource {
                 io.close();
         }
 
-        return response.format(response_format);
+        return response.format(response_format,callback);
     }
 
     ////////////////////////////////////////////////////////////
@@ -135,16 +141,17 @@ public class AbstractResource {
     @Path("/{id: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getForId(@PathParam("id") String id) {
+    public String getForId(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+
         String returnString = "";
         AbstractIO io = null;
         try {
             io = get_connection();
             AbstractObject obj = (AbstractObject) io.getWithId(Integer.parseInt(id));
-            returnString = obj.format(response_format);
+            returnString = obj.format(response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
@@ -157,6 +164,9 @@ public class AbstractResource {
     @Path("/{id: [0-9]+}")
     @DELETE
     public String delete(@PathParam("id") String id) {
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         Response response;
 
         AbstractIO io = null;
@@ -185,7 +195,7 @@ public class AbstractResource {
                 io.close();
         }
 
-        return response.format(response_format);
+        return response.format(response_format,callback);
     }
 
     protected AbstractIO get_connection() throws Exception {

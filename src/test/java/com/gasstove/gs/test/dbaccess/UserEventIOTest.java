@@ -31,6 +31,9 @@ public class UserEventIOTest extends AbstractIOTest<UserEvent> {
 
     @Test
     public void test_getUsersForEvent() {
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         try {
             ArrayList<User> us = ((UserEventIO)io).getUsersForEvent(TestConfiguration.event_id);
             assertNotNull(us);
@@ -45,7 +48,7 @@ public class UserEventIOTest extends AbstractIOTest<UserEvent> {
             String response,expected;
             for(int i=0;i<us.size();i++) {
                 expected = exp.get(i);
-                response = us.get(i).format(Configuration.FORMAT.json);
+                response = us.get(i).format(Configuration.FORMAT.json,callback);
                 TestConfiguration.printout(response,expected,"test_getUsersForEvent");
                 assertEquals(expected,response);
             }

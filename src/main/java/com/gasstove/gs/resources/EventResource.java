@@ -35,6 +35,9 @@ public class EventResource extends AbstractResource {
     @Override
     public String delete(@PathParam("id") String id) {
 
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
+
         UserEventIO userEventIO = null;
         MediaEventIO mediaEventIO = null;
         boolean success = false;
@@ -56,7 +59,7 @@ public class EventResource extends AbstractResource {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return (new Response(false, "Event deletion failed",null)).format(response_format);
+            return (new Response(false, "Event deletion failed",null)).format(response_format,callback);
         } finally {
             if(userEventIO!=null)
                 userEventIO.close();
@@ -65,12 +68,15 @@ public class EventResource extends AbstractResource {
             Response response = success ?
                     new Response(true, "Event successfully deleted",null) :
                     new Response(false, "Event deletion failed",null) ;
-            return response.format(response_format);
+            return response.format(response_format,callback);
         }
 
     }
 
     public String deleteEventsOwnedBy(String user_id_str){
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
 
         int user_id = Integer.parseInt(user_id_str);
 
@@ -90,7 +96,7 @@ public class EventResource extends AbstractResource {
                 new Response(true, "Events successfully deleted",null) :
                 new Response(false, "Events deletion failed",null);
 
-        return return_resp.format(response_format);
+        return return_resp.format(response_format,callback);
     }
 
 }

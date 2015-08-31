@@ -40,6 +40,8 @@ public class MediaResource extends AbstractResource  {
     @Override
     public String delete(@PathParam("id") String id) {
 
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         boolean success = true;
         MediaEventIO mediaEventIO = null;
 
@@ -58,18 +60,21 @@ public class MediaResource extends AbstractResource  {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return (new Response(false, "Media deletion failed",null)).format(response_format);
+            return (new Response(false, "Media deletion failed",null)).format(response_format,callback);
         } finally {
             if(mediaEventIO!=null)
                 mediaEventIO.close();
             Response response = success ?
                     new Response(true, "Media successfully deleted",null) :
                     new Response(false, "Media deletion failed",null) ;
-            return response.format(response_format);
+            return response.format(response_format,callback);
         }
     }
 
     public String deleteMediaOwnedBy(String user_id){
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         MediaIO io = null;
         Response response;
         try {
@@ -78,12 +83,12 @@ public class MediaResource extends AbstractResource  {
         } catch (Exception exp) {
             exp.printStackTrace();
             response = new Response(false, exp.getMessage(), null);
-            return response.format(response_format);
+            return response.format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
             response = new Response(true, "Media successfully deleted",null);
-            return response.format(response_format);
+            return response.format(response_format,callback);
         }
 
     }

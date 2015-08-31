@@ -38,16 +38,17 @@ public class UserEventResource extends AbstractResource  {
     @Path("/user/{userId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getEventsForUser(@PathParam("userId") String userId) {
+    public String getEventsForUser(@PathParam("userId") String userId,@QueryParam("gaswrapper") String callback) {
+
         String returnString = "";
         UserEventIO io = null;
         try {
             io = (UserEventIO) get_connection();
             ArrayList<Event> events = io.getEventsForUser(Integer.parseInt(userId));
-            returnString = Util.formatArray(events,response_format);
+            returnString = Util.formatArray(events,response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
@@ -62,16 +63,17 @@ public class UserEventResource extends AbstractResource  {
     @Path("/event/{eventId: [0-9]+}")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public String getUsersForEvent(@PathParam("eventId") String eventId) {
+    public String getUsersForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
+
         String returnString = "";
         UserEventIO io = null;
         try {
             io = (UserEventIO) get_connection();
             ArrayList<User> users = io.getUsersForEvent(Integer.parseInt(eventId));
-            returnString = Util.formatArray(users,response_format);
+            returnString = Util.formatArray(users,response_format,callback);
         } catch (Exception exp) {
             exp.printStackTrace();
-            returnString = (new Response(false, exp.getMessage(), null)).format(response_format);
+            returnString = (new Response(false, exp.getMessage(), null)).format(response_format,callback);
         } finally {
             if(io!=null)
                 io.close();
@@ -84,6 +86,8 @@ public class UserEventResource extends AbstractResource  {
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public String cloberGuestsInEvent(@PathParam("eventId") String eventId, String users_json){
+
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
 
         Response response;
         int eid = Integer.parseInt(eventId);
@@ -135,7 +139,7 @@ public class UserEventResource extends AbstractResource  {
             io.close();
         }
 
-        return response.format(response_format);
+        return response.format(response_format,callback);
     }
 
 }

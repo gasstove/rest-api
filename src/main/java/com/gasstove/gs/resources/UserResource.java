@@ -35,6 +35,8 @@ public class UserResource extends AbstractResource  {
     @Override
     public String delete(@PathParam("id") String id) {
 
+        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+
         boolean success = true;
 
         // TODO : THE main table delete has to go last!!!
@@ -66,7 +68,7 @@ public class UserResource extends AbstractResource  {
             Response response = success ?
                     new Response(true, "User successfully deleted",null) :
                     new Response(false, "User deletion failed",null) ;
-            return response.format(response_format);
+            return response.format(response_format,callback);
         }
 
     }

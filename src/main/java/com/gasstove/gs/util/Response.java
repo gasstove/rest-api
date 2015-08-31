@@ -89,12 +89,12 @@ public class Response {
 //        return (new Gson()).toJson(this,Response.class);
 //    }
 
-    public String format(Configuration.FORMAT format) {
+    public String format(Configuration.FORMAT format,String callback) {
         switch (format) {
             case json:
                 return (new Gson()).toJson(this, Response.class);
             case jsonp:
-                return Util.json2jsonp( (new Gson()).toJson(this, Response.class) );
+                return Util.json2jsonp( (new Gson()).toJson(this, Response.class) ,callback);
         }
         return null;
     }
