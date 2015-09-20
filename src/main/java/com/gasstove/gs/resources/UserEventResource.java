@@ -20,13 +20,13 @@ import java.util.ArrayList;
 @Path("/userevents")
 public class UserEventResource extends AbstractResource  {
 
-    @SuppressWarnings("unused")
-    public UserEventResource(){
-        this(Configuration.getDB());
-    };
+//    @SuppressWarnings("unused")
+//    public UserEventResource(){
+//        this(Configuration.getDB());
+//    };
 
-    public UserEventResource(String db){
-        super(db);
+    public UserEventResource(String db,Configuration.FORMAT response_format){
+        super(db,response_format);
         this.ioclass = UserEventIO.class;
         this.objclass = UserEvent.class;
     }

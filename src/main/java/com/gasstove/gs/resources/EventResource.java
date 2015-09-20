@@ -13,13 +13,13 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventResource extends AbstractResource {
 
-    @SuppressWarnings("unused")
-    public EventResource(){
-        this(Configuration.getDB());
-    }
+//    @SuppressWarnings("unused")
+//    public EventResource(){
+//        this(Configuration.getDB());
+//    }
 
-    public EventResource(String db){
-        super(db);
+    public EventResource(String db,Configuration.FORMAT response_format){
+        super(db,response_format);
         this.ioclass = EventIO.class;
         this.objclass = Event.class;
     }

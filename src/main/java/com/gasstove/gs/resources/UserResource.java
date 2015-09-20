@@ -12,13 +12,13 @@ import static org.junit.Assert.fail;
 @Path("/users")
 public class UserResource extends AbstractResource  {
 
-    @SuppressWarnings("unused")
-    public UserResource(){
-        this(Configuration.getDB());
-    };
+//    @SuppressWarnings("unused")
+//    public UserResource(){
+//        this(Configuration.getDB());
+//    };
 
-    public UserResource(String db){
-        super(db);
+    public UserResource(String db,Configuration.FORMAT response_format){
+        super(db,response_format);
         this.ioclass = UserIO.class;
         this.objclass = User.class;
     }
@@ -49,14 +49,14 @@ public class UserResource extends AbstractResource  {
 
             // delete all events belonging to this user
             if(success) {
-                EventResource er = new EventResource(db);
+                EventResource er = new EventResource(db,Configuration.FORMAT.json);
                 Response event_resp = new Response( er.deleteEventsOwnedBy(id) );
                 success &= event_resp.success;
             }
 
             // delete media owned by this user
             if(success) {
-                MediaResource mr = new MediaResource(db);
+                MediaResource mr = new MediaResource(db,Configuration.FORMAT.json);
                 Response media_resp = new Response( mr.deleteMediaOwnedBy(id) );
                 success &= media_resp.success;
             }

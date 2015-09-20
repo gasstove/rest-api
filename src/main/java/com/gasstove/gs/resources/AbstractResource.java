@@ -18,7 +18,7 @@ public class AbstractResource {
     protected String db;
     protected Class ioclass;
     protected Class objclass;
-    protected Configuration.FORMAT response_format = Configuration.FORMAT.jsonp; // TODO: PASS THIS IN
+    protected Configuration.FORMAT response_format;
 
 //    @Context
 //    Request req;
@@ -29,8 +29,9 @@ public class AbstractResource {
     // @Context
     // private ServletContext context;
 
-    public AbstractResource(String db){
+    public AbstractResource(String db,Configuration.FORMAT response_format){
         this.db = db;
+        this.response_format = response_format;
     }
 
     ////////////////////////////////////////////////////////////

@@ -13,13 +13,13 @@ import java.util.ArrayList;
 @Path("/mediaevents")
 public class MediaEventResource extends AbstractResource {
 
-    @SuppressWarnings("unused")
-    public MediaEventResource(){
-        this(Configuration.getDB());
-    };
+//    @SuppressWarnings("unused")
+//    public MediaEventResource(){
+//        this(Configuration.getDB());
+//    };
 
-    public MediaEventResource(String db) {
-        super(db);
+    public MediaEventResource(String db,Configuration.FORMAT response_format) {
+        super(db,response_format);
         this.ioclass = MediaEventIO.class;
         this.objclass = MediaEvent.class;
     }

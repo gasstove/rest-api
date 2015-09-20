@@ -19,13 +19,13 @@ import javax.ws.rs.*;
 @Path("/medias")
 public class MediaResource extends AbstractResource  {
 
-    @SuppressWarnings("unused")
-    public MediaResource(){
-        this(Configuration.getDB());
-    };
+//    @SuppressWarnings("unused")
+//    public MediaResource(){
+//        this(Configuration.getDB());
+//    };
 
-    public MediaResource(String db){
-        super(db);
+    public MediaResource(String db,Configuration.FORMAT response_format){
+        super(db,response_format);
         this.ioclass = MediaIO.class;
         this.objclass = Media.class;
     }

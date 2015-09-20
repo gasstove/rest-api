@@ -30,9 +30,7 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_getAll() {
-
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
-
+        String callback = "testCallback";
         System.out.println("test_getAll for " + resource.getClass().getSimpleName() );
         String response = resource.getAll(callback);
         TestConfiguration.printout(response, getAll_exp, "test_getAll");
