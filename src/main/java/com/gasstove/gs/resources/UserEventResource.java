@@ -11,6 +11,7 @@ import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.sun.jersey.api.core.InjectParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -25,7 +26,7 @@ public class UserEventResource extends AbstractResource  {
 //        this(Configuration.getDB());
 //    };
 
-    public UserEventResource(String db){
+    public UserEventResource(@InjectParam String db){
         super(db);
         this.ioclass = UserEventIO.class;
         this.objclass = UserEvent.class;
@@ -39,7 +40,7 @@ public class UserEventResource extends AbstractResource  {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsForUser(@PathParam("userId") String userId,@QueryParam("gaswrapper") String callback) {
-        return this.getEventsForUser(userId,Configuration.FORMAT.jsonp,callback);
+        return this.getEventsForUserX(userId, Configuration.FORMAT.jsonp, callback);
     }
 
     ////////////////////////////////////////////////////////////
@@ -50,7 +51,7 @@ public class UserEventResource extends AbstractResource  {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getUsersForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
-        return this.getUsersForEvent(eventId,Configuration.FORMAT.jsonp,callback);
+        return this.getUsersForEventX(eventId, Configuration.FORMAT.jsonp, callback);
     }
 
     @Path("/event/{eventId: [0-9]+}")
@@ -58,14 +59,14 @@ public class UserEventResource extends AbstractResource  {
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public String cloberGuestsInEvent(@PathParam("eventId") String eventId, String users_json,@QueryParam("gaswrapper") String callback){
-        return this.cloberGuestsInEvent(eventId,users_json,Configuration.FORMAT.jsonp,callback);
+        return this.cloberGuestsInEventX(eventId, users_json, Configuration.FORMAT.jsonp, callback);
     }
 
     ////////////////////////////////////////////////////////////
     // overloads
     ////////////////////////////////////////////////////////////
 
-    public String getEventsForUser(String userId,Configuration.FORMAT response_format,String callback) {
+    public String getEventsForUserX(String userId,Configuration.FORMAT response_format,String callback) {
 
         String returnString = "";
         UserEventIO io = null;
@@ -83,11 +84,11 @@ public class UserEventResource extends AbstractResource  {
         return returnString;
     }
 
-    public String getEventsForUser(String userId){
-        return this.getEventsForUser(userId,Configuration.FORMAT.json,"");
+    public String getEventsForUserX(String userId){
+        return this.getEventsForUserX(userId, Configuration.FORMAT.json, "");
     }
 
-    public String getUsersForEvent(String eventId,Configuration.FORMAT response_format,String callback) {
+    public String getUsersForEventX(String eventId,Configuration.FORMAT response_format,String callback) {
 
         String returnString = "";
         UserEventIO io = null;
@@ -105,11 +106,11 @@ public class UserEventResource extends AbstractResource  {
         return returnString;
     }
 
-    public String getUsersForEvent(String userId){
-        return this.getUsersForEvent(userId,Configuration.FORMAT.json,"");
+    public String getUsersForEventX(String userId){
+        return this.getUsersForEventX(userId, Configuration.FORMAT.json, "");
     }
 
-    public String cloberGuestsInEvent(String eventId,String users_json,Configuration.FORMAT response_format,String callback){
+    public String cloberGuestsInEventX(String eventId,String users_json,Configuration.FORMAT response_format,String callback){
         Response response;
         int eid = Integer.parseInt(eventId);
         UserEventIO io = null;
@@ -163,8 +164,8 @@ public class UserEventResource extends AbstractResource  {
         return response.format(response_format,callback);
     }
 
-    public String cloberGuestsInEvent(String eventId,String users_json){
-        return this.cloberGuestsInEvent(eventId,users_json,Configuration.FORMAT.json,"");
+    public String cloberGuestsInEventX(String eventId,String users_json){
+        return this.cloberGuestsInEventX(eventId, users_json, Configuration.FORMAT.json, "");
     }
 
 

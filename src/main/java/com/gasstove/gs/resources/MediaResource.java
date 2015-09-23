@@ -19,10 +19,10 @@ import javax.ws.rs.*;
 @Path("/medias")
 public class MediaResource extends AbstractResource  {
 
-//    @SuppressWarnings("unused")
-//    public MediaResource(){
-//        this(Configuration.getDB());
-//    };
+    @SuppressWarnings("unused")
+    public MediaResource(){
+        this(Configuration.getDB());
+    };
 
     public MediaResource(String db){
         super(db);
@@ -59,7 +59,7 @@ public class MediaResource extends AbstractResource  {
             int media_id = Integer.parseInt(id);
 
             // delete row in events table, get a response
-            String resp_json = super.delete(id);
+            String resp_json = super.deleteX(id);
             success &= (new Response(resp_json)).success;
 
             // delete from media_events
