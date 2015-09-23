@@ -27,15 +27,15 @@ public abstract class AbstractResourceTest {
     protected String getAll_exp;            // expected return value of getAll
     protected String use_id;                // object id to use in getForId test
     protected String getForId_exp;          // expected return value of getForId(use_id)
-//    protected String callback = "testCallback";
+//    protected Configuration.FORMAT format;
 
-//    @Parameterized.Parameters
-//    public static Collection<Object[]> getFormat(){
-//        return Arrays.asList(new Object[][]{
-//                {Configuration.FORMAT.jsonp},
-//                {Configuration.FORMAT.json}
-//        });
-//    }
+    @Parameterized.Parameters
+    public static Collection<Object[]> getFormat(){
+        return Arrays.asList(new Object[][]{
+                {Configuration.FORMAT.jsonp},
+                {Configuration.FORMAT.json}
+        });
+    }
 
     public AbstractResourceTest(){
         Configuration.profile = Configuration.PROFILE.test;

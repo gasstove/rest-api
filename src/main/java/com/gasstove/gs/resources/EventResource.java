@@ -18,8 +18,8 @@ public class EventResource extends AbstractResource {
 //        this(Configuration.getDB());
 //    }
 
-    public EventResource(String db,Configuration.FORMAT response_format){
-        super(db,response_format);
+    public EventResource(String db){
+        super(db);
         this.ioclass = EventIO.class;
         this.objclass = Event.class;
     }

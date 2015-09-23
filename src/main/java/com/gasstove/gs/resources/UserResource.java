@@ -17,8 +17,8 @@ public class UserResource extends AbstractResource  {
 //        this(Configuration.getDB());
 //    };
 
-    public UserResource(String db,Configuration.FORMAT response_format){
-        super(db,response_format);
+    public UserResource(String db){
+        super(db);
         this.ioclass = UserIO.class;
         this.objclass = User.class;
     }
@@ -54,14 +54,14 @@ public class UserResource extends AbstractResource  {
 
             // delete all events belonging to this user
             if(success) {
-                EventResource er = new EventResource(db,Configuration.FORMAT.json);
+                EventResource er = new EventResource(db);
                 Response event_resp = new Response( er.deleteEventsOwnedBy(id) );
                 success &= event_resp.success;
             }
 
             // delete media owned by this user
             if(success) {
-                MediaResource mr = new MediaResource(db,Configuration.FORMAT.json);
+                MediaResource mr = new MediaResource(db);
                 Response media_resp = new Response( mr.deleteMediaOwnedBy(id) );
                 success &= media_resp.success;
             }

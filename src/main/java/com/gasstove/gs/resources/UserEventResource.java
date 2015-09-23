@@ -25,8 +25,8 @@ public class UserEventResource extends AbstractResource  {
 //        this(Configuration.getDB());
 //    };
 
-    public UserEventResource(String db,Configuration.FORMAT response_format){
-        super(db,response_format);
+    public UserEventResource(String db){
+        super(db);
         this.ioclass = UserEventIO.class;
         this.objclass = UserEvent.class;
     }

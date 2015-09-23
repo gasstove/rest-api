@@ -18,8 +18,8 @@ public class MediaEventResource extends AbstractResource {
 //        this(Configuration.getDB());
 //    };
 
-    public MediaEventResource(String db,Configuration.FORMAT response_format) {
-        super(db,response_format);
+    public MediaEventResource(String db) {
+        super(db);
         this.ioclass = MediaEventIO.class;
         this.objclass = MediaEvent.class;
     }

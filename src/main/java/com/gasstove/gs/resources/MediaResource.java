@@ -24,8 +24,8 @@ public class MediaResource extends AbstractResource  {
 //        this(Configuration.getDB());
 //    };
 
-    public MediaResource(String db,Configuration.FORMAT response_format){
-        super(db,response_format);
+    public MediaResource(String db){
+        super(db);
         this.ioclass = MediaIO.class;
         this.objclass = Media.class;
     }

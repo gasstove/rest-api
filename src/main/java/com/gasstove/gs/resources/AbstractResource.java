@@ -19,7 +19,7 @@ public class AbstractResource {
     protected Class ioclass;
     protected Class objclass;
 
-    public AbstractResource(String db,Configuration.FORMAT response_format){
+    public AbstractResource(String db){
         this.db = db;
     }
 
