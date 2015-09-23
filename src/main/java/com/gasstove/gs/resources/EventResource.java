@@ -13,10 +13,10 @@ import java.util.ArrayList;
 @Path("/events")
 public class EventResource extends AbstractResource {
 
-//    @SuppressWarnings("unused")
-//    public EventResource(){
-//        this(Configuration.getDB());
-//    }
+    @SuppressWarnings("unused")
+    public EventResource(){
+        this(Configuration.getDB());
+    }
 
     public EventResource(String db){
         super(db);
@@ -63,7 +63,7 @@ public class EventResource extends AbstractResource {
             mediaEventIO.deleteForEventId(event_id);
 
             // delete row in events table, get a response
-            String resp_json = super.delete(id);
+            String resp_json = super.deleteX(id);
             success = (new Response(resp_json)).success;
 
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class EventResource extends AbstractResource {
         // use Event resource to delete all those events
         boolean success = true;
         for(Event event : events){
-            Response response = new Response(delete(String.format("%d",event.getId())));
+            Response response = new Response(deleteX(String.format("%d",event.getId())));
             success &= response.success;
         }
 

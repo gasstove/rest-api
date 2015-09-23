@@ -5,6 +5,7 @@ import com.gasstove.gs.models.MediaEvent;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
 import com.gasstove.gs.util.Util;
+import com.sun.jersey.api.core.InjectParam;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -18,7 +19,7 @@ public class MediaEventResource extends AbstractResource {
 //        this(Configuration.getDB());
 //    };
 
-    public MediaEventResource(String db) {
+    public MediaEventResource(@InjectParam String db) {
         super(db);
         this.ioclass = MediaEventIO.class;
         this.objclass = MediaEvent.class;
@@ -32,7 +33,7 @@ public class MediaEventResource extends AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getSharedMediaForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
-        return this.getSharedMediaForEvent(eventId,Configuration.FORMAT.jsonp,callback);
+        return this.getSharedMediaForEventX(eventId, Configuration.FORMAT.jsonp, callback);
     }
 
     ////////////////////////////////////////////////////////////
@@ -43,14 +44,14 @@ public class MediaEventResource extends AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getMediaForUserAndEvent(@PathParam("eventId") String eventId,@PathParam("userId") String userId,@QueryParam("gaswrapper") String callback) {
-        return this.getMediaForUserAndEvent(eventId,userId,Configuration.FORMAT.jsonp,callback);
+        return this.getMediaForUserAndEventX(eventId, userId, Configuration.FORMAT.jsonp, callback);
     }
 
     ////////////////////////////////////////////////////////////
     // overloading
     ////////////////////////////////////////////////////////////
 
-    public String getSharedMediaForEvent(String eventId,Configuration.FORMAT response_format,String callback) {
+    public String getSharedMediaForEventX(String eventId,Configuration.FORMAT response_format,String callback) {
         String returnString;
         MediaEventIO io = null;
         try {
@@ -68,10 +69,10 @@ public class MediaEventResource extends AbstractResource {
     }
 
     public String getSharedMediaForEvent(String eventId){
-        return this.getSharedMediaForEvent(eventId,Configuration.FORMAT.json,"");
+        return this.getSharedMediaForEventX(eventId, Configuration.FORMAT.json, "");
     }
 
-    public String getMediaForUserAndEvent(String eventId,String userId,Configuration.FORMAT response_format,String callback) {
+    public String getMediaForUserAndEventX(String eventId,String userId,Configuration.FORMAT response_format,String callback) {
 
         String returnString;
         MediaEventIO io = null;
@@ -92,7 +93,7 @@ public class MediaEventResource extends AbstractResource {
     }
 
     public String getMediaForUserAndEvent(String eventId,String userId){
-        return this.getMediaForUserAndEvent(eventId,userId,Configuration.FORMAT.json,"");
+        return this.getMediaForUserAndEventX(eventId, userId, Configuration.FORMAT.json, "");
     }
 
 }

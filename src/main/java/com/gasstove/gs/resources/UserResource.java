@@ -4,6 +4,7 @@ import com.gasstove.gs.dbaccess.UserIO;
 import com.gasstove.gs.models.User;
 import com.gasstove.gs.util.Configuration;
 import com.gasstove.gs.util.Response;
+import com.sun.jersey.api.core.InjectParam;
 
 import javax.ws.rs.*;
 
@@ -12,10 +13,10 @@ import static org.junit.Assert.fail;
 @Path("/users")
 public class UserResource extends AbstractResource  {
 
-//    @SuppressWarnings("unused")
-//    public UserResource(){
-//        this(Configuration.getDB());
-//    };
+    @SuppressWarnings("unused")
+    public UserResource(){
+        this(Configuration.getDB());
+    };
 
     public UserResource(String db){
         super(db);
@@ -33,7 +34,7 @@ public class UserResource extends AbstractResource  {
      */
     @Override
     public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
-        return this.delete_user(id,Configuration.FORMAT.jsonp,callback);
+        return this.delete_user(id, Configuration.FORMAT.jsonp, callback);
     }
 
     ////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ public class UserResource extends AbstractResource  {
         try {
 
             // delete row in users table, get a response
-            String resp_json = super.delete(id);
+            String resp_json = super.deleteX(id);
             success &= (new Response(resp_json)).success;
 
             // delete all events belonging to this user
@@ -79,7 +80,7 @@ public class UserResource extends AbstractResource  {
     }
 
     public String delete_user(String id){
-        return this.delete_user(id,Configuration.FORMAT.json,"");
+        return this.delete_user(id, Configuration.FORMAT.json, "");
     }
 
 }

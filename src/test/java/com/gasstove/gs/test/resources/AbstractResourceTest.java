@@ -46,7 +46,7 @@ public abstract class AbstractResourceTest {
     @Test
     public void test_getAll() {
         System.out.println("test_getAll for " + resource.getClass().getSimpleName() + ", format=" + format);
-        String response = resource.getAll(format,callback);
+        String response = resource.getAllX(format,callback);
         TestConfiguration.printout(response, getAll_exp, "test_getAll");
         assertEquals(getAll_exp, response);
     }
@@ -54,7 +54,7 @@ public abstract class AbstractResourceTest {
     @Test
     public void test_getForId() {
         System.out.println("test_getForId for " + resource.getClass().getSimpleName()+ ", format=" + format);
-        String response = resource.getForId(use_id,format,callback);
+        String response = resource.getForIdX(use_id,format,callback);
         TestConfiguration.printout(response, getForId_exp, "test_getForId");
         assertEquals(getForId_exp, response);
     }
@@ -68,7 +68,7 @@ public abstract class AbstractResourceTest {
             AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
-            String responseStr = resource.insertOrUpdate(obj.formatJson());
+            String responseStr = resource.insertOrUpdateX(obj.formatJson());
 
             // get it
             Response response = (new Gson()).fromJson(responseStr,Response.class);
@@ -78,7 +78,7 @@ public abstract class AbstractResourceTest {
             return_obj.populate_from_Json(response.resource);
 
             // delete it
-            responseStr = resource.delete(String.format("%d",return_obj.getId()));
+            responseStr = resource.deleteX(String.format("%d",return_obj.getId()));
             assertTrue(responseStr.contains("successfully deleted"));
 
         } catch (Exception exp) {

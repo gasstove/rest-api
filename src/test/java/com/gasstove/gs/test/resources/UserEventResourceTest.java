@@ -45,7 +45,7 @@ public class UserEventResourceTest extends AbstractResourceTest {
     @Test
     public void test_getUsersForEvent() {
         System.out.println("test_getUsersForEvent");
-        String response = ((UserEventResource)resource).getUsersForEvent(TestConfiguration.event_id.toString());
+        String response = ((UserEventResource)resource).getUsersForEventX(TestConfiguration.event_id.toString());
         String expected = "[{\"first\":\"Teresa\",\"last\":\"Torrain\",\"id\":13},{\"first\":\"Ed\",\"last\":\"Eggen\",\"id\":16},{\"first\":\"Maynard\",\"last\":\"Magnusson\",\"id\":30},{\"first\":\"Adelaida\",\"last\":\"Ariza\",\"id\":45},{\"first\":\"Hildegarde\",\"last\":\"Hellman\",\"id\":50}]";
         TestConfiguration.printout(response, expected, "test_getUsersForEvent");
         assertTrue(response.equals(expected));
@@ -54,7 +54,7 @@ public class UserEventResourceTest extends AbstractResourceTest {
     @Test
     public void test_getEventsForUser() {
         System.out.println("test_getEventsForUser");
-        String response = ((UserEventResource)resource).getEventsForUser(TestConfiguration.user_id.toString());
+        String response = ((UserEventResource)resource).getEventsForUserX(TestConfiguration.user_id.toString());
         String expected = "[{\"name\":\"theistic\",\"openDate\":\"1970-01-04T02:26:02.926-08:00\",\"closeDate\":\"1970-01-04T02:26:02.926-08:00\",\"ownerId\":36,\"id\":6}]";
         TestConfiguration.printout(response,expected,"test_getEventsForUser");
         assertEquals(response,expected);
@@ -76,7 +76,7 @@ public class UserEventResourceTest extends AbstractResourceTest {
         String event_id = TestConfiguration.event_id.toString();
 
         // get guests in event
-        String users_json = uer.getUsersForEvent(event_id);
+        String users_json = uer.getUsersForEventX(event_id);
         Type type = new TypeToken<ArrayList<User>>(){}.getType();
         ArrayList<User> users = Util.getGson().fromJson(users_json,type);
 
@@ -91,10 +91,10 @@ public class UserEventResourceTest extends AbstractResourceTest {
         uio.close();
 
         // update table
-        uer.cloberGuestsInEvent(event_id, Util.getGson().toJson(users));
+        uer.cloberGuestsInEventX(event_id, Util.getGson().toJson(users));
 
         // get guests in event
-        String users_json2 = uer.getUsersForEvent(event_id);
+        String users_json2 = uer.getUsersForEventX(event_id);
         ArrayList<User> users2 = Util.getGson().fromJson(users_json2,type);
 
         // check removed_user is not there and added_user is there

@@ -30,21 +30,21 @@ public class AbstractResource {
     /**
      *  Returns all entries in a table
      */
-    @Path("/")
+//    @Path("/")
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAll(@QueryParam("gaswrapper") String callback) {
-        return getAll(Configuration.FORMAT.jsonp,callback);
+        return getAllX(Configuration.FORMAT.jsonp,callback);
     }
 
     /** insert or update table row
      */
-    @Path("/")
+//    @Path("/")
     @POST
     @Produces({ MediaType.APPLICATION_JSON })
     @Consumes({ MediaType.APPLICATION_JSON })
     public String insertOrUpdate(String objStr,@QueryParam("gaswrapper") String callback)  {
-        return this.insertOrUpdate(objStr,Configuration.FORMAT.jsonp,callback);
+        return this.insertOrUpdateX(objStr,Configuration.FORMAT.jsonp,callback);
     }
 
     ////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ public class AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getForId(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
-        return this.getForId(id,Configuration.FORMAT.jsonp,callback);
+        return this.getForIdX(id,Configuration.FORMAT.jsonp,callback);
     }
 
     /** delete table row
@@ -65,7 +65,7 @@ public class AbstractResource {
     @Path("/{id: [0-9]+}")
     @DELETE
     public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
-        return this.delete(id,Configuration.FORMAT.jsonp,callback);
+        return this.deleteX(id,Configuration.FORMAT.jsonp,callback);
     }
 
     protected AbstractIO get_connection() throws Exception {
@@ -78,7 +78,7 @@ public class AbstractResource {
     // overloading
     ////////////////////////////////////////////////////////////
 
-    public String getAll(Configuration.FORMAT response_format,String callback) {
+    public String getAllX(Configuration.FORMAT response_format,String callback) {
         String returnStr = "";
         AbstractIO io = null;
         try {
@@ -95,11 +95,11 @@ public class AbstractResource {
         return returnStr;
     }
 
-    public String getAll() {
-        return this.getAll(Configuration.FORMAT.json,"");
+    public String getAllX() {
+        return this.getAllX(Configuration.FORMAT.json,"");
     }
 
-    public String insertOrUpdate(String objStr,Configuration.FORMAT response_format,String callback)  {
+    public String insertOrUpdateX(String objStr,Configuration.FORMAT response_format,String callback)  {
 
         AbstractObject get_obj, return_obj;
         Response response;
@@ -142,11 +142,11 @@ public class AbstractResource {
         return response.format(response_format,callback);
     }
 
-    public String insertOrUpdate(String objStr) {
-        return this.insertOrUpdate(objStr,Configuration.FORMAT.json,"");
+    public String insertOrUpdateX(String objStr) {
+        return this.insertOrUpdateX(objStr,Configuration.FORMAT.json,"");
     }
 
-    public String getForId(String id,Configuration.FORMAT response_format,String callback) {
+    public String getForIdX(String id,Configuration.FORMAT response_format,String callback) {
         String returnString = "";
         AbstractIO io = null;
         try {
@@ -163,11 +163,11 @@ public class AbstractResource {
         return returnString;
     }
 
-    public String getForId(String id) {
-        return this.getForId(id,Configuration.FORMAT.json,"");
+    public String getForIdX(String id) {
+        return this.getForIdX(id,Configuration.FORMAT.json,"");
     }
 
-    public String delete(String id,Configuration.FORMAT response_format, String callback) {
+    public String deleteX(String id,Configuration.FORMAT response_format, String callback) {
 
         Response response;
 
@@ -200,8 +200,8 @@ public class AbstractResource {
         return response.format(response_format,callback);
     }
 
-    public String delete(String id) {
-        return delete(id,Configuration.FORMAT.json,"");
+    public String deleteX(String id) {
+        return deleteX(id,Configuration.FORMAT.json,"");
     }
 
 }
