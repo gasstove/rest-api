@@ -69,7 +69,7 @@ public abstract class AbstractIO<T> {
 
     /** update single row in a table **/
     public final int update(AbstractObject obj) throws Exception{
-        String sql = "UPDATE " + get_table_name() + " SET " + get_csv_fields_question_marks()+"WHERE id=?";
+        String sql = "UPDATE " + get_table_name() + " SET " + get_csv_fields_question_marks()+" WHERE id=?";
         PreparedStatement statement = conn.prepareStatement(sql);
         int i = fill_prepared_statement(statement,obj);
         statement.setInt(i,obj.getId());

@@ -4,10 +4,14 @@ import com.gasstove.gs.models.AbstractObject;
 import com.gasstove.gs.models.Factory;
 import com.gasstove.gs.resources.AbstractResource;
 import com.gasstove.gs.util.Configuration;
-import com.gasstove.gs.util.Response;
 import com.gasstove.gs.test.TestConfiguration;
+import com.gasstove.gs.util.Response;
 import com.google.gson.Gson;
 import org.junit.Test;
+import org.junit.runners.Parameterized;
+
+import java.util.Arrays;
+import java.util.Collection;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -23,6 +27,15 @@ public abstract class AbstractResourceTest {
     protected String getAll_exp;            // expected return value of getAll
     protected String use_id;                // object id to use in getForId test
     protected String getForId_exp;          // expected return value of getForId(use_id)
+//    protected String callback = "testCallback";
+
+//    @Parameterized.Parameters
+//    public static Collection<Object[]> getFormat(){
+//        return Arrays.asList(new Object[][]{
+//                {Configuration.FORMAT.jsonp},
+//                {Configuration.FORMAT.json}
+//        });
+//    }
 
     public AbstractResourceTest(){
         Configuration.profile = Configuration.PROFILE.test;
@@ -30,20 +43,16 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_getAll() {
-        String callback = "testCallback";
-        System.out.println("test_getAll for " + resource.getClass().getSimpleName() );
-        String response = resource.getAll(callback);
+        System.out.println(" test_getAll for " + resource.getClass().getSimpleName() );
+        String response = resource.getAll();
         TestConfiguration.printout(response, getAll_exp, "test_getAll");
         assertEquals(getAll_exp, response);
     }
 
     @Test
     public void test_getForId() {
-
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
-
-        System.out.println("test_getForId for " + resource.getClass().getSimpleName() );
-        String response = resource.getForId(use_id,callback);
+        System.out.println(" test_getForId for " + resource.getClass().getSimpleName() );
+        String response = resource.getForId(use_id);
         TestConfiguration.printout(response, getForId_exp, "test_getForId");
         assertEquals(getForId_exp, response);
     }
@@ -51,15 +60,13 @@ public abstract class AbstractResourceTest {
     @Test
     public void test_insertdelete(){
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
-
         try {
 
             // create an event
             AbstractObject obj = Factory.generate_random(clath);
 
             // insert it
-            String responseStr = resource.insertOrUpdate(obj.format(Configuration.FORMAT.json,callback));
+            String responseStr = resource.insertOrUpdate(obj.formatJson());
 
             // get it
             Response response = (new Gson()).fromJson(responseStr,Response.class);

@@ -29,6 +29,10 @@ public abstract class AbstractObject {
         return null;
     }
 
+    public String formatJson() {
+        return format(Configuration.FORMAT.json, "");
+    }
+
     public void populate_from_Json(String json){}
 
     // GET/SET .......................................................

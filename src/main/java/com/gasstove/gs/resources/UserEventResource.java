@@ -39,6 +39,33 @@ public class UserEventResource extends AbstractResource  {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getEventsForUser(@PathParam("userId") String userId,@QueryParam("gaswrapper") String callback) {
+        return this.getEventsForUser(userId,Configuration.FORMAT.jsonp,callback);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // '/event/#'
+    ////////////////////////////////////////////////////////////
+
+    @Path("/event/{eventId: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getUsersForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
+        return this.getUsersForEvent(eventId,Configuration.FORMAT.jsonp,callback);
+    }
+
+    @Path("/event/{eventId: [0-9]+}")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public String cloberGuestsInEvent(@PathParam("eventId") String eventId, String users_json,@QueryParam("gaswrapper") String callback){
+        return this.cloberGuestsInEvent(eventId,users_json,Configuration.FORMAT.jsonp,callback);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // overloads
+    ////////////////////////////////////////////////////////////
+
+    public String getEventsForUser(String userId,Configuration.FORMAT response_format,String callback) {
 
         String returnString = "";
         UserEventIO io = null;
@@ -56,14 +83,11 @@ public class UserEventResource extends AbstractResource  {
         return returnString;
     }
 
-    ////////////////////////////////////////////////////////////
-    // '/event/#'
-    ////////////////////////////////////////////////////////////
+    public String getEventsForUser(String userId){
+        return this.getEventsForUser(userId,Configuration.FORMAT.json,"");
+    }
 
-    @Path("/event/{eventId: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getUsersForEvent(@PathParam("eventId") String eventId,@QueryParam("gaswrapper") String callback) {
+    public String getUsersForEvent(String eventId,Configuration.FORMAT response_format,String callback) {
 
         String returnString = "";
         UserEventIO io = null;
@@ -81,14 +105,11 @@ public class UserEventResource extends AbstractResource  {
         return returnString;
     }
 
-    @Path("/event/{eventId: [0-9]+}")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON })
-    @Consumes({ MediaType.APPLICATION_JSON })
-    public String cloberGuestsInEvent(@PathParam("eventId") String eventId, String users_json){
+    public String getUsersForEvent(String userId){
+        return this.getUsersForEvent(userId,Configuration.FORMAT.json,"");
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
-
+    public String cloberGuestsInEvent(String eventId,String users_json,Configuration.FORMAT response_format,String callback){
         Response response;
         int eid = Integer.parseInt(eventId);
         UserEventIO io = null;
@@ -141,5 +162,10 @@ public class UserEventResource extends AbstractResource  {
 
         return response.format(response_format,callback);
     }
+
+    public String cloberGuestsInEvent(String eventId,String users_json){
+        return this.cloberGuestsInEvent(eventId,users_json,Configuration.FORMAT.json,"");
+    }
+
 
 }

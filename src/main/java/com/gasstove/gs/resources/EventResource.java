@@ -33,10 +33,19 @@ public class EventResource extends AbstractResource {
      * @return
      */
     @Override
-    public String delete(@PathParam("id") String id) {
+    public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+        return this.delete_event(id,Configuration.FORMAT.jsonp,callback);
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    public String deleteEventsOwnedBy(String user_id_str,@QueryParam("gaswrapper") String callback){
+        return this.deleteEventsOwnedBy(user_id_str,Configuration.FORMAT.jsonp,callback);
+    }
 
+    ////////////////////////////////////////////////////////////
+    // overloads
+    ////////////////////////////////////////////////////////////
+
+    public String delete_event(String id,Configuration.FORMAT response_format,String callback) {
 
         UserEventIO userEventIO = null;
         MediaEventIO mediaEventIO = null;
@@ -73,10 +82,11 @@ public class EventResource extends AbstractResource {
 
     }
 
-    public String deleteEventsOwnedBy(String user_id_str){
+    public String delete_event(String id){
+        return this.delete_event(id,Configuration.FORMAT.json,"");
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
-
+    public String deleteEventsOwnedBy(String user_id_str,Configuration.FORMAT response_format,String callback){
 
         int user_id = Integer.parseInt(user_id_str);
 
@@ -96,7 +106,11 @@ public class EventResource extends AbstractResource {
                 new Response(true, "Events successfully deleted",null) :
                 new Response(false, "Events deletion failed",null);
 
-        return return_resp.format(response_format,callback);
+        return return_resp.format(response_format,"");
+    }
+
+    public String deleteEventsOwnedBy(String user_id_str){
+        return this.deleteEventsOwnedBy(user_id_str,Configuration.FORMAT.json,"");
     }
 
 }

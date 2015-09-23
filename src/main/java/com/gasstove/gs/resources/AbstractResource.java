@@ -18,20 +18,9 @@ public class AbstractResource {
     protected String db;
     protected Class ioclass;
     protected Class objclass;
-    protected Configuration.FORMAT response_format;
-
-//    @Context
-//    Request req;
-
-//    @Context
-//    HttpHeaders headers;
-
-    // @Context
-    // private ServletContext context;
 
     public AbstractResource(String db,Configuration.FORMAT response_format){
         this.db = db;
-        this.response_format = response_format;
     }
 
     ////////////////////////////////////////////////////////////
@@ -45,10 +34,51 @@ public class AbstractResource {
     @GET
     @Produces({MediaType.APPLICATION_JSON})
     public String getAll(@QueryParam("gaswrapper") String callback) {
+        return getAll(Configuration.FORMAT.jsonp,callback);
+    }
 
-        if(callback==null)
-            callback = "callbackX";
+    /** insert or update table row
+     */
+    @Path("/")
+    @POST
+    @Produces({ MediaType.APPLICATION_JSON })
+    @Consumes({ MediaType.APPLICATION_JSON })
+    public String insertOrUpdate(String objStr,@QueryParam("gaswrapper") String callback)  {
+        return this.insertOrUpdate(objStr,Configuration.FORMAT.jsonp,callback);
+    }
 
+    ////////////////////////////////////////////////////////////
+    // '/#'
+    ////////////////////////////////////////////////////////////
+
+    /** get table row with id
+     */
+    @Path("/{id: [0-9]+}")
+    @GET
+    @Produces({MediaType.APPLICATION_JSON})
+    public String getForId(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+        return this.getForId(id,Configuration.FORMAT.jsonp,callback);
+    }
+
+    /** delete table row
+     */
+    @Path("/{id: [0-9]+}")
+    @DELETE
+    public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+        return this.delete(id,Configuration.FORMAT.jsonp,callback);
+    }
+
+    protected AbstractIO get_connection() throws Exception {
+        AbstractIO io = (AbstractIO) ioclass.newInstance();
+        io.connect(db);
+        return io;
+    }
+
+    ////////////////////////////////////////////////////////////
+    // overloading
+    ////////////////////////////////////////////////////////////
+
+    public String getAll(Configuration.FORMAT response_format,String callback) {
         String returnStr = "";
         AbstractIO io = null;
         try {
@@ -65,37 +95,16 @@ public class AbstractResource {
         return returnStr;
     }
 
-    /** insert or update table row
-     */
-    @Path("/")
-    @POST
-    @Produces({ MediaType.APPLICATION_JSON })
-    @Consumes({ MediaType.APPLICATION_JSON })
-    public String insertOrUpdate(String objStr)  {
+    public String getAll() {
+        return this.getAll(Configuration.FORMAT.json,"");
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    public String insertOrUpdate(String objStr,Configuration.FORMAT response_format,String callback)  {
 
         AbstractObject get_obj, return_obj;
         Response response;
 
         AbstractIO io = null;
-
-        /** check headers
-         List<String> authHeaders = this.headers.getRequestHeader("Authorization");
-         List<String> dbHeader = this.headers.getRequestHeader("DB");
-         if (authHeaders==null || dbHeader==null)
-         return Response.JSONMessage(false, "Error Saving New Scenario, Invalid Authentication Header", null);
-         */
-
-        /** authenticate
-         String encodedUserPass = authHeaders.get(0);
-         String dbName = dbHeader.get(0);
-         OraDatabaseWeb db = Authentication.authenticate(encodedUserPass, dbName);
-         */
-
-        /**
-         Authentication.User user = Authentication.getUserInfoFromHeader(encodedUserPass, dbName);
-         */
 
         try {
 
@@ -115,7 +124,7 @@ public class AbstractResource {
             // query and send it back
             return_obj = (AbstractObject) io.getWithId(objId);
 
-            response = new Response(true, "New object successfully saved", return_obj.format(Configuration.FORMAT.json,callback));
+            response = new Response(true, "New object successfully saved", return_obj.formatJson());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -133,17 +142,11 @@ public class AbstractResource {
         return response.format(response_format,callback);
     }
 
-    ////////////////////////////////////////////////////////////
-    // '/#'
-    ////////////////////////////////////////////////////////////
+    public String insertOrUpdate(String objStr) {
+        return this.insertOrUpdate(objStr,Configuration.FORMAT.json,"");
+    }
 
-    /** get table row with id
-     */
-    @Path("/{id: [0-9]+}")
-    @GET
-    @Produces({MediaType.APPLICATION_JSON})
-    public String getForId(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
-
+    public String getForId(String id,Configuration.FORMAT response_format,String callback) {
         String returnString = "";
         AbstractIO io = null;
         try {
@@ -160,13 +163,11 @@ public class AbstractResource {
         return returnString;
     }
 
-    /** delete table row
-     */
-    @Path("/{id: [0-9]+}")
-    @DELETE
-    public String delete(@PathParam("id") String id) {
+    public String getForId(String id) {
+        return this.getForId(id,Configuration.FORMAT.json,"");
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    public String delete(String id,Configuration.FORMAT response_format, String callback) {
 
         Response response;
 
@@ -199,10 +200,8 @@ public class AbstractResource {
         return response.format(response_format,callback);
     }
 
-    protected AbstractIO get_connection() throws Exception {
-        AbstractIO io = (AbstractIO) ioclass.newInstance();
-        io.connect(db);
-        return io;
+    public String delete(String id) {
+        return delete(id,Configuration.FORMAT.json,"");
     }
 
 }

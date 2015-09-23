@@ -23,7 +23,6 @@ public class UserResource extends AbstractResource  {
         this.objclass = User.class;
     }
 
-
     /**
      * Delete a user.
      *  1) delete a row from the users table
@@ -33,9 +32,15 @@ public class UserResource extends AbstractResource  {
      * @return
      */
     @Override
-    public String delete(@PathParam("id") String id) {
+    public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+        return this.delete_user(id,Configuration.FORMAT.jsonp,callback);
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    ////////////////////////////////////////////////////////////
+    // overloads
+    ////////////////////////////////////////////////////////////
+
+    public String delete_user(String id,Configuration.FORMAT response_format,String callback) {
 
         boolean success = true;
 
@@ -71,6 +76,10 @@ public class UserResource extends AbstractResource  {
             return response.format(response_format,callback);
         }
 
+    }
+
+    public String delete_user(String id){
+        return this.delete_user(id,Configuration.FORMAT.json,"");
     }
 
 }

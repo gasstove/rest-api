@@ -38,9 +38,19 @@ public class MediaResource extends AbstractResource  {
      * @return
      */
     @Override
-    public String delete(@PathParam("id") String id) {
+    public String delete(@PathParam("id") String id,@QueryParam("gaswrapper") String callback) {
+        return this.delete_media(id,Configuration.FORMAT.jsonp,callback);
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    public String deleteMediaOwnedBy(String user_id,@QueryParam("gaswrapper") String callback){
+        return this.deleteMediaOwnedBy(user_id,Configuration.FORMAT.jsonp,callback);
+    }
+
+    ////////////////////////////////////////////////////////////
+    // overloads
+    ////////////////////////////////////////////////////////////
+
+    public String delete_media(String id,Configuration.FORMAT response_format,String callback) {
 
         boolean success = true;
         MediaEventIO mediaEventIO = null;
@@ -71,9 +81,11 @@ public class MediaResource extends AbstractResource  {
         }
     }
 
-    public String deleteMediaOwnedBy(String user_id){
+    public String delete_media(String id){
+        return this.delete_media(id,Configuration.FORMAT.json,"");
+    }
 
-        String callback = "FAKECALLBACK_FIXTHISINAPI!!!"; // TODO FIX THIS
+    public String deleteMediaOwnedBy(String user_id,Configuration.FORMAT response_format,String callback){
 
         MediaIO io = null;
         Response response;
@@ -92,4 +104,9 @@ public class MediaResource extends AbstractResource  {
         }
 
     }
+
+    public String deleteMediaOwnedBy(String user_id) {
+        return this.deleteMediaOwnedBy(user_id,Configuration.FORMAT.json,"");
+    }
+
 }
