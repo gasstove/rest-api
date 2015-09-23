@@ -27,7 +27,9 @@ public abstract class AbstractResourceTest {
     protected String getAll_exp;            // expected return value of getAll
     protected String use_id;                // object id to use in getForId test
     protected String getForId_exp;          // expected return value of getForId(use_id)
-//    protected Configuration.FORMAT format;
+
+    protected Configuration.FORMAT format;
+    protected String callback = "testCallback";
 
     @Parameterized.Parameters
     public static Collection<Object[]> getFormat(){
@@ -43,16 +45,16 @@ public abstract class AbstractResourceTest {
 
     @Test
     public void test_getAll() {
-        System.out.println(" test_getAll for " + resource.getClass().getSimpleName() );
-        String response = resource.getAll();
+        System.out.println("test_getAll for " + resource.getClass().getSimpleName() + ", format=" + format);
+        String response = resource.getAll(format,callback);
         TestConfiguration.printout(response, getAll_exp, "test_getAll");
         assertEquals(getAll_exp, response);
     }
 
     @Test
     public void test_getForId() {
-        System.out.println(" test_getForId for " + resource.getClass().getSimpleName() );
-        String response = resource.getForId(use_id);
+        System.out.println("test_getForId for " + resource.getClass().getSimpleName()+ ", format=" + format);
+        String response = resource.getForId(use_id,format,callback);
         TestConfiguration.printout(response, getForId_exp, "test_getForId");
         assertEquals(getForId_exp, response);
     }
