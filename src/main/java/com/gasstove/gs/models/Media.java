@@ -10,6 +10,7 @@ public class Media extends AbstractObject {
     private String fileName;
     private int userId;
     private Time dateTaken;
+    private String url = "resources//images//1.jpg";
 
     // cross table fields
 
@@ -28,6 +29,7 @@ public class Media extends AbstractObject {
         this.setUserId(x.getUserId());
         this.setFileName(x.getFileName());
         this.setDateTaken(x.getDateTaken());
+        this.setUrl(x.getUrl());
     }
 
     @Override
@@ -36,7 +38,8 @@ public class Media extends AbstractObject {
         return type.equals(x.type)
                 && fileName.equals(x.fileName)
                 && userId==x.userId
-                && dateTaken.equals(x.dateTaken);
+                && dateTaken.equals(x.dateTaken)
+                && url.equals(x.url);
     }
 
     @Override
@@ -78,5 +81,12 @@ public class Media extends AbstractObject {
         this.userId = userId;
     }
 
+    public String getUrl(){
+        return this.url;
+    }
+
+    public void setUrl(String url){
+        this.url = url;
+    }
 
 }

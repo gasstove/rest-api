@@ -29,6 +29,7 @@ public class MediaIO extends AbstractIO<Media> {
             x.setFileName(rs.getString("file_name"));
             x.setUserId(rs.getInt("user_id"));
             x.setDateTaken(new Time(rs.getInt("date_taken")));
+//            x.setUrl(rs.getString("url"));
         } catch (SQLException exp) {
             exp.printStackTrace();
             return null;

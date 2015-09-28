@@ -19,6 +19,7 @@ public class MediaEvent extends AbstractObject {
     private String mediaFileName;
     private Integer userId;
     private Time mediaDateTaken;
+    private String url = "resources//images//1.jpg";
 
     // CONSTRUCTION .......................................................
 
@@ -42,6 +43,7 @@ public class MediaEvent extends AbstractObject {
         this.setMediaFileName(x.getMediaFileName());
         this.setUserId(x.getUserId());
         this.setMediaDateTaken(x.getMediaDateTaken());
+        this.setUrl(x.getUrl());
     }
 
     @Override
@@ -63,7 +65,9 @@ public class MediaEvent extends AbstractObject {
                 && mediaType.equals(x.mediaType)
                 && mediaFileName.equals(x.mediaFileName)
                 && userId.equals(x.userId)
-                && mediaDateTaken.equals(x.mediaDateTaken);
+                && mediaDateTaken.equals(x.mediaDateTaken)
+                && url.equals(x.url);
+
     }
 
     // GET/SET .......................................................
@@ -162,6 +166,12 @@ public class MediaEvent extends AbstractObject {
 
     public void setNumDislikes(int numDislikes) {
         this.numDislikes = numDislikes;
+    }
+
+    public String getUrl() { return url; }
+
+    public void setUrl(String url){
+        this.url = url;
     }
 
 }

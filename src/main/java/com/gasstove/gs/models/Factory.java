@@ -35,6 +35,7 @@ public class Factory {
             Media media = new Media();
             media.setFileName("random file name");
             media.setUserId(12345);
+            media.setUrl("aaa");
             media.setType("audio");
             media.setDateTaken(new Time(0));
             obj = media;
