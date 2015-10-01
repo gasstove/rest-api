@@ -16,9 +16,4 @@ public class EventIOTest extends AbstractIOTest<Event> {
         test_id = TestConfiguration.event_id;
     }
 
-    ////////////////////////////////////////////
-    // additional readers
-    ////////////////////////////////////////////
-
-
 }

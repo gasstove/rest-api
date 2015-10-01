@@ -16,8 +16,4 @@ public class MediaIOTest extends AbstractIOTest<Media> {
         test_id = TestConfiguration.media_id;
     }
 
-    ////////////////////////////////////////////
-    // additional readers
-    ////////////////////////////////////////////
-
 }

@@ -43,13 +43,13 @@ public abstract class AbstractResourceTest {
         Configuration.profile = Configuration.PROFILE.test;
     }
 
-    @Test
-    public void test_getAll() {
-        System.out.println("test_getAll for " + resource.getClass().getSimpleName() + ", format=" + format);
-        String response = resource.getAllX(format,callback);
-        TestConfiguration.printout(response, getAll_exp, "test_getAll");
-        assertEquals(getAll_exp, response);
-    }
+//    @Test
+//    public void test_getAll() {
+//        System.out.println("test_getAll for " + resource.getClass().getSimpleName() + ", format=" + format);
+//        String response = resource.getAllX(format,callback);
+//        TestConfiguration.printout(response, getAll_exp, "test_getAll");
+//        assertEquals(getAll_exp, response);
+//    }
 
     @Test
     public void test_getForId() {

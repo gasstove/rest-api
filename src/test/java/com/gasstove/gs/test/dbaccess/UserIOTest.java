@@ -16,8 +16,4 @@ public class UserIOTest extends AbstractIOTest<User> {
         test_id = TestConfiguration.user_id;
     }
 
-    ////////////////////////////////////////////
-    // additional readers
-    ////////////////////////////////////////////
-
 }
